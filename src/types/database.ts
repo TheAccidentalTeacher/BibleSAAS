@@ -128,23 +128,27 @@ export interface HighlightRow {
   [key: string]: unknown;
   id: string;
   user_id: string;
-  book_code: string;
-  chapter_number: number;
-  verse_number: number;
+  book: string;
+  chapter: number;
+  verse_start: number;
+  verse_end: number | null;
   color: string;
   note: string | null;
   created_at: string;
+  deleted_at: string | null;
+  meta: Record<string, unknown>;
 }
 
 export interface BookmarkRow {
   [key: string]: unknown;
   id: string;
   user_id: string;
-  book_code: string;
-  chapter_number: number;
-  verse_number: number | null;
+  book: string;
+  chapter: number;
+  verse: number | null;
   label: string | null;
   created_at: string;
+  meta: Record<string, unknown>;
 }
 
 export interface JournalEntryRow {
@@ -342,13 +346,13 @@ export type Database = {
       };
       highlights: {
         Row: HighlightRow;
-        Insert: { user_id: string; book_code: string; chapter_number: number; verse_number: number; color: string; note?: string | null; id?: string; created_at?: string };
+        Insert: { user_id: string; book: string; chapter: number; verse_start: number; verse_end?: number | null; color: string; note?: string | null; id?: string; created_at?: string; deleted_at?: string | null; meta?: Record<string, unknown> };
         Update: Partial<Omit<HighlightRow, "id">>;
         Relationships: [];
       };
       bookmarks: {
         Row: BookmarkRow;
-        Insert: { user_id: string; book_code: string; chapter_number: number; verse_number?: number | null; label?: string | null; id?: string; created_at?: string };
+        Insert: { user_id: string; book: string; chapter: number; verse?: number | null; label?: string | null; id?: string; created_at?: string; meta?: Record<string, unknown> };
         Update: Partial<Omit<BookmarkRow, "id">>;
         Relationships: [];
       };

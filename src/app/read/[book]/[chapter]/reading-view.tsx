@@ -30,6 +30,12 @@ import TranslationPicker from "./translation-picker";
 import CharlesCard from "./charles-card";
 import OIASheet from "./oia-sheet";
 import SpurgeonCard, { type SpurgeonEntry } from "./spurgeon-card";
+import VerseActionMenu, {
+  type HighlightColor,
+  type HighlightState,
+  type BookmarkState,
+  HIGHLIGHT_BG,
+} from "./verse-action-menu";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
 
@@ -81,6 +87,111 @@ export default function ReadingView({
 
   const skeletonTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Highlights & Bookmarks ──────────────────────────────────────────────
+  const [highlights, setHighlights] = useState<HighlightState[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkState[]>([]);
+  const [activeMenu, setActiveMenu] = useState<{
+    verse: number;
+    anchorY: number;
+  } | null>(null);
+
+  // Load highlights + bookmarks when chapter changes
+  useEffect(() => {
+    let cancelled = false;
+    async function loadAnnotations() {
+      const [hlRes, bmRes] = await Promise.all([
+        fetch(`/api/highlights?book=${bookCode}&chapter=${chapter}`),
+        fetch(`/api/bookmarks?book=${bookCode}&chapter=${chapter}`),
+      ]);
+      if (cancelled) return;
+      if (hlRes.ok) {
+        const j = await hlRes.json() as { highlights: Array<{ id: string; verse_start: number; verse_end: number | null; color: string; note: string | null }> };
+        setHighlights(
+          j.highlights.map((h) => ({
+            id: h.id,
+            verse_start: h.verse_start,
+            verse_end: h.verse_end,
+            color: h.color as HighlightColor,
+            note: h.note,
+          }))
+        );
+      }
+      if (bmRes.ok) {
+        const j = await bmRes.json() as { bookmarks: Array<{ id: string; verse: number | null }> };
+        setBookmarks(
+          j.bookmarks
+            .filter((b) => b.verse !== null)
+            .map((b) => ({ id: b.id, verse: b.verse! }))
+        );
+      }
+    }
+    setHighlights([]);
+    setBookmarks([]);
+    loadAnnotations();
+    return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  const handleHighlight = useCallback(async (verse: number, color: HighlightColor) => {
+    const res = await fetch("/api/highlights", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ book: bookCode, chapter, verse_start: verse, color }),
+    });
+    if (res.ok) {
+      const j = await res.json() as { highlight: { id: string; verse_start: number; verse_end: number | null; color: string; note: string | null } };
+      const h = j.highlight;
+      setHighlights((prev) => {
+        const without = prev.filter((x) => x.verse_start !== verse);
+        return [...without, { id: h.id, verse_start: h.verse_start, verse_end: h.verse_end, color: h.color as HighlightColor, note: h.note }];
+      });
+    }
+  }, [bookCode, chapter]);
+
+  const handleRemoveHighlight = useCallback(async (id: string) => {
+    await fetch("/api/highlights", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    setHighlights((prev) => prev.filter((h) => h.id !== id));
+  }, []);
+
+  const handleAddNote = useCallback(async (id: string, note: string) => {
+    const res = await fetch("/api/highlights", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, note }),
+    });
+    if (res.ok) {
+      setHighlights((prev) => prev.map((h) => h.id === id ? { ...h, note } : h));
+    }
+  }, []);
+
+  const handleBookmark = useCallback(async (verse: number) => {
+    const res = await fetch("/api/bookmarks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ book: bookCode, chapter, verse }),
+    });
+    if (res.ok) {
+      const j = await res.json() as { bookmark: { id: string; verse: number | null } };
+      if (j.bookmark.verse !== null) {
+        setBookmarks((prev) => [...prev.filter((b) => b.verse !== verse), { id: j.bookmark.id, verse: j.bookmark.verse! }]);
+      }
+    }
+  }, [bookCode, chapter]);
+
+  const handleRemoveBookmark = useCallback(async (verse: number) => {
+    const bm = bookmarks.find((b) => b.verse === verse);
+    if (!bm) return;
+    await fetch("/api/bookmarks", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: bm.id }),
+    });
+    setBookmarks((prev) => prev.filter((b) => b.verse !== verse));
+  }, [bookmarks]);
 
   const fetchContent = useCallback(async () => {
     skeletonTimer.current = setTimeout(() => setShowSkeleton(true), 500);
@@ -319,19 +430,59 @@ export default function ReadingView({
 
             {/* Verses */}
             <div style={{ paddingLeft: "40px" }}>
-              {chapterData.verses.map((verse) => (
-                <span
-                  key={verse.verse}
-                  className="reading-verse"
-                  style={{
-                    display: "block",
-                    marginTop: verse.paragraph_start ? "1.5em" : "0",
-                  }}
-                >
-                  <span className="reading-verse-num">{verse.verse}</span>
-                  {verse.text}{" "}
-                </span>
-              ))}
+              {chapterData.verses.map((v) => {
+                const hl = highlights.find(
+                  (h) =>
+                    v.verse >= h.verse_start &&
+                    (h.verse_end === null || v.verse <= h.verse_end)
+                ) ?? null;
+                const bm = bookmarks.find((b) => b.verse === v.verse) ?? null;
+                return (
+                  <span
+                    key={v.verse}
+                    className="reading-verse"
+                    style={{
+                      display: "block",
+                      marginTop: v.paragraph_start ? "1.5em" : "0",
+                      background: hl ? HIGHLIGHT_BG[hl.color] : undefined,
+                      borderRadius: hl ? "4px" : undefined,
+                      transition: "background 0.15s",
+                    }}
+                  >
+                    {/* Verse number — tap to open action menu */}
+                    <button
+                      className="reading-verse-num"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                        setActiveMenu({ verse: v.verse, anchorY: rect.bottom + window.scrollY });
+                      }}
+                      aria-label={`Verse ${v.verse} actions`}
+                      title="Highlight or bookmark this verse"
+                      style={{ cursor: "pointer", position: "relative" }}
+                    >
+                      {v.verse}
+                      {/* Bookmark dot */}
+                      {bm && (
+                        <span
+                          aria-label="Bookmarked"
+                          className="absolute -top-0.5 -right-1 w-1.5 h-1.5 rounded-full"
+                          style={{ background: "var(--color-accent)" }}
+                        />
+                      )}
+                      {/* Note indicator */}
+                      {hl?.note && (
+                        <span
+                          aria-label="Has note"
+                          className="absolute -bottom-0.5 -right-1 w-1.5 h-1.5 rounded-full"
+                          style={{ background: "#F0954A" }}
+                        />
+                      )}
+                    </button>
+                    {v.text}{" "}
+                  </span>
+                );
+              })}
             </div>
           </div>
         )}
@@ -403,6 +554,28 @@ export default function ReadingView({
           translation={translation}
           questions={questions}
           onClose={() => setStudyOpen(false)}
+        />
+      )}
+
+      {/* ── Verse Action Menu ── */}
+      {activeMenu && (
+        <VerseActionMenu
+          verse={activeMenu.verse}
+          anchorY={activeMenu.anchorY}
+          existingHighlight={
+            highlights.find(
+              (h) =>
+                activeMenu.verse >= h.verse_start &&
+                (h.verse_end === null || activeMenu.verse <= h.verse_end)
+            ) ?? null
+          }
+          isBookmarked={bookmarks.some((b) => b.verse === activeMenu.verse)}
+          onHighlight={handleHighlight}
+          onRemoveHighlight={handleRemoveHighlight}
+          onAddNote={handleAddNote}
+          onBookmark={handleBookmark}
+          onRemoveBookmark={handleRemoveBookmark}
+          onClose={() => setActiveMenu(null)}
         />
       )}
     </div>
