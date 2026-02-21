@@ -2,7 +2,7 @@
 ## Phase-by-Phase, Step-by-Step Implementation Guide
 
 > **For use by:** Claude Sonnet 4.6 / Claude Opus 4  
-> **Reference files:** `project-notes.md` (all 31 sessions), `charles-persona.md`, `sql/` (12 schema files + README)  
+> **Reference files:** `docs/project-notes.md` (all 31 sessions), `docs/charles-persona.md`, `sql/` (13 schema files + README)  
 > **Stack:** Next.js 14 App Router · Supabase · Vercel · Anthropic API · Resend · Stripe · Tailwind CSS
 
 ---

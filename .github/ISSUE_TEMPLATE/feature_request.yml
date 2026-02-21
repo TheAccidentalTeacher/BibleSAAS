@@ -1,0 +1,65 @@
+name: Feature Request
+description: Suggest a new feature or enhancement
+title: "[Feature]: "
+labels: ["enhancement", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Feature requests are reviewed against `docs/coding-plan.md`. Requests that conflict with the planned architecture or product vision will likely be closed.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Feature area
+      options:
+        - Personalization / AI
+        - Bible reading experience
+        - Journal / OIA study
+        - Prayer journal
+        - Gamification / Streaks
+        - Memory verses
+        - Audio
+        - Sharing / Community
+        - Subscriptions / Gifting
+        - Export / Your Edition
+        - Settings / Accessibility
+        - Performance / PWA
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the user-facing problem, not the solution.
+      placeholder: "As a user who reads the Bible during commutes, I have no way to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: How would you solve it?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: What else did you consider?
+
+  - type: dropdown
+    id: tier
+    attributes:
+      label: Which subscription tier should this apply to?
+      options:
+        - Free
+        - Standard
+        - Premium
+        - Your Edition
+        - All tiers
+        - Not sure

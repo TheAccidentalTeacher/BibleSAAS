@@ -1,0 +1,97 @@
+name: Bug Report
+description: Something isn't working correctly
+title: "[Bug]: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Please fill out the sections below as completely as you can.
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      description: Which part of the app is affected?
+      options:
+        - Authentication / Onboarding
+        - Bible reading screen
+        - Charles AI (commentary / questions)
+        - Journal / OIA study
+        - Highlights / Bookmarks
+        - Prayer journal
+        - Streaks / Gamification
+        - Memory verses
+        - Audio Bible
+        - Dashboard / Reading plans
+        - Trails (TSK cross-reference)
+        - Word study
+        - Notifications / Settings
+        - Stripe / Subscriptions
+        - Export / Your Edition PDF
+        - Community / Study groups
+        - PWA / Offline
+        - Database / API
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: A clear description of the bug.
+      placeholder: "When I do X, Y happens instead of Z."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Log in as a free-tier user
+        2. Navigate to Genesis 1
+        3. Long-press verse 1
+        4. Tap "Highlight"
+        5. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (data loss, payment error, security issue)
+        - High (feature completely broken)
+        - Medium (feature partially broken, workaround exists)
+        - Low (cosmetic / minor inconvenience)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Environment
+      placeholder: |
+        Browser: Chrome 121 / Safari 17 / Firefox 122
+        OS: iOS 17 / Android 14 / Windows 11 / macOS Sonoma
+        Subscription tier: Free / Standard / Premium / Your Edition
+        Installed as PWA: Yes / No
+
+  - type: checkboxes
+    id: security
+    attributes:
+      label: Security note
+      options:
+        - label: This bug involves user data exposure, payment processing, or authentication — I will report it via SECURITY.md instead of this public issue
+          required: false

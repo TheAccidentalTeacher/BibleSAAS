@@ -1,0 +1,112 @@
+name: CI
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  # ─────────────────────────────────────────────
+  # Type check + lint (runs once app code exists)
+  # ─────────────────────────────────────────────
+  type-check:
+    name: Type Check & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Only run if package.json exists (pre-code phase: skip gracefully)
+      - name: Check if app code exists
+        id: app-exists
+        run: |
+          if [ -f "package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "::notice::No package.json yet — skipping type check (pre-development phase)"
+          fi
+
+      - name: Install dependencies
+        if: steps.app-exists.outputs.exists == 'true'
+        run: npm ci
+
+      - name: Type check
+        if: steps.app-exists.outputs.exists == 'true'
+        run: npm run type-check
+
+      - name: Lint
+        if: steps.app-exists.outputs.exists == 'true'
+        run: npm run lint
+
+  # ─────────────────────────────────────────────
+  # SQL validation (runs now — no app code needed)
+  # ─────────────────────────────────────────────
+  validate-sql:
+    name: Validate SQL Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check all sql/ files have SQL blocks
+        run: |
+          MISSING=()
+          for f in sql/[0-9]*.md; do
+            if ! grep -q '```sql' "$f"; then
+              MISSING+=("$f")
+            fi
+          done
+          if [ ${#MISSING[@]} -gt 0 ]; then
+            echo "The following sql/ files have no SQL code blocks:"
+            printf '  %s\n' "${MISSING[@]}"
+            exit 1
+          fi
+          echo "✓ All sql/ files contain SQL blocks"
+
+      - name: Check all sql/ files have RLS
+        run: |
+          MISSING_RLS=()
+          for f in sql/[0-9]*.md; do
+            # Source data files (07, 08, 09) intentionally have no RLS on reference tables
+            num=$(basename "$f" | cut -c1-2)
+            if [[ "$num" == "07" || "$num" == "08" || "$num" == "09" || "$num" == "13" ]]; then
+              continue
+            fi
+            if ! grep -q 'ENABLE ROW LEVEL SECURITY' "$f"; then
+              MISSING_RLS+=("$f")
+            fi
+          done
+          if [ ${#MISSING_RLS[@]} -gt 0 ]; then
+            echo "The following sql/ files appear to be missing RLS:"
+            printf '  %s\n' "${MISSING_RLS[@]}"
+            exit 1
+          fi
+          echo "✓ RLS present in all expected sql/ files"
+
+  # ─────────────────────────────────────────────
+  # Security: ensure no secrets committed
+  # ─────────────────────────────────────────────
+  secret-scan:
+    name: Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for secrets
+        uses: trufflesecurity/trufflehog@main
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --only-verified
