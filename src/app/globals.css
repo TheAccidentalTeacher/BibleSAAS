@@ -1,26 +1,98 @@
 @import "tailwindcss";
+@import "../styles/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
+/**
+ * Tailwind v4: register design tokens as Tailwind utilities.
+ * The `inline` keyword means Tailwind emits `var(--color-*)` directly
+ * in generated utilities instead of creating new CSS variables.
+ * Runtime theme switching works because the CSS vars are defined on
+ * html[data-theme] and resolved by the cascade.
+ */
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fonts */
+  --font-reading: var(--font-reading);
+  --font-ui: var(--font-ui);
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+
+  /* Brand colors — reference our token vars */
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-surface-2: var(--color-surface-2);
+  --color-border: var(--color-border);
+  --color-text-1: var(--color-text-1);
+  --color-text-2: var(--color-text-2);
+  --color-text-3: var(--color-text-3);
+  --color-accent: var(--color-accent);
+  --color-accent-dim: var(--color-accent-dim);
+
+  /* Vault */
+  --color-vault-bg: var(--vault-bg);
+  --color-vault-border: var(--vault-border);
+  --color-vault-text: var(--vault-text);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* ─── Base styles ──────────────────────────────────────────────────────────── */
+html {
+  color-scheme: dark;   /* hints the browser to dark scrollbars / inputs */
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text-1);
+  font-family: var(--font-ui);
+  font-size: var(--text-ui-size);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Vault treatment ──────────────────────────────────────────────────────── */
+/**
+ * .vault-card  — parchment surface for source documents.
+ * Used for: Spurgeon commentary, TSK cross-refs, catechism, historical sources.
+ * Always consistent, ignores user theme. No loading skeleton ever.
+ */
+.vault-card {
+  background-color: var(--vault-bg);
+  border: 1px solid var(--vault-border);
+  color: var(--vault-text);
+  font-family: var(--vault-font);
+  border-radius: var(--radius-card);
+}
+
+.vault-card .vault-badge {
+  color: var(--vault-badge-color);
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ─── Reading screen base ──────────────────────────────────────────────────── */
+.reading-verse {
+  padding-left: var(--verse-left-margin);
+  position: relative;
+}
+
+.reading-verse-num {
+  position: absolute;
+  left: 0;
+  width: var(--verse-num-gutter);
+  text-align: right;
+  font-family: var(--font-ui);
+  font-size: var(--text-verse-num-size);
+  color: var(--color-text-3);
+  line-height: var(--text-body-line-height);
+  user-select: none;
+}
+
+/* ─── Utility: label style ─────────────────────────────────────────────────── */
+.label {
+  font-family: var(--font-ui);
+  font-weight: 500;
+  font-size: var(--text-label-size);
+  letter-spacing: var(--text-label-spacing);
+  text-transform: uppercase;
+  color: var(--color-text-2);
 }
