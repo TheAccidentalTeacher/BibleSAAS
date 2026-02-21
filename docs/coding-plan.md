@@ -7,6 +7,78 @@
 
 ---
 
+## 🗓 PHASE PROGRESS — Last updated: 2026-02-21
+
+| Phase | Title | Status | Commit |
+|-------|-------|--------|--------|
+| 0 | Foundation & Infrastructure | ✅ Complete | `d74d217` |
+| 0.2 | Design Token System | ✅ Complete | `928cef5` |
+| 1 | Authentication & User Profiles | ✅ Complete | `a279270` |
+| 2 | Conversational Onboarding | ✅ Complete | `84bb56f` |
+| 3 | Core Bible Reading Screen | ✅ Complete | `3c4061d` |
+| 4 | Charles AI Layer & OIA Study System | ✅ Complete | `19facb0` |
+| 5 | Highlights, Bookmarks & Annotations | ✅ Complete | `75986c4` |
+| 6 | Dashboard & Reading Plans | ✅ Complete | `eadb869` |
+| 7 | Streaks, XP & Gamification | ✅ Complete | `e21412a` |
+| 8 | Memory Verses (SM-2 spaced repetition) | 🔴 Not started | — |
+| 9 | Journey Screen (character cards) | 🔴 Not started | — |
+| 10 | Cross-Reference Trails | 🔴 Not started | — |
+| 11 | Word Study (Strong's + morphology) | 🔴 Not started | — |
+| 12 | Audio (ESV / API.Bible audio layer) | 🔴 Not started | — |
+| 13 | Geography & Archaeology Layer | 🔴 Not started | — |
+| 14 | Community & Sharing | 🔴 Not started | — |
+| 15 | Stripe / Subscription Management | 🔴 Not started | — |
+| 16 | Weekly Charles Letter (email) | 🔴 Not started | — |
+| 17 | PWA + Offline Support | 🔴 Not started | — |
+| 18 | Admin Panel | 🔴 Not started | — |
+| 19 | Year-in-Review PDF | 🔴 Not started | — |
+
+### Infrastructure state (2026-02-21)
+- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS (main branch)
+- **Build:** `npm run build` → 0 errors, 23 routes (dynamic + static)
+- **CI:** GitHub Actions — Type Check ✅ · SQL Validate ✅ · Secret Scan ✅ (fixed 2026-02-21)
+- **Vercel:** Not yet connected — ready to deploy (see Vercel setup instructions below)
+- **Supabase:** SQL schema files ready in `sql/` — migrations not yet applied to any project
+- **Bible data:** WEB/KJV/ASV/YLT served from Supabase `chapters` table — requires `npm run seed:translations` in Supabase before reading screen works
+- **Node:** v24.13.1 · npm v11.8.0
+
+### Key architectural decisions made
+- Tailwind v4 (CSS-only `@theme inline {}` in globals.css — NO `tailwind.config.ts`)
+- Supabase cast pattern: `data as unknown as RowType` (no generated types yet)
+- Phosphor icons from `@phosphor-icons/react/dist/ssr` in server components
+- `streaks` table (renamed from `user_streaks` in Phase 7)
+- Chapter read marked via `IntersectionObserver` sentinel at bottom of reading view
+- Achievement definitions split: client-safe data in `achievements-data.ts`, server engine in `achievements.ts`
+
+---
+
+### 🚀 Vercel Setup Instructions (when ready)
+
+1. **Go to** https://vercel.com → New Project → Import from GitHub → `TheAccidentalTeacher/BibleSAAS`
+2. **Framework preset:** Next.js (auto-detected)
+3. **Root directory:** leave as `.` (repo root)
+4. **Build command:** `npm run build` (default)
+5. **Add environment variables** (Settings → Environment Variables):
+
+   | Variable | Where to find it |
+   |---|---|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Supabase → Settings → API → Project URL |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon/public key |
+   | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → service_role key |
+   | `ANTHROPIC_API_KEY` | console.anthropic.com → API Keys |
+   | `STRIPE_SECRET_KEY` | dashboard.stripe.com (test mode for now) — can be `sk_test_dummy` until Phase 15 |
+   | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | dashboard.stripe.com (test mode) |
+   | `STRIPE_WEBHOOK_SECRET` | Set `whsec_dummy` until Phase 15 |
+   | `RESEND_API_KEY` | resend.com — can be `re_dummy` until Phase 16 |
+
+6. **Before deploying:** Run SQL migrations in Supabase SQL editor (files in `sql/` — run in order 01→12)
+7. **Seed Bible text:** Run `npm run seed:translations` (populates `chapters` table with WEB + KJV). Without this, the reading screen shows "Bible content not yet available" but auth/dashboard/onboarding still work.
+8. **Deploy** — the app will load, auth will work. Bible reading requires step 7.
+
+---
+
+
+
 ## HOW TO USE THIS PLAN
 
 Each Phase is a **self-contained coding session**. Hand the agent this file + the referenced source files. Every Phase ends with a working, testable state. Never skip a Phase — each one is a dependency for what follows.

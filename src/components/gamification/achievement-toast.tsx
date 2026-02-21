@@ -12,7 +12,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { ACHIEVEMENT_DEFINITIONS } from "@/lib/achievements";
+import { ACHIEVEMENT_DEFINITIONS } from "@/lib/achievements-data";
 
 interface Props {
   earned: string[]; // achievement keys
