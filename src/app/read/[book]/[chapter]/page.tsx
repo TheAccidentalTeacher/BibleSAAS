@@ -14,6 +14,7 @@ import {
   TRANSLATIONS,
 } from "@/lib/bible/index";
 import ReadingView from "./reading-view";
+import type { SpurgeonEntry } from "./spurgeon-card";
 
 interface PageProps {
   params: Promise<{ book: string; chapter: string }>;
@@ -55,20 +56,25 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
   // Priority: URL query param > user display settings > default (WEB)
   let translation = "WEB";
 
+  // ----- Fetch display settings once -----
+  const { data: rawDisplaySettings } = await supabase
+    .from("user_display_settings")
+    .select("default_translation, spurgeon_layer")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  const displaySettings = rawDisplaySettings as unknown as {
+    default_translation?: string;
+    spurgeon_layer?: boolean;
+  } | null;
+
   if (qsTranslation) {
     const valid = TRANSLATIONS.find(
       (t) => t.code === qsTranslation.toUpperCase()
     );
     if (valid) translation = valid.code;
   } else {
-    const { data: displaySettings } = await supabase
-      .from("user_display_settings")
-      .select("default_translation")
-      .eq("user_id", user.id)
-      .maybeSingle();
-
     if (displaySettings?.default_translation) {
-      translation = displaySettings.default_translation as string;
+      translation = displaySettings.default_translation;
     }
   }
 
@@ -88,6 +94,21 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
 
   const userTier = (profile?.subscription_tier as string) ?? "free";
 
+  // ----- Spurgeon entries -----
+  const spurgeonEnabled = displaySettings?.spurgeon_layer ?? false;
+  let spurgeonEntries: SpurgeonEntry[] = [];
+  if (spurgeonEnabled) {
+    const { data: spurgeonData } = await supabase
+      .from("spurgeon_index")
+      .select("id, date_key, title, body, source")
+      .eq("book", bookCode)
+      .eq("chapter", chapterNum)
+      .eq("source", "morning_evening");
+    if (spurgeonData) {
+      spurgeonEntries = spurgeonData as unknown as SpurgeonEntry[];
+    }
+  }
+
   return (
     <ReadingView
       bookCode={bookCode}
@@ -97,6 +118,8 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
       unavailableReason={chapterData ? null : getUnavailableReason(translation)}
       translation={translation}
       userTier={userTier}
+      spurgeonEnabled={spurgeonEnabled}
+      spurgeonEntries={spurgeonEntries}
       prevChapter={prev ? { book: prev.book, chapter: prev.chapter } : null}
       nextChapter={next ? { book: next.book, chapter: next.chapter } : null}
     />
