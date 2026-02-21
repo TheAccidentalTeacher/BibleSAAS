@@ -160,6 +160,17 @@ export interface UserStreakRow {
   updated_at: string;
 }
 
+export interface OnboardingConversationRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  messages: unknown; // JSON array of {role, content} objects
+  profile_extracted: boolean;
+  extracted_json: unknown | null; // JSON profile extraction result
+  created_at: string;
+  completed_at: string | null;
+}
+
 // ─── Database type (Supabase-compatible shape) ────────────────────────────────
 // NOTE: `Relationships: []` is required by postgrest-js GenericTable —
 // it will NOT resolve table types without it.
@@ -278,6 +289,12 @@ export type Database = {
         Row: UserStreakRow;
         Insert: { user_id: string; current_streak?: number; longest_streak?: number; last_activity_date?: string | null; updated_at?: string };
         Update: Partial<Omit<UserStreakRow, "user_id">>;
+        Relationships: [];
+      };
+      onboarding_conversations: {
+        Row: OnboardingConversationRow;
+        Insert: { user_id: string; messages: unknown; profile_extracted?: boolean; extracted_json?: unknown | null; id?: string; created_at?: string; completed_at?: string | null };
+        Update: Partial<Omit<OnboardingConversationRow, "id">>;
         Relationships: [];
       };
     };
