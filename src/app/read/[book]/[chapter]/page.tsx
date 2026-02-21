@@ -15,6 +15,7 @@ import {
 } from "@/lib/bible/index";
 import ReadingView from "./reading-view";
 import type { SpurgeonEntry } from "./spurgeon-card";
+import type { StreakRow } from "@/types/database";
 
 interface PageProps {
   params: Promise<{ book: string; chapter: string }>;
@@ -94,6 +95,15 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
 
   const userTier = (profile?.subscription_tier as string) ?? "free";
 
+  // ----- Streak (for header badge) -----
+  const { data: streakRaw } = await supabase
+    .from("streaks")
+    .select("current_streak, total_xp, current_level")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  const streakRow = streakRaw as unknown as Pick<StreakRow, "current_streak" | "total_xp" | "current_level"> | null;
+  const currentStreak = streakRow?.current_streak ?? 0;
+
   // ----- Spurgeon entries -----
   const spurgeonEnabled = displaySettings?.spurgeon_layer ?? false;
   let spurgeonEntries: SpurgeonEntry[] = [];
@@ -120,6 +130,7 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
       userTier={userTier}
       spurgeonEnabled={spurgeonEnabled}
       spurgeonEntries={spurgeonEntries}
+      currentStreak={currentStreak}
       prevChapter={prev ? { book: prev.book, chapter: prev.chapter } : null}
       nextChapter={next ? { book: next.book, chapter: next.chapter } : null}
     />

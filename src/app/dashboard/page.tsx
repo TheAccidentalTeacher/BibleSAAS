@@ -120,7 +120,7 @@ export default async function DashboardPage() {
 
   // ── Streak ────────────────────────────────────────────────────────────────
   const { data: streakData } = await supabase
-    .from("user_streaks")
+    .from("streaks")
     .select("*")
     .eq("user_id", user.id)
     .maybeSingle();

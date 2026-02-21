@@ -173,13 +173,59 @@ export interface ReadingProgressRow {
   reading_plan_id: string | null;
 }
 
-export interface UserStreakRow {
+export interface StreakRow {
   [key: string]: unknown;
+  id: string;
   user_id: string;
   current_streak: number;
   longest_streak: number;
-  last_activity_date: string | null;
-  updated_at: string;
+  last_active_date: string | null; // date string YYYY-MM-DD
+  total_days: number;
+  total_xp: number;
+  current_level: number;
+  streak_grace_used: boolean;
+  streak_grace_last_used: string | null;
+  prayer_days_streaked: number;
+  prayer_longest_streak: number;
+  prayer_last_active: string | null;
+  meta: Record<string, unknown>;
+}
+
+/** @deprecated Use StreakRow + 'streaks' table. Kept for backwards compat. */
+export type UserStreakRow = StreakRow;
+
+export interface AchievementRow {
+  [key: string]: unknown;
+  id: string;
+  key: string;
+  name: string;
+  description: string | null;
+  xp_value: number;
+  icon: string | null;
+  category: "reading" | "streaks" | "engagement" | "memory" | "prayer" | "word_study" | "special";
+  tier_required: string;
+  is_hidden: boolean;
+  sort_order: number;
+  meta: Record<string, unknown>;
+}
+
+export interface UserAchievementRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  achievement_id: string;
+  earned_at: string;
+  meta: Record<string, unknown>;
+}
+
+export interface XpEventRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  event_type: string;
+  xp_earned: number;
+  context: Record<string, unknown>;
+  created_at: string;
 }
 
 export interface OnboardingConversationRow {
@@ -405,10 +451,28 @@ export type Database = {
         Update: Partial<Omit<ReadingProgressRow, "id">>;
         Relationships: [];
       };
-      user_streaks: {
-        Row: UserStreakRow;
-        Insert: { user_id: string; current_streak?: number; longest_streak?: number; last_activity_date?: string | null; updated_at?: string };
-        Update: Partial<Omit<UserStreakRow, "user_id">>;
+      streaks: {
+        Row: StreakRow;
+        Insert: { user_id: string; current_streak?: number; longest_streak?: number; last_active_date?: string | null; total_days?: number; total_xp?: number; current_level?: number; streak_grace_used?: boolean; streak_grace_last_used?: string | null; prayer_days_streaked?: number; prayer_longest_streak?: number; prayer_last_active?: string | null; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<StreakRow, "id">>;
+        Relationships: [];
+      };
+      achievements: {
+        Row: AchievementRow;
+        Insert: { key: string; name: string; description?: string | null; xp_value?: number; icon?: string | null; category?: AchievementRow["category"]; tier_required?: string; is_hidden?: boolean; sort_order?: number; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<AchievementRow, "id">>;
+        Relationships: [];
+      };
+      user_achievements: {
+        Row: UserAchievementRow;
+        Insert: { user_id: string; achievement_id: string; earned_at?: string; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<UserAchievementRow, "id">>;
+        Relationships: [];
+      };
+      xp_events: {
+        Row: XpEventRow;
+        Insert: { user_id: string; event_type: string; xp_earned: number; context?: Record<string, unknown>; id?: string; created_at?: string };
+        Update: never;
         Relationships: [];
       };
       onboarding_conversations: {

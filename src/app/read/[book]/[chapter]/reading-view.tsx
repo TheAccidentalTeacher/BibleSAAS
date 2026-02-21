@@ -25,6 +25,7 @@ import {
   BookOpen,
   FlaskConical,
   MessageSquare,
+  Flame,
 } from "lucide-react";
 import TranslationPicker from "./translation-picker";
 import CharlesCard from "./charles-card";
@@ -36,6 +37,7 @@ import VerseActionMenu, {
   type BookmarkState,
   HIGHLIGHT_BG,
 } from "./verse-action-menu";
+import AchievementToast from "@/components/gamification/achievement-toast";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
 
@@ -60,6 +62,7 @@ interface ReadingViewProps {
   spurgeonEntries: SpurgeonEntry[];
   prevChapter: { book: string; chapter: number } | null;
   nextChapter: { book: string; chapter: number } | null;
+  currentStreak: number;
 }
 
 export default function ReadingView({
@@ -72,6 +75,7 @@ export default function ReadingView({
   userTier,
   spurgeonEnabled,
   spurgeonEntries,
+  currentStreak,
   prevChapter,
   nextChapter,
 }: ReadingViewProps) {
@@ -85,8 +89,43 @@ export default function ReadingView({
   const [contentLoading, setContentLoading] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
 
+  // ── Gamification state ────────────────────────────────────────────────────
+  const [streak, setStreak] = useState(currentStreak);
+  const [earnedAchievements, setEarnedAchievements] = useState<string[]>([]);
+  const chapterMarkedRef = useRef(false);
+  const readSentinelRef = useRef<HTMLDivElement | null>(null);
+
   const skeletonTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const appearTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // ── Auto-mark chapter as read when sentinel enters viewport ───────────────
+  useEffect(() => {
+    chapterMarkedRef.current = false;
+    const sentinel = readSentinelRef.current;
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting && !chapterMarkedRef.current) {
+          chapterMarkedRef.current = true;
+          void (async () => {
+            const res = await fetch("/api/reading-progress", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ book: bookCode, chapter }),
+            });
+            if (res.ok) {
+              const data = await res.json() as { streak?: number; achievements?: string[] };
+              if (data.streak !== undefined) setStreak(data.streak);
+              if (data.achievements?.length) setEarnedAchievements(data.achievements);
+            }
+          })();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [bookCode, chapter]);
 
   // ── Highlights & Bookmarks ──────────────────────────────────────────────
   const [highlights, setHighlights] = useState<HighlightState[]>([]);
@@ -318,6 +357,18 @@ export default function ReadingView({
         >
           <Share2 size={18} />
         </button>
+
+        {/* Streak badge */}
+        {streak > 0 && (
+          <div
+            className="flex items-center gap-0.5 text-[12px] font-semibold"
+            style={{ color: "var(--color-accent)" }}
+            title={`${streak}-day streak`}
+          >
+            <Flame size={14} />
+            {streak}
+          </div>
+        )}
       </header>
 
       {/* ── Secondary controls: mode toggle + translation pill ── */}
@@ -517,6 +568,9 @@ export default function ReadingView({
             />
           </div>
         )}
+
+        {/* Read sentinel — triggers chapter-read event when scrolled into view */}
+        <div ref={readSentinelRef} style={{ height: 1 }} aria-hidden />
       </main>
 
       {/* ─── Charles re-summon button ─── */}
@@ -578,6 +632,11 @@ export default function ReadingView({
           onClose={() => setActiveMenu(null)}
         />
       )}
+      {/* ── Achievement Toast ── */}
+      <AchievementToast
+        earned={earnedAchievements}
+        onDismiss={() => setEarnedAchievements([])}
+      />
     </div>
   );
 }

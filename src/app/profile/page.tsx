@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import BottomNav from "@/components/layout/bottom-nav";
+import { getLevelForXp } from "@/lib/xp";
+import type { StreakRow } from "@/types/database";
 
 export const metadata = { title: "Profile" };
 
@@ -39,6 +41,22 @@ export default async function ProfilePage() {
       }).format(new Date(profile.created_at))
     : "—";
 
+  // XP + streak
+  const { data: streakRaw } = await supabase
+    .from("streaks")
+    .select("current_streak, longest_streak, total_xp, current_level, total_days")
+    .eq("user_id", user.id)
+    .maybeSingle();
+  const streakData = streakRaw as unknown as Pick<StreakRow, "current_streak" | "longest_streak" | "total_xp" | "current_level" | "total_days"> | null;
+  const totalXp = streakData?.total_xp ?? 0;
+  const currentStreak = streakData?.current_streak ?? 0;
+  const longestStreak = streakData?.longest_streak ?? 0;
+  const totalDays = streakData?.total_days ?? 0;
+  const levelInfo = getLevelForXp(totalXp);
+  const xpIntoLevel = totalXp - levelInfo.minXp;
+  const xpForLevel = (levelInfo.nextLevelXp ?? levelInfo.minXp + 1000) - levelInfo.minXp;
+  const levelPct = Math.min(100, Math.round((xpIntoLevel / xpForLevel) * 100));
+
   return (
     <>
       <main className="flex min-h-screen flex-col bg-[var(--color-bg)] pb-20">
@@ -60,6 +78,45 @@ export default async function ProfilePage() {
           >
             {displayName ?? "Your Profile"}
           </h1>
+        </div>
+
+        {/* XP / Level card */}
+        <div className="mb-6 rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] px-5 py-4">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: "var(--color-accent)" }}>Level {levelInfo.level}</p>
+              <p className="text-[18px] font-bold text-[var(--color-text-1)]">{levelInfo.title}</p>
+            </div>
+            <p className="text-[13px] text-[var(--color-text-3)]">{totalXp.toLocaleString()} XP</p>
+          </div>
+          {/* XP progress bar */}
+          <div className="h-2 rounded-full overflow-hidden" style={{ background: "var(--color-border)" }}>
+            <div
+              className="h-full rounded-full transition-all"
+              style={{ width: `${levelPct}%`, background: "var(--color-accent)" }}
+            />
+          </div>
+          {levelInfo.nextLevelXp && (
+            <p className="mt-1.5 text-[11px]" style={{ color: "var(--color-text-3)" }}>
+              {totalXp - levelInfo.minXp} / {xpForLevel} XP to Level {levelInfo.level + 1}
+            </p>
+          )}
+
+          {/* Streak stats */}
+          <div className="mt-4 grid grid-cols-3 gap-3 pt-4 border-t" style={{ borderColor: "var(--color-border)" }}>
+            <div className="text-center">
+              <p className="text-[20px] font-bold text-[var(--color-text-1)]">{currentStreak}</p>
+              <p className="text-[11px]" style={{ color: "var(--color-text-3)" }}>Current streak</p>
+            </div>
+            <div className="text-center">
+              <p className="text-[20px] font-bold text-[var(--color-text-1)]">{longestStreak}</p>
+              <p className="text-[11px]" style={{ color: "var(--color-text-3)" }}>Best streak</p>
+            </div>
+            <div className="text-center">
+              <p className="text-[20px] font-bold text-[var(--color-text-1)]">{totalDays}</p>
+              <p className="text-[11px]" style={{ color: "var(--color-text-3)" }}>Days read</p>
+            </div>
+          </div>
         </div>
 
         {/* Info card */}

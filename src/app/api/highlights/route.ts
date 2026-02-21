@@ -10,6 +10,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { HighlightRow } from "@/types/database";
+import { awardXP } from "@/lib/xp";
 
 // ── GET ─────────────────────────────────────────────────────────────────────
 export async function GET(req: Request) {
@@ -80,6 +81,8 @@ export async function POST(req: Request) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+  // Award XP for adding a highlight (fire-and-forget)
+  void awardXP(user.id, "highlight_added");
   return NextResponse.json({ highlight: data as unknown as HighlightRow });
 }
 

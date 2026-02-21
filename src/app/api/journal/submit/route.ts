@@ -37,6 +37,8 @@ import { buildContentSystemPrompt } from "@/lib/charles/content";
 import { ANTHROPIC_MODEL } from "@/lib/charles/prompts";
 import { getChapter } from "@/lib/bible/index";
 import type { ProfileRow } from "@/types/database";
+import { awardXP } from "@/lib/xp";
+import { checkAndAwardAchievements } from "@/lib/achievements";
 
 interface AnswerInput {
   oia_type: "observe" | "interpret" | "apply";
@@ -164,6 +166,16 @@ export async function POST(req: NextRequest) {
 
   // ----- Call Anthropic for responses (paid tiers only) -----
   const apiKey = process.env.ANTHROPIC_API_KEY;
+
+  // Award XP for journal answers (5 XP each, capped at 25 per session)
+  const cappedAnswerCount = Math.min(answeredItems.length, 5);
+  if (cappedAnswerCount > 0) {
+    void awardXP(user.id, "journal_answer", cappedAnswerCount * 5, {
+      entry_id: entryId,
+      count: cappedAnswerCount,
+    });
+  }
+  void checkAndAwardAchievements(user.id, { type: "journal_answer" });
 
   if (!apiKey || tier === "free") {
     // Free users get no AI response — just acknowledgment
