@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
+import BottomNav from "@/components/layout/bottom-nav";
 
 export const metadata = { title: "Profile" };
 
@@ -39,7 +40,8 @@ export default async function ProfilePage() {
     : "—";
 
   return (
-    <main className="flex min-h-screen flex-col bg-[var(--color-bg)]">
+    <>
+      <main className="flex min-h-screen flex-col bg-[var(--color-bg)] pb-20">
       <div className="mx-auto w-full max-w-lg px-4 py-12">
         {/* Back link */}
         <a
@@ -121,5 +123,7 @@ export default async function ProfilePage() {
         </div>
       </div>
     </main>
+    <BottomNav />
+    </>
   );
 }

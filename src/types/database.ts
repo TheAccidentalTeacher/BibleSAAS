@@ -193,6 +193,43 @@ export interface OnboardingConversationRow {
   completed_at: string | null;
 }
 
+export interface ReadingPlanRow {
+  [key: string]: unknown;
+  id: string;
+  name: string;
+  type: string; // 'sequential' | 'chronological' | 'topical' | 'single_book' | 'custom'
+  description: string | null;
+  book_filter: string | null; // null = all books
+  is_default: boolean;
+  is_system: boolean;
+  meta: Record<string, unknown>;
+  created_at: string;
+  // virtual: total_days (count of plan_chapters)
+  total_days?: number;
+}
+
+export interface PlanChapterRow {
+  [key: string]: unknown;
+  id: string;
+  plan_id: string;
+  day_number: number;
+  book: string;
+  chapter: number;
+  section_label: string | null;
+}
+
+export interface UserReadingPlanRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  plan_id: string;
+  started_at: string;
+  current_day: number;
+  active: boolean;
+  completed_at: string | null;
+  meta: Record<string, unknown>;
+}
+
 export interface PersonalizedContentRow {
   [key: string]: unknown;
   id: string;
@@ -396,6 +433,24 @@ export type Database = {
         Row: SpurgeonRow;
         Insert: { source: string; body: string; date_key?: string | null; book?: string | null; chapter?: number | null; verse?: number | null; title?: string | null; id?: string; meta?: unknown };
         Update: Partial<Omit<SpurgeonRow, "id">>;
+        Relationships: [];
+      };
+      reading_plans: {
+        Row: ReadingPlanRow;
+        Insert: { name: string; type: string; description?: string | null; book_filter?: string | null; is_default?: boolean; is_system?: boolean; meta?: Record<string, unknown>; id?: string; created_at?: string };
+        Update: Partial<Omit<ReadingPlanRow, "id">>;
+        Relationships: [];
+      };
+      plan_chapters: {
+        Row: PlanChapterRow;
+        Insert: { plan_id: string; day_number: number; book: string; chapter: number; section_label?: string | null; id?: string };
+        Update: Partial<Omit<PlanChapterRow, "id">>;
+        Relationships: [];
+      };
+      user_reading_plans: {
+        Row: UserReadingPlanRow;
+        Insert: { user_id: string; plan_id: string; started_at?: string; current_day?: number; active?: boolean; completed_at?: string | null; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<UserReadingPlanRow, "id">>;
         Relationships: [];
       };
     };
