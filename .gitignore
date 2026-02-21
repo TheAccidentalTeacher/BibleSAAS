@@ -16,6 +16,11 @@ build/
 .env.test.local
 .env.production.local
 .env*.local
+.env*
+
+# === TypeScript build artifacts ===
+*.tsbuildinfo
+next-env.d.ts
 
 # === Supabase local dev ===
 supabase/.temp/
@@ -48,3 +53,6 @@ yarn-error.log*
 # === Dropbox ===
 .dropbox
 desktop.ini
+
+# === Temp Next.js init folder (can be deleted once node_modules unlocks) ===
+bible-saas/

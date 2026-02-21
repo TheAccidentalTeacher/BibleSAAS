@@ -1,0 +1,17 @@
+# Normalize line endings to LF on commit for all text files.
+# This ensures consistent line endings across macOS, Linux, and Windows.
+* text=auto eol=lf
+
+# Explicitly mark binary files
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg text eol=lf
+*.mp3 binary
+*.mp4 binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
