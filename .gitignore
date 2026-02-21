@@ -56,3 +56,7 @@ desktop.ini
 
 # === Temp Next.js init folder (can be deleted once node_modules unlocks) ===
 bible-saas/
+
+build-log.txt
+scripts/seed-log.txt
+
