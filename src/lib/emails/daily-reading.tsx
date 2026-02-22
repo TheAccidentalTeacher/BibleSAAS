@@ -57,7 +57,7 @@ export default function DailyReadingEmail({
           {bookName} {chapter}
         </Text>
         <Text style={s.body}>
-          Here are a few questions to carry into today's reading.
+          Here are a few questions to carry into today&apos;s reading.
         </Text>
         {questions.length > 0 && (
           <>

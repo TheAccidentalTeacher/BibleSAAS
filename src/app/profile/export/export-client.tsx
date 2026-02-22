@@ -234,7 +234,7 @@ export default function ExportClient({ jobs: initialJobs, deletionRequestedAt, t
             ) : (
               <div className="space-y-3">
                 <p className="text-[#6B6056] text-xs">
-                  Permanently delete your account and all associated data. You'll have 30 days to cancel.
+                  Permanently delete your account and all associated data. You&apos;ll have 30 days to cancel.
                 </p>
                 <button
                   onClick={handleRequestDeletion}

@@ -293,7 +293,7 @@ export default function GroupDetailClient({
                 <MessageSquare className="text-[#2C2C2C] mx-auto mb-3" size={36} strokeWidth={1.5} />
                 <p className="text-[#6B6056] text-sm">No verse threads yet.</p>
                 <p className="text-[#4A4040] text-xs mt-1">
-                  Start a thread from the reading screen — tap a verse and choose "Group Thread."
+                  Start a thread from the reading screen — tap a verse and choose &ldquo;Group Thread.&rdquo;
                 </p>
               </div>
             )}

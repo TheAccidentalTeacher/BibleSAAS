@@ -83,7 +83,7 @@ export default function HymnCard({ hymn, onClose }: HymnCardProps) {
               className="text-sm italic mb-4"
               style={{ color: "var(--color-text-2)" }}
             >
-              "{hymn.first_line}"
+              &ldquo;{hymn.first_line}&rdquo;
             </p>
           )}
 

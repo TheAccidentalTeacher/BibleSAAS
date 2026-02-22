@@ -30,7 +30,7 @@ export default function ServiceWorkerRegister() {
         window.addEventListener("online", async () => {
           if ("sync" in registration) {
             try {
-              // @ts-ignore — BackgroundSync API
+              // @ts-expect-error — BackgroundSync API not in standard types
               await registration.sync.register("pending-sync");
             } catch {
               // Background sync not supported — SW will handle via message

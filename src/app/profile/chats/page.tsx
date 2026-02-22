@@ -72,7 +72,7 @@ export default async function ChatsPage() {
               No conversations yet
             </p>
             <p className="text-sm text-[var(--color-text-secondary)] mt-1 max-w-xs">
-              Start by tapping "Ask Charles" on any chapter, or start a new open conversation.
+              Start by tapping &ldquo;Ask Charles&rdquo; on any chapter, or start a new open conversation.
             </p>
             <Link
               href="/chat/new"

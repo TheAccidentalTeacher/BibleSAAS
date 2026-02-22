@@ -21,6 +21,7 @@ export default async function YearInReviewPage() {
   const tier = profile?.subscription_tier ?? "free";
 
   // Fetch year in review records, newest first
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const { data: years } = await (supabase as any)
     .from("year_in_review")
     .select("year, charles_reflection, content_json, email_sent_at")
