@@ -155,12 +155,56 @@ export interface JournalEntryRow {
   [key: string]: unknown;
   id: string;
   user_id: string;
-  book_code: string | null;
-  chapter_number: number | null;
-  entry_type: "oia" | "free" | "prayer" | "gratitude";
-  content: unknown; // JSON
+  book: string;
+  chapter: number;
+  studied_at: string;
+  just_read_mode: boolean;
+  note: string | null;
+  voice_note_url: string | null;
+  voice_note_duration_seconds: number | null;
+  voice_note_transcript: string | null;
+  voice_note_transcribed_at: string | null;
+  is_lament_session: boolean;
+  follow_up_at: string | null;
+  deleted_at: string | null;
+  response_note: string | null;
+  responded_at: string | null;
+  meta: Record<string, unknown>;
+  created_at: string;
+}
+
+export type PrayerCategory =
+  | "praise"
+  | "thanksgiving"
+  | "petition"
+  | "intercession"
+  | "confession"
+  | "lament";
+
+export interface PrayerJournalRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  title: string | null;
+  body: string;
+  category: PrayerCategory;
+  status: "ongoing" | "answered" | "archived";
+  answered_at: string | null;
+  answered_note: string | null;
+  passage_ref: string | null;
+  linked_verse_text: string | null;
+  tags: string[] | null;
+  reminder_enabled: boolean;
+  reminder_time: string | null;
+  reminder_days: string[] | null;
+  reminder_last_sent: string | null;
+  charles_note: Record<string, unknown> | null;
+  shared_with: string[] | null;
+  hymn_id: string | null;
   created_at: string;
   updated_at: string;
+  deleted_at: string | null;
+  meta: Record<string, unknown>;
 }
 
 export interface ReadingProgressRow {
@@ -441,8 +485,42 @@ export type Database = {
       };
       journal_entries: {
         Row: JournalEntryRow;
-        Insert: { user_id: string; book_code?: string | null; chapter_number?: number | null; entry_type: "oia" | "free" | "prayer" | "gratitude"; content: unknown; id?: string; created_at?: string; updated_at?: string };
+        Insert: {
+          user_id: string;
+          book: string;
+          chapter: number;
+          studied_at?: string;
+          just_read_mode?: boolean;
+          note?: string | null;
+          voice_note_url?: string | null;
+          is_lament_session?: boolean;
+          follow_up_at?: string | null;
+          id?: string;
+          created_at?: string;
+        };
         Update: Partial<Omit<JournalEntryRow, "id">>;
+        Relationships: [];
+      };
+      prayer_journal: {
+        Row: PrayerJournalRow;
+        Insert: {
+          user_id: string;
+          body: string;
+          category: PrayerCategory;
+          title?: string | null;
+          status?: "ongoing" | "answered" | "archived";
+          answered_at?: string | null;
+          answered_note?: string | null;
+          passage_ref?: string | null;
+          linked_verse_text?: string | null;
+          tags?: string[] | null;
+          reminder_enabled?: boolean;
+          charles_note?: Record<string, unknown> | null;
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Omit<PrayerJournalRow, "id">>;
         Relationships: [];
       };
       reading_progress: {

@@ -108,9 +108,8 @@ export async function POST(req: NextRequest) {
     .from("journal_entries")
     .select("id")
     .eq("user_id", user.id)
-    .eq("book_code", book.toUpperCase())
-    .eq("chapter_number", chapter)
-    .eq("entry_type", "oia")
+    .eq("book", book.toUpperCase())
+    .eq("chapter", chapter)
     .gte("created_at", `${today}T00:00:00Z`)
     .maybeSingle();
 
@@ -123,10 +122,11 @@ export async function POST(req: NextRequest) {
       .from("journal_entries")
       .insert({
         user_id: user.id,
-        book_code: book.toUpperCase(),
-        chapter_number: chapter,
-        entry_type: "oia",
-        content: { answers: answeredItems },
+        book: book.toUpperCase(),
+        chapter: chapter,
+        studied_at: new Date().toISOString(),
+        just_read_mode: false,
+        is_lament_session: false,
       })
       .select("id")
       .single();

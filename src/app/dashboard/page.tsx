@@ -136,23 +136,14 @@ export default async function DashboardPage() {
 
   const rawJournal = (journalData as unknown as JournalEntryRow[]) ?? [];
   const recentJournal = rawJournal
-    .filter((e) => e.book_code && e.chapter_number)
-    .map((e) => {
-      const content = e.content as Record<string, unknown> | null;
-      const firstLine =
-        typeof content?.note === "string"
-          ? content.note.slice(0, 120)
-          : typeof content?.text === "string"
-          ? content.text.slice(0, 120)
-          : "Study session";
-      return {
-        id: e.id,
-        book: e.book_code!,
-        chapter: e.chapter_number!,
-        created_at: e.created_at,
-        firstLine,
-      };
-    });
+    .filter((e) => e.book && e.chapter)
+    .map((e) => ({
+      id: e.id,
+      book: e.book as string,
+      chapter: e.chapter as number,
+      created_at: e.created_at,
+      firstLine: e.note ? e.note.slice(0, 120) : "Study session",
+    }));
 
   return (
     <>

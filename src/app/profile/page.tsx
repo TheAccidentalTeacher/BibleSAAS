@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { signOut } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
 import BottomNav from "@/components/layout/bottom-nav";
@@ -117,6 +118,27 @@ export default async function ProfilePage() {
               <p className="text-[11px]" style={{ color: "var(--color-text-3)" }}>Days read</p>
             </div>
           </div>
+        </div>
+
+        {/* My Study — quick links */}
+        <div className="rounded-[var(--radius-card)] border border-[var(--color-border)] bg-[var(--color-surface)] divide-y divide-[var(--color-border)]">
+          {[
+            { href: "/profile/journal", label: "Study Journal", desc: "Past OIA sessions & notes" },
+            { href: "/profile/prayer", label: "Prayer Journal", desc: "Prayers, laments & answered prayer" },
+            { href: "/profile/bookmarks", label: "Bookmarks", desc: "Saved verses" },
+          ].map(({ href, label, desc }) => (
+            <Link
+              key={href}
+              href={href}
+              className="flex items-center justify-between px-5 py-4 transition-colors hover:bg-[var(--color-bg)]"
+            >
+              <div>
+                <p className="text-[15px] font-medium text-[var(--color-text-1)]">{label}</p>
+                <p className="text-[12px] text-[var(--color-text-3)]">{desc}</p>
+              </div>
+              <span className="text-[var(--color-text-3)]">→</span>
+            </Link>
+          ))}
         </div>
 
         {/* Info card */}
