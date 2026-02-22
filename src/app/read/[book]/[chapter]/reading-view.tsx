@@ -46,6 +46,8 @@ import TskRefSheet from "./tsk-ref-sheet";
 import VerseThreadPanel from "./verse-thread-panel";
 import WordNotePopover from "./word-note-popover";
 import AchievementToast from "@/components/gamification/achievement-toast";
+import { useOfflineChapter } from "@/hooks/useOfflineChapter";
+import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
 
@@ -97,6 +99,15 @@ export default function ReadingView({
   nextChapter,
 }: ReadingViewProps) {
   const router = useRouter();
+
+  // ── Offline chapter caching ──────────────────────────────────────────────
+  const isOnline = useOnlineStatus();
+  const { isCached } = useOfflineChapter({
+    book: bookCode,
+    chapter,
+    translation,
+    verses: (chapterData?.verses ?? []).map((v) => ({ verse: v.verse, text: v.text })),
+  });
   const [mode, setMode] = useState<"read" | "study">("read");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [charlesVisible, setCharlesVisible] = useState(false);
@@ -665,6 +676,17 @@ export default function ReadingView({
               Free translations (WEB, KJV, ASV, YLT) will be available after
               the database seed scripts are run.
             </p>
+          </div>
+        )}
+
+        {/* Offline cached indicator */}
+        {!isOnline && isCached && (
+          <div
+            className="mb-3 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full w-fit"
+            style={{ background: "var(--color-surface-2)", color: "var(--color-text-3)" }}
+          >
+            <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-500" />
+            Cached for offline reading
           </div>
         )}
 

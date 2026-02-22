@@ -7,6 +7,8 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import ClientProviders from "@/components/providers";
+import ServiceWorkerRegister from "@/components/pwa/sw-register";
+import OfflineBanner from "@/components/offline/offline-banner";
 
 /**
  * Bible reading text — user-selectable (eb_garamond is default).
@@ -58,6 +60,18 @@ export const metadata: Metadata = {
   },
   description:
     "A deeply personal Bible reading and study companion — OIA methodology, living portrait personalization, cross-references, and the Vault.",
+  manifest: "/manifest.json",
+  themeColor: "#C4A040",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Bible Study",
+  },
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+  },
 };
 
 export default function RootLayout({
@@ -76,7 +90,11 @@ export default function RootLayout({
         robotoMono.variable,
       ].join(" ")}
     >
-      <body className="antialiased"><ClientProviders>{children}</ClientProviders></body>
+      <body className="antialiased">
+        <ServiceWorkerRegister />
+        <OfflineBanner />
+        <ClientProviders>{children}</ClientProviders>
+      </body>
     </html>
   );
 }

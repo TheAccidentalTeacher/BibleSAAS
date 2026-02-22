@@ -1,0 +1,45 @@
+{
+  "name": "Bible Study",
+  "short_name": "Bible Study",
+  "description": "A deeply personal Bible reading and study companion",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#0D0D0D",
+  "theme_color": "#C4A040",
+  "orientation": "portrait-primary",
+  "categories": ["education", "lifestyle"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Continue Reading",
+      "url": "/dashboard",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Memory Verses",
+      "url": "/profile/memory-verses",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
