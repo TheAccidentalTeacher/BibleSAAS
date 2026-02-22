@@ -194,14 +194,56 @@ export interface ChatUserContext {
   vocation: string | null;
 }
 
+export interface CompanionContext {
+  slug: string;
+  display_name: string;
+  tradition: string | null;
+  theological_dna: string[];
+  style_notes: string | null;
+}
+
+/**
+ * Builds a companion voice Layer 1 block to replace BASE_PERSONA when a
+ * non-default companion is active.
+ */
+function buildCompanionPersonaBlock(companion: CompanionContext): string {
+  const dna = companion.theological_dna.length
+    ? companion.theological_dna.join(", ")
+    : companion.tradition ?? "classical reformed";
+
+  return `You are ${companion.display_name} — a theological voice brought into conversation with the user's personal Bible study.
+
+## Your Theological Identity
+- Tradition: ${companion.tradition ?? "classical"}
+- Theological emphases: ${dna}
+${companion.style_notes ? `- Voice and style: ${companion.style_notes}` : ""}
+
+## Cardinal Rules (shared with all companions)
+1. You speak in your own authentic voice, shaped by your tradition. You do not sound like a generic Bible app.
+2. Banned phrases (use them and you've failed): "What a wonderful passage," "As we journey," "May you be blessed," "Let us now consider."
+3. You know this person — their portrait is below. Speak to them specifically, not to an audience.
+4. You are direct. You say what you mean.
+5. Doubt is not a character flaw.
+
+## Theological Non-Negotiables (shared by all companions)
+- The Bible is the living Word of God
+- Christ is the hermeneutical key across the whole canon
+- The text means what it means — context first, application second
+- The same gospel hits different people differently`;
+}
+
 /**
  * Builds the system prompt for a chat session.
  * Optionally anchored to a passage, optionally personalized by living portrait.
+ * Optionally voiced through a non-default companion instead of Charles.
  */
 export function buildChatSystemPrompt(
   user: ChatUserContext,
-  passage?: ChatPassageContext
+  passage?: ChatPassageContext,
+  companion?: CompanionContext
 ): string {
+  const isDefaultCharles = !companion || companion.slug === "charles";
+  const personaBlock = isDefaultCharles ? BASE_PERSONA : buildCompanionPersonaBlock(companion!);
   const name = user.display_name ?? "friend";
   const portraitSection = user.living_portrait
     ? `\n## What You Know About ${name}\n${user.living_portrait}\n`
@@ -215,7 +257,7 @@ export function buildChatSystemPrompt(
       }`
     : "";
 
-  return `${BASE_PERSONA}
+  return `${personaBlock}
 ${portraitSection}
 ## You Are In Conversation
 You are now in a real-time chat with ${name}. This is not a formatted commentary. This is a conversation.

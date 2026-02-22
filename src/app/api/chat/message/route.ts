@@ -8,6 +8,7 @@ import {
   CHAT_TITLE_SYSTEM,
   type ChatUserContext,
   type ChatPassageContext,
+  type CompanionContext,
 } from "@/lib/charles/prompts";
 
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
@@ -50,12 +51,20 @@ export async function POST(request: NextRequest) {
   // ── Get or create session ──────────────────────────────────────────────────
   let sessionId = body.sessionId ?? "";
   if (!sessionId) {
+    // We need active_companion_id before creating session — load it first via service
+    const { data: minimal } = await supabase
+      .from("profiles")
+      .select("active_companion_id")
+      .eq("id", user.id)
+      .single();
     const { data: newSession, error: sessionError } = await supabase
       .from("chat_sessions")
       .insert({
         user_id: user.id,
         anchor_book: anchorBook ?? null,
         anchor_chapter: anchorChapter ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        companion_id: (minimal?.active_companion_id as string | null) ?? null,
       })
       .select("id")
       .single();
@@ -68,7 +77,7 @@ export async function POST(request: NextRequest) {
   // ── Load user profile ──────────────────────────────────────────────────────
   const { data: profileRaw } = await supabase
     .from("profiles")
-    .select("display_name, faith_stage, living_portrait, age_range, vocation")
+    .select("display_name, faith_stage, living_portrait, age_range, vocation, active_companion_id")
     .eq("id", user.id)
     .single();
 
@@ -79,6 +88,27 @@ export async function POST(request: NextRequest) {
     age_range: (profileRaw?.age_range as string | null) ?? null,
     vocation: (profileRaw?.vocation as string | null) ?? null,
   };
+
+  // ── Load active companion ──────────────────────────────────────────────────
+  let companionCtx: CompanionContext | undefined;
+  const activeCompanionId = profileRaw?.active_companion_id as string | null;
+  if (activeCompanionId) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { data: companionRow } = await (supabase as any)
+      .from("companion_definitions")
+      .select("slug, display_name, tradition, theological_dna, style_notes")
+      .eq("id", activeCompanionId)
+      .single();
+    if (companionRow) {
+      companionCtx = {
+        slug: companionRow.slug as string,
+        display_name: companionRow.display_name as string,
+        tradition: (companionRow.tradition as string | null) ?? null,
+        theological_dna: (companionRow.theological_dna as string[] | null) ?? [],
+        style_notes: (companionRow.style_notes as string | null) ?? null,
+      };
+    }
+  }
 
   // ── Load last 20 messages for context ────────────────────────────────────
   const { data: historyRows } = await supabase
@@ -115,7 +145,7 @@ export async function POST(request: NextRequest) {
     };
   }
 
-  const systemPrompt = buildChatSystemPrompt(userCtx, passageCtx);
+  const systemPrompt = buildChatSystemPrompt(userCtx, passageCtx, companionCtx);
 
   // ── Save user message ──────────────────────────────────────────────────────
   await supabase.from("chat_messages").insert({
