@@ -6,6 +6,7 @@
  */
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Flame, BookOpen, CheckCircle2, ChevronRight, Plus, Brain } from "lucide-react";
 import PlanPicker from "./plan-picker";
@@ -275,13 +276,13 @@ export default function DashboardClient({
               <h2 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--color-text-3)" }}>
                 Recent Notes
               </h2>
-              <a
+              <Link
                 href="/profile/journal"
                 className="text-xs font-semibold"
                 style={{ color: "var(--color-accent)" }}
               >
                 See all
-              </a>
+              </Link>
             </div>
             <div className="flex gap-3 overflow-x-auto pb-1">
               {recentJournal.map((entry) => (

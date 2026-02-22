@@ -18,7 +18,7 @@ interface GiftSetupPageProps {
  *
  * The token maps to a profile with `gifted_by` set during account creation.
  */
-export default function GiftSetupPage({ params: _params }: GiftSetupPageProps) {
+export default function GiftSetupPage(_: GiftSetupPageProps) {
   const [state, action, isPending] = useActionState(submitGiftSetup, null);
 
   return (

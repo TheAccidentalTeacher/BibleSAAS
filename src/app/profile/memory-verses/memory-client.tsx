@@ -6,7 +6,7 @@
 
 import { useState, useTransition } from "react";
 import Link from "next/link";
-import { ArrowLeft, Brain, Trash2, Crown, Clock, Star } from "lucide-react";
+import { ArrowLeft, Brain, Trash2, Crown, Clock } from "lucide-react";
 import type { MemoryVerseRow } from "@/types/database";
 
 type EnrichedVerse = MemoryVerseRow & { bookName: string };
@@ -112,7 +112,7 @@ function VerseCard({
   );
 }
 
-export default function MemoryClient({ due, upcoming, mastered, today }: Props) {
+export default function MemoryClient({ due, upcoming, mastered, today: _today }: Props) {
   const [dueList, setDueList] = useState(due);
   const [upcomingList, setUpcomingList] = useState(upcoming);
   const [masteredList, setMasteredList] = useState(mastered);

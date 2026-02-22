@@ -149,7 +149,7 @@ export async function POST(req: NextRequest) {
         });
       }
     }
-  } catch (_) {
+  } catch {
     // Email failure is non-fatal in dev
   }
 

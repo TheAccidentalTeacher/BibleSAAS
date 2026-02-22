@@ -8,7 +8,7 @@
 
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import type { ReadingPlanRow, UserReadingPlanRow, PlanChapterRow } from "@/types/database";
+import type { ReadingPlanRow, UserReadingPlanRow } from "@/types/database";
 
 export async function GET() {
   const supabase = await createClient();

@@ -10,7 +10,7 @@
 
 import { useState, useCallback, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { X, RotateCcw, CheckCircle2, Crown } from "lucide-react";
+import { X, RotateCcw, CheckCircle2 } from "lucide-react";
 import type { MemoryVerseRow } from "@/types/database";
 
 type EnrichedVerse = MemoryVerseRow & { bookName: string };
@@ -402,7 +402,7 @@ function MasteryCelebration({ verse, onContinue }: { verse: EnrichedVerse; onCon
 // ─── Main Component ──────────────────────────────────────────────────────────
 export default function ReviewSession({ verses }: Props) {
   const router = useRouter();
-  const [queue, setQueue] = useState(verses);
+  const [queue] = useState(verses);
   const [index, setIndex] = useState(0);
   const [cardState, setCardState] = useState<CardState>("idle");
   const [masteredVerse, setMasteredVerse] = useState<EnrichedVerse | null>(null);
@@ -411,7 +411,6 @@ export default function ReviewSession({ verses }: Props) {
 
   const current = queue[index];
   const mode = current ? pickMode(current, index) : "flashcard";
-  const remaining = queue.length - index;
 
   const handleRate = useCallback((quality: number) => {
     if (!current) return;

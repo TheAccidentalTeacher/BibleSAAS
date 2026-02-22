@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 import type { Metadata } from "next";
 import type { SharedContentRow } from "@/types/database";
 
@@ -120,13 +121,13 @@ export default async function SharePage({ params }: Props) {
 
         {/* CTA */}
         <div className="mt-8 pt-6 border-t" style={{ borderColor: "var(--color-border)" }}>
-          <a
+          <Link
             href="/"
             className="block text-center text-sm font-semibold py-3 px-6 rounded-full transition-colors"
             style={{ background: "var(--color-accent)", color: "var(--color-bg)" }}
           >
             Open Bible Study App
-          </a>
+          </Link>
         </div>
       </div>
     </div>

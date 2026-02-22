@@ -522,6 +522,96 @@ export interface SpurgeonRow {
   meta: unknown;
 }
 
+export interface TskReferenceRow {
+  [key: string]: unknown;
+  id: string;
+  from_book: string;
+  from_chapter: number;
+  from_verse: number;
+  to_book: string;
+  to_chapter: number;
+  to_verse: number;
+  meta: Record<string, unknown>;
+}
+
+export interface TskVerseStatRow {
+  [key: string]: unknown;
+  id: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  reference_count: number;
+  density_tier: string; // generated: 'rare'|'low'|'medium'|'high'|'very_high'
+}
+
+export interface DailyTrailRow {
+  [key: string]: unknown;
+  id: string;
+  trail_date: string;
+  slot: "morning" | "evening";
+  origin_book: string;
+  origin_chapter: number;
+  origin_verse: number;
+  ai_rationale: string | null;
+  community_stats: Record<string, unknown>;
+  created_at: string;
+  meta: Record<string, unknown>;
+}
+
+export interface CrossReferenceTrailRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  name: string | null;
+  trail_type: "free" | "daily_morning" | "daily_evening" | "thread_needle";
+  daily_trail_id: string | null;
+  origin_book: string;
+  origin_chapter: number;
+  origin_verse: number;
+  step_count: number;
+  share_token: string;
+  is_public: boolean;
+  svg_cache: string | null;
+  svg_generated_at: string | null;
+  created_at: string;
+  completed_at: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface TrailStepRow {
+  [key: string]: unknown;
+  id: string;
+  trail_id: string;
+  step_order: number;
+  book: string;
+  chapter: number;
+  verse: number;
+  note: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface ThreadDefinitionRow {
+  [key: string]: unknown;
+  id: string;
+  book: string;
+  thread_key: string;
+  thread_name: string;
+  description: string | null;
+  target_refs: string[] | null;
+  sort_order: number | null;
+  meta: Record<string, unknown>;
+}
+
+export interface UserTrailThreadRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  thread_id: string;
+  completing_trail_id: string | null;
+  pulled_at: string;
+  meta: Record<string, unknown>;
+}
+
 export type MemoryReviewMode = "flashcard" | "fill_blank" | "word_order" | "all";
 
 export interface MemoryVerseRow {
@@ -1092,6 +1182,48 @@ export type Database = {
         Row: SpurgeonRow;
         Insert: { source: string; body: string; date_key?: string | null; book?: string | null; chapter?: number | null; verse?: number | null; title?: string | null; id?: string; meta?: unknown };
         Update: Partial<Omit<SpurgeonRow, "id">>;
+        Relationships: [];
+      };
+      tsk_references: {
+        Row: TskReferenceRow;
+        Insert: { from_book: string; from_chapter: number; from_verse: number; to_book: string; to_chapter: number; to_verse: number; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<TskReferenceRow, "id">>;
+        Relationships: [];
+      };
+      tsk_verse_stats: {
+        Row: TskVerseStatRow;
+        Insert: { book: string; chapter: number; verse: number; reference_count: number; id?: string };
+        Update: Partial<Omit<TskVerseStatRow, "id">>;
+        Relationships: [];
+      };
+      daily_trails: {
+        Row: DailyTrailRow;
+        Insert: { trail_date: string; slot: "morning" | "evening"; origin_book: string; origin_chapter: number; origin_verse: number; ai_rationale?: string | null; community_stats?: Record<string, unknown>; meta?: Record<string, unknown>; id?: string; created_at?: string };
+        Update: Partial<Omit<DailyTrailRow, "id">>;
+        Relationships: [];
+      };
+      cross_reference_trails: {
+        Row: CrossReferenceTrailRow;
+        Insert: { user_id: string; origin_book: string; origin_chapter: number; origin_verse: number; name?: string | null; trail_type?: "free" | "daily_morning" | "daily_evening" | "thread_needle"; daily_trail_id?: string | null; share_token?: string; is_public?: boolean; meta?: Record<string, unknown>; id?: string; created_at?: string };
+        Update: Partial<Omit<CrossReferenceTrailRow, "id">>;
+        Relationships: [];
+      };
+      trail_steps: {
+        Row: TrailStepRow;
+        Insert: { trail_id: string; step_order: number; book: string; chapter: number; verse: number; note?: string | null; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<TrailStepRow, "id">>;
+        Relationships: [];
+      };
+      thread_definitions: {
+        Row: ThreadDefinitionRow;
+        Insert: { book: string; thread_key: string; thread_name: string; description?: string | null; target_refs?: string[] | null; sort_order?: number | null; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<ThreadDefinitionRow, "id">>;
+        Relationships: [];
+      };
+      user_trail_threads: {
+        Row: UserTrailThreadRow;
+        Insert: { user_id: string; thread_id: string; completing_trail_id?: string | null; pulled_at?: string; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<UserTrailThreadRow, "id">>;
         Relationships: [];
       };
       reading_plans: {

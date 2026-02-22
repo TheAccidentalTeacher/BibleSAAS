@@ -173,8 +173,8 @@ async function main() {
 
   // Resume from checkpoint if available
   const checkpoint = await getCheckpoint();
-  let resumeBook = checkpoint?.last_book ?? null;
-  let resumeChapter = checkpoint?.last_chapter ?? 0;
+  const resumeBook = checkpoint?.last_book ?? null;
+  const resumeChapter = checkpoint?.last_chapter ?? 0;
   let skipping = resumeBook !== null;
 
   if (skipping) {
