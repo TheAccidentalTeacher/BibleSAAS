@@ -10,7 +10,7 @@
  * Dismissible. Re-openable via the Charles avatar button in reading-view.
  */
 
-import { X, BookOpen } from "lucide-react";
+import { X, BookOpen, MessageSquare } from "lucide-react";
 import type { ChapterContent } from "@/lib/charles/content";
 
 interface CharlesCardProps {
@@ -19,15 +19,18 @@ interface CharlesCardProps {
   loading: boolean;               // true = skeleton shimmer
   onStudyClick: () => void;
   onDismiss: () => void;
+  onChatClick?: () => void;
 }
 
 // Vault card for free tier (parchment treatment)
 function VaultCard({
   onStudyClick,
   onDismiss,
+  onChatClick,
 }: {
   onStudyClick: () => void;
   onDismiss: () => void;
+  onChatClick?: () => void;
 }) {
   return (
     <div
@@ -55,14 +58,26 @@ function VaultCard({
         Observation is harder than interpretation — and more honest.
       </p>
 
-      <button
-        onClick={onStudyClick}
-        className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-full"
-        style={{ background: "#3D2B1F", color: "#F5ECD7" }}
-      >
-        <BookOpen size={14} />
-        Study this chapter
-      </button>
+      <div className="flex items-center gap-2 flex-wrap">
+        <button
+          onClick={onStudyClick}
+          className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-full"
+          style={{ background: "#3D2B1F", color: "#F5ECD7" }}
+        >
+          <BookOpen size={14} />
+          Study this chapter
+        </button>
+        {onChatClick && (
+          <button
+            onClick={onChatClick}
+            className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-full transition-opacity hover:opacity-80"
+            style={{ background: "rgba(0,0,0,0.08)", color: "#3D2B1F" }}
+          >
+            <MessageSquare size={14} />
+            Ask Charles
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -153,6 +168,7 @@ export default function CharlesCard({
   loading,
   onStudyClick,
   onDismiss,
+  onChatClick,
 }: CharlesCardProps) {
   const isFree = userTier === "free";
 
@@ -161,7 +177,7 @@ export default function CharlesCard({
 
   // Free user or null content — show Vault card
   if (isFree || !content) {
-    return <VaultCard onStudyClick={onStudyClick} onDismiss={onDismiss} />;
+    return <VaultCard onStudyClick={onStudyClick} onDismiss={onDismiss} onChatClick={onChatClick} />;
   }
 
   // Loaded with content
@@ -201,18 +217,33 @@ export default function CharlesCard({
       {/* Connection chips */}
       <ConnectionChips connections={content.connections} />
 
-      {/* Study CTA */}
-      <button
-        onClick={onStudyClick}
-        className="flex items-center gap-2 mt-4 text-sm font-medium py-2 px-4 rounded-full transition-opacity hover:opacity-80"
-        style={{
-          background: "var(--color-accent)",
-          color: "var(--color-bg)",
-        }}
-      >
-        <BookOpen size={14} />
-        Study this chapter
-      </button>
+      {/* Study / Chat CTAs */}
+      <div className="flex items-center gap-2 flex-wrap mt-4">
+        <button
+          onClick={onStudyClick}
+          className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-full transition-opacity hover:opacity-80"
+          style={{
+            background: "var(--color-accent)",
+            color: "var(--color-bg)",
+          }}
+        >
+          <BookOpen size={14} />
+          Study this chapter
+        </button>
+        {onChatClick && (
+          <button
+            onClick={onChatClick}
+            className="flex items-center gap-2 text-sm font-medium py-2 px-4 rounded-full transition-opacity hover:opacity-80"
+            style={{
+              background: "var(--color-surface-2)",
+              color: "var(--color-text-1)",
+            }}
+          >
+            <MessageSquare size={14} />
+            Ask Charles
+          </button>
+        )}
+      </div>
     </div>
   );
 }

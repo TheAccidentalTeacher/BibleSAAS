@@ -699,6 +699,42 @@ export interface SharedContentRow {
   meta: Record<string, unknown>;
 }
 
+export interface ChatSessionRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  companion_id: string | null;
+  anchor_book: string | null;
+  anchor_chapter: number | null;
+  anchor_verse: number | null;
+  title: string | null;
+  message_count: number;
+  token_count: number;
+  model_used: string | null;
+  started_at: string;
+  last_message_at: string;
+  closed_at: string | null;
+  deleted_at: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface ChatMessageRow {
+  [key: string]: unknown;
+  id: string;
+  session_id: string;
+  user_id: string;
+  role: "user" | "assistant" | "system";
+  content: string;
+  input_tokens: number;
+  output_tokens: number;
+  content_source: "live" | "vault" | "cached";
+  suggested_questions: Array<{ text: string }>;
+  thumbs_up: boolean | null;
+  flagged: boolean;
+  created_at: string;
+  meta: Record<string, unknown>;
+}
+
 // ─── Database type (Supabase-compatible shape) ────────────────────────────────
 // NOTE: `Relationships: []` is required by postgrest-js GenericTable —
 // it will NOT resolve table types without it.
@@ -1242,6 +1278,18 @@ export type Database = {
         Row: UserReadingPlanRow;
         Insert: { user_id: string; plan_id: string; started_at?: string; current_day?: number; active?: boolean; completed_at?: string | null; meta?: Record<string, unknown>; id?: string };
         Update: Partial<Omit<UserReadingPlanRow, "id">>;
+        Relationships: [];
+      };
+      chat_sessions: {
+        Row: ChatSessionRow;
+        Insert: { user_id: string; companion_id?: string | null; anchor_book?: string | null; anchor_chapter?: number | null; anchor_verse?: number | null; title?: string | null; model_used?: string | null; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<ChatSessionRow, "id" | "user_id" | "started_at">>;
+        Relationships: [];
+      };
+      chat_messages: {
+        Row: ChatMessageRow;
+        Insert: { session_id: string; user_id: string; role: "user" | "assistant" | "system"; content: string; input_tokens?: number; output_tokens?: number; content_source?: "live" | "vault" | "cached"; suggested_questions?: Array<{ text: string }>; meta?: Record<string, unknown>; id?: string };
+        Update: Partial<Omit<ChatMessageRow, "id" | "session_id" | "user_id" | "created_at">>;
         Relationships: [];
       };
     };

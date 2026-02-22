@@ -859,6 +859,7 @@ export default function ReadingView({
               loading={contentLoading && showSkeleton}
               onStudyClick={() => setStudyOpen(true)}
               onDismiss={() => setCharlesDismissed(true)}
+              onChatClick={() => router.push(`/read/${bookCode}/${chapter}/chat`)}
             />
           </div>
         )}

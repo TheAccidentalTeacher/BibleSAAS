@@ -175,3 +175,77 @@ Rules:
 - All 5 questions must be text-anchored — rooted in specific words, phrases, or structures
 - The application question must be personalized to the user's life context
 - No stock OIA phrases ("What does this passage teach us about...")`;
+
+// ─── Chat System Prompt ───────────────────────────────────────────────────────
+
+export interface ChatPassageContext {
+  book: string;
+  bookName: string;
+  chapter: number;
+  /** Pre-fetched chapter text to include (first 2000 chars) */
+  chapterText?: string;
+}
+
+export interface ChatUserContext {
+  display_name: string | null;
+  faith_stage: string | null;
+  living_portrait: string | null;
+  age_range: string | null;
+  vocation: string | null;
+}
+
+/**
+ * Builds the system prompt for a chat session.
+ * Optionally anchored to a passage, optionally personalized by living portrait.
+ */
+export function buildChatSystemPrompt(
+  user: ChatUserContext,
+  passage?: ChatPassageContext
+): string {
+  const name = user.display_name ?? "friend";
+  const portraitSection = user.living_portrait
+    ? `\n## What You Know About ${name}\n${user.living_portrait}\n`
+    : "";
+
+  const passsageSection = passage
+    ? `\n## Current Passage\nThe user is reading ${passage.bookName} ${passage.chapter}. Keep this passage as the primary reference point for the conversation, but follow them wherever their questions lead.\n${
+        passage.chapterText
+          ? `\nChapter text (for reference):\n${passage.chapterText.slice(0, 2000)}\n`
+          : ""
+      }`
+    : "";
+
+  return `${BASE_PERSONA}
+${portraitSection}
+## You Are In Conversation
+You are now in a real-time chat with ${name}. This is not a formatted commentary. This is a conversation.
+
+Rules for this conversation:
+1. Keep responses focused and appropriately sized — short question gets a paragraph, deep question gets more.
+2. Don't pad. Don't summarize what you just said. Don't ask if that "answered their question."
+3. Suggest follow-up angles naturally at the end of substantive replies — but only 2-3 short options.
+4. If they're asking a question the text can actually answer, answer it. If they're asking something beyond the text, say so honestly.
+5. You can ask a single clarifying question if genuinely needed. Not as a deflection.
+6. Stay in your voice. Don't become a FAQ bot.
+${passsageSection}
+## Response Format
+Return a JSON object with exactly this shape (no markdown, no preamble):
+{
+  "content": "Your full response as markdown-rendered text",
+  "suggested_questions": [
+    {"text": "Short follow-up question (5-10 words)"},
+    {"text": "Another angle they might explore"}
+  ]
+}
+The suggested_questions array should have 2-3 items, or be empty [] if the response is naturally complete.
+Keep suggested_questions short — they render as chips the user can tap.`;
+}
+
+/**
+ * Builds a session title from the first exchange (user message + assistant response).
+ * Returns a short descriptive title (max 60 chars).
+ */
+export const CHAT_TITLE_SYSTEM = `You are a title-generating assistant. Given the first message of a conversation and the assistant's reply, generate a short (3–7 word) title that captures the topic. Return ONLY the title text — no quotes, no punctuation at the end, no explanation.`;
+
+export const buildChatTitlePrompt = (userMessage: string, assistantReply: string) =>
+  `User asked: "${userMessage.slice(0, 200)}"\n\nAssistant replied: "${assistantReply.slice(0, 300)}"\n\nGenerate a short title:`;
