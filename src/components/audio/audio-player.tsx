@@ -12,7 +12,7 @@
  *  - Auto-advance notice
  */
 
-import { X, Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react";
+import { X, Play, Pause, SkipBack, SkipForward } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 
 interface Props {

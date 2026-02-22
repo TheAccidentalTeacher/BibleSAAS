@@ -41,6 +41,7 @@ export default function CatechismPage() {
     setLoading(false);
   }, [cat, q]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load(); }, [load]);
 
   const catInfo = CATECHISMS.find((c) => c.id === cat)!;

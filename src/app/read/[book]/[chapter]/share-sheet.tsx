@@ -58,7 +58,7 @@ export default function ShareSheet({
         const { url } = await res.json() as { url: string };
         copy(url, "link");
       }
-    } catch (_) {/* ignore */}
+    } catch {/* ignore */}
     setLoadingLink(false);
   }
 

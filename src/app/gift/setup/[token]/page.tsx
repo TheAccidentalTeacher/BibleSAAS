@@ -5,10 +5,6 @@ import { submitGiftSetup } from "./actions";
 import { Button } from "@/components/ui/button";
 import { FormError, FormSuccess } from "@/components/ui/form-feedback";
 
-interface GiftSetupPageProps {
-  params: Promise<{ token: string }>;
-}
-
 /**
  * /gift/setup/[token] — Gift giver setup flow (Phase 2.4)
  *
@@ -18,7 +14,7 @@ interface GiftSetupPageProps {
  *
  * The token maps to a profile with `gifted_by` set during account creation.
  */
-export default function GiftSetupPage(_: GiftSetupPageProps) {
+export default function GiftSetupPage() {
   const [state, action, isPending] = useActionState(submitGiftSetup, null);
 
   return (

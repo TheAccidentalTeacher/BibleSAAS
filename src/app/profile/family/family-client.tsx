@@ -26,7 +26,7 @@ interface FamilyClientProps {
   myRole: string | null;
 }
 
-export default function FamilyClient({ unit, members, myRole: _myRole }: FamilyClientProps) {
+export default function FamilyClient({ unit, members }: FamilyClientProps) {
   const router = useRouter();
   const [view, setView] = useState<"overview" | "create" | "join">("overview");
   const [unitName, setUnitName] = useState("");

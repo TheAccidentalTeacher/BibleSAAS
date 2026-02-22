@@ -13,12 +13,6 @@ const CATEGORIES: { value: PrayerCategory; label: string; emoji: string }[] = [
   { value: "lament", label: "Lament", emoji: "🌧️" },
 ];
 
-const STATUS_LABELS: Record<string, string> = {
-  ongoing: "Ongoing",
-  answered: "Answered",
-  archived: "Archived",
-};
-
 function formatDate(iso: string) {
   return new Intl.DateTimeFormat("en-US", {
     month: "short",

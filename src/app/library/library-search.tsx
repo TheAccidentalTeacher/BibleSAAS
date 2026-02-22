@@ -22,7 +22,11 @@ export default function LibrarySearch() {
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
-    if (!query.trim()) { setResults([]); return; }
+    if (!query.trim()) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setResults([]);
+      return;
+    }
     debounceRef.current = setTimeout(async () => {
       setLoading(true);
       const r = await fetch(`/api/library/search?q=${encodeURIComponent(query)}`);

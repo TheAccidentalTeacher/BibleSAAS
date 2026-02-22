@@ -22,7 +22,7 @@ export async function GET() {
 
   // Check if user has already started these trails today
   const dailyIdArr = [morning?.id, evening?.id].filter(Boolean) as string[];
-  let userTrailMap: Record<string, string> = {};
+  const userTrailMap: Record<string, string> = {};
   if (dailyIdArr.length > 0) {
     const { data: userTrails } = await supabase
       .from("cross_reference_trails")

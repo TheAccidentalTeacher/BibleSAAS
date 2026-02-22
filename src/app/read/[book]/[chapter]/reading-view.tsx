@@ -141,7 +141,7 @@ export default function ReadingView({
   async function handleListen() {
     if (isThisChapterAudio) {
       // Toggle play/pause
-      audioState.isPlaying ? audioActions.pause() : audioActions.play();
+      if (audioState.isPlaying) { audioActions.pause(); } else { audioActions.play(); }
       return;
     }
     if (!chapterData) return;
@@ -153,7 +153,7 @@ export default function ReadingView({
         const p = await r.json() as { position_seconds: number; completed: boolean };
         if (!p.completed) resumeSeconds = p.position_seconds;
       }
-    } catch (_) { /* ignore */ }
+    } catch { /* ignore */ }
 
     audioActions.loadChapter({
       book: bookCode,

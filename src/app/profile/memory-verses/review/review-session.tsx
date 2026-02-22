@@ -412,6 +412,15 @@ export default function ReviewSession({ verses }: Props) {
   const current = queue[index];
   const mode = current ? pickMode(current, index) : "flashcard";
 
+  const advanceQueue = useCallback(() => {
+    if (index + 1 >= queue.length) {
+      setCompleted(true);
+    } else {
+      setIndex((i) => i + 1);
+      setCardState("idle");
+    }
+  }, [index, queue.length]);
+
   const handleRate = useCallback((quality: number) => {
     if (!current) return;
     startTransition(async () => {
@@ -435,16 +444,7 @@ export default function ReviewSession({ verses }: Props) {
         advanceQueue();
       }
     });
-  }, [current, mode]);
-
-  function advanceQueue() {
-    if (index + 1 >= queue.length) {
-      setCompleted(true);
-    } else {
-      setIndex((i) => i + 1);
-      setCardState("idle");
-    }
-  }
+  }, [current, mode, advanceQueue]);
 
   function handleMasteryContinue() {
     setMasteredVerse(null);
@@ -537,7 +537,7 @@ export default function ReviewSession({ verses }: Props) {
             <FillBlankMode
               verse={current}
               cardState={cardState}
-              onCheck={(correct) => {
+              onCheck={() => {
                 setCardState("checked");
               }}
               onRate={handleRate}
@@ -547,7 +547,7 @@ export default function ReviewSession({ verses }: Props) {
             <WordOrderMode
               verse={current}
               cardState={cardState}
-              onCheck={(correct) => {
+              onCheck={() => {
                 setCardState("checked");
               }}
               onRate={handleRate}

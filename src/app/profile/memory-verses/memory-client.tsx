@@ -112,7 +112,7 @@ function VerseCard({
   );
 }
 
-export default function MemoryClient({ due, upcoming, mastered, today: _today }: Props) {
+export default function MemoryClient({ due, upcoming, mastered }: Props) {
   const [dueList, setDueList] = useState(due);
   const [upcomingList, setUpcomingList] = useState(upcoming);
   const [masteredList, setMasteredList] = useState(mastered);

@@ -23,7 +23,11 @@ export default function AchievementToast({ earned, onDismiss }: Props) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    if (earned.length === 0) { setVisible(false); return; }
+    if (earned.length === 0) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setVisible(false);
+      return;
+    }
     setVisible(true);
     const t = setTimeout(() => {
       setVisible(false);

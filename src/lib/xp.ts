@@ -80,7 +80,6 @@ export async function awardXP(
       .eq("user_id", userId)
       .maybeSingle();
     const totalXp = (s as { total_xp?: number } | null)?.total_xp ?? 0;
-    const prevLevel = (s as { current_level?: number } | null)?.current_level ?? 1;
     return { xpEarned: 0, totalXp, level: getLevelForXp(totalXp), leveledUp: false };
   }
 

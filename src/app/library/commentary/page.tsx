@@ -57,7 +57,8 @@ export default function CommentaryPage() {
     setExpanded(null);
   }, [book, chapter, activeSource]);
 
-  useEffect(() => { load(); }, [book, chapter]); // eslint-disable-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/set-state-in-effect, react-hooks/exhaustive-deps
+  useEffect(() => { load(); }, [book, chapter]);
 
   const entries = grouped[activeSource] ?? [];
 

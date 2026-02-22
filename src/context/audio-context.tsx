@@ -125,7 +125,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           readalong_on: s.readAlong,
         }),
       });
-    } catch (_) { /* ignore */ }
+    } catch { /* ignore */ }
   }, []);
 
   // Fire XP + reading-progress credit when >90% complete
@@ -139,7 +139,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ book, chapter, source: "audio" }),
       });
-    } catch (_) { /* ignore */ }
+    } catch { /* ignore */ }
   }, []);
 
   // ── TTS helpers ────────────────────────────────────────────────────────────
@@ -175,6 +175,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       const nextIdx = idx + 1;
       // Check if still playing (not paused)
       if (stateRef.current.isPlaying) {
+        // eslint-disable-next-line react-hooks/immutability
         speakVerse(nextIdx);
       }
     };

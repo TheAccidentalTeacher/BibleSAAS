@@ -64,7 +64,7 @@ export default function MiniPlayer() {
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                state.isPlaying ? actions.pause() : actions.play();
+                if (state.isPlaying) { actions.pause(); } else { actions.play(); }
               }}
               className="flex items-center justify-center w-9 h-9 rounded-full"
               style={{ background: "var(--color-accent)", color: "var(--color-bg)" }}
