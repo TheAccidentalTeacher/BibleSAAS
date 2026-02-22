@@ -15,6 +15,7 @@ import {
 } from "@/lib/bible/index";
 import ReadingView from "./reading-view";
 import type { SpurgeonEntry } from "./spurgeon-card";
+import type { HymnEntry } from "./hymn-card";
 import type { StreakRow } from "@/types/database";
 
 interface PageProps {
@@ -119,6 +120,18 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
     }
   }
 
+  // ----- Hymn connections -----
+  let hymns: HymnEntry[] = [];
+  {
+    const { data: hymnData } = await supabase
+      .from("hymn_index")
+      .select("id, title, first_line, tune_name, lyrics, explicit_refs")
+      .overlaps("explicit_refs" as never, [`${bookData.name} ${chapterNum}`] as never);
+    if (hymnData) {
+      hymns = (hymnData as unknown as HymnEntry[]);
+    }
+  }
+
   return (
     <ReadingView
       bookCode={bookCode}
@@ -133,6 +146,7 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
       currentStreak={currentStreak}
       prevChapter={prev ? { book: prev.book, chapter: prev.chapter } : null}
       nextChapter={next ? { book: next.book, chapter: next.chapter } : null}
+      hymns={hymns}
     />
   );
 }

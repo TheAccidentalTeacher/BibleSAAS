@@ -28,6 +28,8 @@ import {
   MessageSquare,
   Flame,
   Headphones,
+  Hand,
+  Music,
 } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";
@@ -48,6 +50,8 @@ import WordNotePopover from "./word-note-popover";
 import AchievementToast from "@/components/gamification/achievement-toast";
 import { useOfflineChapter } from "@/hooks/useOfflineChapter";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
+import PrayModePanel from "./pray-mode-panel";
+import HymnCard, { type HymnEntry } from "./hymn-card";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
 
@@ -82,6 +86,7 @@ interface ReadingViewProps {
   prevChapter: { book: string; chapter: number } | null;
   nextChapter: { book: string; chapter: number } | null;
   currentStreak: number;
+  hymns: HymnEntry[];
 }
 
 export default function ReadingView({
@@ -97,6 +102,7 @@ export default function ReadingView({
   currentStreak,
   prevChapter,
   nextChapter,
+  hymns,
 }: ReadingViewProps) {
   const router = useRouter();
 
@@ -108,14 +114,32 @@ export default function ReadingView({
     translation,
     verses: (chapterData?.verses ?? []).map((v) => ({ verse: v.verse, text: v.text })),
   });
-  const [mode, setMode] = useState<"read" | "study">("read");
+  const [mode, setMode] = useState<"read" | "study" | "pray">("read");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [charlesVisible, setCharlesVisible] = useState(false);
   const [charlesDismissed, setCharlesDismissed] = useState(false);
   const [studyOpen, setStudyOpen] = useState(false);
+  const [prayModeOpen, setPrayModeOpen] = useState(false);
+  const [activeHymn, setActiveHymn] = useState<HymnEntry | null>(null);
   const [content, setContent] = useState<ChapterContent | null>(null);
   const [contentLoading, setContentLoading] = useState(false);
   const [showSkeleton, setShowSkeleton] = useState(false);
+
+  // Build a map from verse number → hymn for this chapter
+  const hymnVerseMap = new Map<number, HymnEntry>();
+  for (const hymn of hymns) {
+    for (const ref of hymn.explicit_refs) {
+      // ref is like "Romans 8:28" or "Romans 8:28-39"
+      const verseMatch = ref.match(/:(\d+)(?:-(\d+))?$/);
+      if (verseMatch) {
+        const start = parseInt(verseMatch[1]!, 10);
+        const end = verseMatch[2] ? parseInt(verseMatch[2], 10) : start;
+        for (let v = start; v <= end; v++) {
+          if (!hymnVerseMap.has(v)) hymnVerseMap.set(v, hymn);
+        }
+      }
+    }
+  }
 
   // ── Gamification state ────────────────────────────────────────────────────
   const [streak, setStreak] = useState(currentStreak);
@@ -638,6 +662,23 @@ export default function ReadingView({
             <FlaskConical size={13} />
             Study
           </button>
+          <button
+            onClick={() => { setMode("pray"); setPrayModeOpen(true); }}
+            className="flex items-center gap-1.5 px-3 py-1 text-xs font-medium transition-colors"
+            style={{
+              background:
+                mode === "pray"
+                  ? "var(--color-accent)"
+                  : "var(--color-surface-2)",
+              color:
+                mode === "pray"
+                  ? "var(--color-bg)"
+                  : "var(--color-text-2)",
+            }}
+          >
+            <Hand size={13} />
+            Pray
+          </button>
         </div>
 
         {/* Translation pill */}
@@ -791,6 +832,32 @@ export default function ReadingView({
                         </span>
                       )}
                     </button>
+                    {/* Hymn connection chip — inline after verse number */}
+                    {hymnVerseMap.has(v.verse) && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setActiveHymn(hymnVerseMap.get(v.verse) ?? null);
+                        }}
+                        aria-label={`Hymn: ${hymnVerseMap.get(v.verse)?.title}`}
+                        title={`Hymn connection: ${hymnVerseMap.get(v.verse)?.title}`}
+                        style={{
+                          display: "inline-block",
+                          fontSize: "9px",
+                          marginLeft: 2,
+                          verticalAlign: "super",
+                          cursor: "pointer",
+                          border: "none",
+                          background: "transparent",
+                          padding: 0,
+                          color: "#6b7280",
+                          lineHeight: 1,
+                        }}
+                      >
+                        ♪
+                      </button>
+                    )}
                     {/* TSK density dot */}
                     {tskStats[v.verse] && (
                       <button
@@ -1096,6 +1163,25 @@ export default function ReadingView({
           />
         );
       })()}
+
+      {/* ── Pray Mode Panel ── */}
+      {prayModeOpen && chapterData && (
+        <PrayModePanel
+          bookCode={bookCode}
+          bookName={bookName}
+          chapter={chapter}
+          verses={chapterData.verses.map((v) => ({ verse: v.verse, text: v.text }))}
+          onClose={() => {
+            setPrayModeOpen(false);
+            setMode("read");
+          }}
+        />
+      )}
+
+      {/* ── Hymn Card ── */}
+      {activeHymn && (
+        <HymnCard hymn={activeHymn} onClose={() => setActiveHymn(null)} />
+      )}
     </div>
   );
 }
