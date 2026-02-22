@@ -13,7 +13,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { X, Bookmark, BookmarkCheck, MessageSquare, Trash2 } from "lucide-react";
+import { X, Bookmark, BookmarkCheck, MessageSquare, Trash2, Brain } from "lucide-react";
 
 export type HighlightColor = "yellow" | "green" | "blue" | "pink" | "orange" | "purple";
 
@@ -54,11 +54,13 @@ interface VerseActionMenuProps {
   anchorY: number;          // pageY of the tapped verse number
   existingHighlight: HighlightState | null;
   isBookmarked: boolean;
+  isMemorized: boolean;
   onHighlight: (verse: number, color: HighlightColor) => void;
   onRemoveHighlight: (id: string) => void;
   onAddNote: (id: string, note: string) => void;
   onBookmark: (verse: number) => void;
   onRemoveBookmark: (verse: number) => void;
+  onMemorize: (verse: number) => void;
   onClose: () => void;
 }
 
@@ -67,11 +69,13 @@ export default function VerseActionMenu({
   anchorY,
   existingHighlight,
   isBookmarked,
+  isMemorized,
   onHighlight,
   onRemoveHighlight,
   onAddNote,
   onBookmark,
   onRemoveBookmark,
+  onMemorize,
   onClose,
 }: VerseActionMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -251,6 +255,25 @@ export default function VerseActionMenu({
             Remove
           </button>
         )}
+      </div>
+
+      {/* Memorize button */}
+      <div className="mt-2 pt-2 border-t" style={{ borderColor: "var(--color-border)" }}>
+        <button
+          onClick={() => {
+            onMemorize(verse);
+            onClose();
+          }}
+          className="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border w-full justify-center"
+          style={{
+            background: isMemorized ? "rgba(139,92,246,0.12)" : "var(--color-surface-2)",
+            borderColor: isMemorized ? "#8b5cf6" : "var(--color-border)",
+            color: isMemorized ? "#8b5cf6" : "var(--color-text-1)",
+          }}
+        >
+          <Brain size={13} />
+          {isMemorized ? "In Memory Queue" : "Memorize"}
+        </button>
       </div>
     </div>
   );

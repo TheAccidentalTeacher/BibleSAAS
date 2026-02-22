@@ -37,6 +37,7 @@ import VerseActionMenu, {
   type BookmarkState,
   HIGHLIGHT_BG,
 } from "./verse-action-menu";
+import MemorizeSheet from "./memorize-sheet";
 import AchievementToast from "@/components/gamification/achievement-toast";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
@@ -135,6 +136,13 @@ export default function ReadingView({
     anchorY: number;
   } | null>(null);
 
+  // ── Memory verse markers ──────────────────────────────────────────────────
+  // Set of verse numbers that are already in the memory queue for this chapter
+  const [memorizedVerses, setMemorizedVerses] = useState<Set<number>>(new Set());
+  // Set of verse numbers that are due for review today
+  const [memoryDueVerses, setMemoryDueVerses] = useState<Set<number>>(new Set());
+  const [memorySheetVerse, setMemorySheetVerse] = useState<number | null>(null);
+
   // Load highlights + bookmarks when chapter changes
   useEffect(() => {
     let cancelled = false;
@@ -168,6 +176,30 @@ export default function ReadingView({
     setHighlights([]);
     setBookmarks([]);
     loadAnnotations();
+    return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  // Load memory markers for this chapter
+  useEffect(() => {
+    let cancelled = false;
+    async function loadMemoryMarkers() {
+      const res = await fetch(`/api/memory?book=${bookCode}&chapter=${chapter}`);
+      if (cancelled) return;
+      if (res.ok) {
+        const j = await res.json() as { markers: Array<{ verse: number; mastered: boolean; due: boolean }> };
+        const memorized = new Set<number>();
+        const due = new Set<number>();
+        for (const m of j.markers) {
+          memorized.add(m.verse);
+          if (m.due) due.add(m.verse);
+        }
+        setMemorizedVerses(memorized);
+        setMemoryDueVerses(due);
+      }
+    }
+    setMemorizedVerses(new Set());
+    setMemoryDueVerses(new Set());
+    void loadMemoryMarkers();
     return () => { cancelled = true; };
   }, [bookCode, chapter]);
 
@@ -529,6 +561,17 @@ export default function ReadingView({
                           style={{ background: "#F0954A" }}
                         />
                       )}
+                      {/* Memory star */}
+                      {memorizedVerses.has(v.verse) && (
+                        <span
+                          aria-label={memoryDueVerses.has(v.verse) ? "Due for review" : "Memorized"}
+                          className="absolute -top-1.5 -left-1 text-[9px] leading-none"
+                          title={memoryDueVerses.has(v.verse) ? "Due for review today" : "In memory queue"}
+                          style={{ color: memoryDueVerses.has(v.verse) ? "#f59e0b" : "#8b5cf6" }}
+                        >
+                          ★
+                        </span>
+                      )}
                     </button>
                     {v.text}{" "}
                   </span>
@@ -624,14 +667,37 @@ export default function ReadingView({
             ) ?? null
           }
           isBookmarked={bookmarks.some((b) => b.verse === activeMenu.verse)}
+          isMemorized={memorizedVerses.has(activeMenu.verse)}
           onHighlight={handleHighlight}
           onRemoveHighlight={handleRemoveHighlight}
           onAddNote={handleAddNote}
           onBookmark={handleBookmark}
           onRemoveBookmark={handleRemoveBookmark}
+          onMemorize={(v) => setMemorySheetVerse(v)}
           onClose={() => setActiveMenu(null)}
         />
       )}
+      {/* ── Memorize Sheet ── */}
+      {memorySheetVerse !== null && chapterData && (() => {
+        const vData = chapterData.verses.find((v) => v.verse === memorySheetVerse);
+        if (!vData) return null;
+        return (
+          <MemorizeSheet
+            book={bookCode}
+            bookName={bookName}
+            chapter={chapter}
+            verse={memorySheetVerse}
+            verseText={vData.text}
+            translation={translation}
+            alreadyMemorized={memorizedVerses.has(memorySheetVerse)}
+            onClose={() => setMemorySheetVerse(null)}
+            onSuccess={(v) => {
+              setMemorizedVerses((prev) => new Set([...prev, v]));
+            }}
+          />
+        );
+      })()}
+
       {/* ── Achievement Toast ── */}
       <AchievementToast
         earned={earnedAchievements}

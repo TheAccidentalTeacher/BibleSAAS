@@ -366,6 +366,46 @@ export interface SpurgeonRow {
   meta: unknown;
 }
 
+export type MemoryReviewMode = "flashcard" | "fill_blank" | "word_order" | "all";
+
+export interface MemoryVerseRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  verse_text: string;
+  translation: string;
+  ease_factor: number;
+  interval_days: number;
+  repetitions: number;
+  next_review: string; // date string YYYY-MM-DD
+  last_reviewed: string | null;
+  mastered: boolean;
+  practice_count: number;
+  review_mode: MemoryReviewMode;
+  added_from: "reading" | "journal" | "search" | "suggestion" | "family_share";
+  memory_type: "verse" | "catechism_qa";
+  catechism_entry_id: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface MemoryVerseReviewRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  memory_verse_id: string;
+  reviewed_at: string;
+  review_mode: "flashcard" | "fill_blank" | "word_order";
+  quality: number; // 0–5
+  ease_factor_after: number | null;
+  interval_after: number | null;
+  repetitions_after: number | null;
+  time_taken_seconds: number | null;
+  meta: Record<string, unknown>;
+}
+
 // ─── Database type (Supabase-compatible shape) ────────────────────────────────
 // NOTE: `Relationships: []` is required by postgrest-js GenericTable —
 // it will NOT resolve table types without it.
@@ -569,6 +609,50 @@ export type Database = {
         Row: JournalAnswerRow;
         Insert: { entry_id: string; user_id: string; oia_type: "observe" | "interpret" | "apply"; question_text?: string | null; answer_text?: string | null; charles_response?: string | null; question_id?: string | null; id?: string; created_at?: string; deleted_at?: string | null; meta?: unknown };
         Update: Partial<Omit<JournalAnswerRow, "id">>;
+        Relationships: [];
+      };
+      memory_verses: {
+        Row: MemoryVerseRow;
+        Insert: {
+          user_id: string;
+          book: string;
+          chapter: number;
+          verse: number;
+          verse_text: string;
+          translation?: string;
+          ease_factor?: number;
+          interval_days?: number;
+          repetitions?: number;
+          next_review?: string;
+          mastered?: boolean;
+          practice_count?: number;
+          review_mode?: MemoryReviewMode;
+          added_from?: "reading" | "journal" | "search" | "suggestion" | "family_share";
+          memory_type?: "verse" | "catechism_qa";
+          catechism_entry_id?: string | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+          last_reviewed?: string | null;
+        };
+        Update: Partial<Omit<MemoryVerseRow, "id">>;
+        Relationships: [];
+      };
+      memory_verse_reviews: {
+        Row: MemoryVerseReviewRow;
+        Insert: {
+          user_id: string;
+          memory_verse_id: string;
+          review_mode: "flashcard" | "fill_blank" | "word_order";
+          quality: number;
+          ease_factor_after?: number | null;
+          interval_after?: number | null;
+          repetitions_after?: number | null;
+          time_taken_seconds?: number | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+          reviewed_at?: string;
+        };
+        Update: never;
         Relationships: [];
       };
       spurgeon_index: {

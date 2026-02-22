@@ -145,6 +145,16 @@ export default async function DashboardPage() {
       firstLine: e.note ? e.note.slice(0, 120) : "Study session",
     }));
 
+  // ── Memory verses due today ───────────────────────────────────────────────
+  const todayDate = new Date().toISOString().split("T")[0]!;
+  const { count: memoryDueCount } = await supabase
+    .from("memory_verses")
+    .select("id", { count: "exact", head: true })
+    .eq("user_id", user.id)
+    .eq("mastered", false)
+    .lte("next_review", todayDate);
+  const memoryVerseDueCount = memoryDueCount ?? 0;
+
   return (
     <>
       <DashboardClient
@@ -158,6 +168,7 @@ export default async function DashboardPage() {
         lastReadBookName={lastReadBookName}
         streak={streak}
         recentJournal={recentJournal}
+        memoryVerseDueCount={memoryVerseDueCount}
       />
       <BottomNav />
     </>

@@ -7,7 +7,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Flame, BookOpen, CheckCircle2, ChevronRight, Plus } from "lucide-react";
+import { Flame, BookOpen, CheckCircle2, ChevronRight, Plus, Brain } from "lucide-react";
 import PlanPicker from "./plan-picker";
 import type { ReadingPlanRow, UserReadingPlanRow, PlanChapterRow, ReadingProgressRow, UserStreakRow } from "@/types/database";
 
@@ -36,6 +36,7 @@ interface DashboardClientProps {
   lastReadBookName: string | null;
   streak: UserStreakRow | null;
   recentJournal: RecentEntry[];
+  memoryVerseDueCount: number;
 }
 
 export default function DashboardClient({
@@ -48,6 +49,7 @@ export default function DashboardClient({
   lastReadBookName,
   streak,
   recentJournal,
+  memoryVerseDueCount,
 }: DashboardClientProps) {
   const router = useRouter();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -308,6 +310,31 @@ export default function DashboardClient({
                 </button>
               ))}
             </div>
+          </section>
+        )}
+
+        {/* ── Memory verse due ── */}
+        {memoryVerseDueCount > 0 && (
+          <section>
+            <button
+              onClick={() => router.push("/profile/memory-verses/review")}
+              className="w-full rounded-2xl p-4 border flex items-center gap-4 text-left"
+              style={{
+                background: "rgba(139,92,246,0.08)",
+                borderColor: "#8b5cf6",
+              }}
+            >
+              <Brain size={28} style={{ color: "#8b5cf6", flexShrink: 0 }} />
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-sm" style={{ color: "#8b5cf6" }}>
+                  {memoryVerseDueCount} verse{memoryVerseDueCount !== 1 ? "s" : ""} due for review
+                </p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>
+                  Keep your memory strong — tap to review now
+                </p>
+              </div>
+              <ChevronRight size={16} style={{ color: "#8b5cf6", flexShrink: 0 }} />
+            </button>
           </section>
         )}
 
