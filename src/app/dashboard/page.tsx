@@ -155,6 +155,21 @@ export default async function DashboardPage() {
     .lte("next_review", todayDate);
   const memoryVerseDueCount = memoryDueCount ?? 0;
 
+  // ── Verse Pulse (top 3 this week) ─────────────────────────────────────────────
+  const thisWeekStart = new Date();
+  thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay()); // Sunday
+  thisWeekStart.setHours(0, 0, 0, 0);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: pulseData } = await (supabase as any)
+    .from("verse_pulse_cache")
+    .select("verse_ref, weight")
+    .gte("week_start", thisWeekStart.toISOString().split("T")[0])
+    .order("weight", { ascending: false })
+    .limit(3);
+  const pulseVerses: { verse_ref: string; weight: number }[] =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (pulseData ?? []).map((r: any) => ({ verse_ref: r.verse_ref as string, weight: r.weight as number }));
+
   return (
     <>
       <DashboardClient
@@ -169,6 +184,7 @@ export default async function DashboardPage() {
         streak={streak}
         recentJournal={recentJournal}
         memoryVerseDueCount={memoryVerseDueCount}
+        pulseVerses={pulseVerses}
       />
       <BottomNav />
     </>

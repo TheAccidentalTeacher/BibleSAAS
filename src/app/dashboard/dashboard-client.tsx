@@ -26,6 +26,11 @@ interface RecentEntry {
   firstLine: string;
 }
 
+interface PulseVerse {
+  verse_ref: string;
+  weight: number;
+}
+
 interface DashboardClientProps {
   displayName: string;
   tier: string;
@@ -38,6 +43,7 @@ interface DashboardClientProps {
   streak: UserStreakRow | null;
   recentJournal: RecentEntry[];
   memoryVerseDueCount: number;
+  pulseVerses: PulseVerse[];
 }
 
 export default function DashboardClient({
@@ -51,6 +57,7 @@ export default function DashboardClient({
   streak,
   recentJournal,
   memoryVerseDueCount,
+  pulseVerses,
 }: DashboardClientProps) {
   const router = useRouter();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -336,6 +343,67 @@ export default function DashboardClient({
               </div>
               <ChevronRight size={16} style={{ color: "#8b5cf6", flexShrink: 0 }} />
             </button>
+          </section>
+        )}
+
+        {/* ── Verse Pulse ── */}
+        {pulseVerses.length > 0 && (
+          <section>
+            <h2
+              className="text-xs font-semibold uppercase tracking-widest mb-3"
+              style={{ color: "var(--color-text-3)" }}
+            >
+              This week in the Book
+            </h2>
+            <div
+              className="rounded-2xl p-4 border space-y-3"
+              style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
+            >
+              {pulseVerses.map((pv, i) => (
+                <div key={pv.verse_ref} className="flex items-center gap-3">
+                  <span
+                    className="text-xs font-bold w-4 text-right shrink-0"
+                    style={{ color: "var(--color-text-3)" }}
+                  >
+                    {i + 1}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <span
+                        className="text-xs font-medium truncate"
+                        style={{ color: "var(--color-text-1)" }}
+                      >
+                        {pv.verse_ref}
+                      </span>
+                      <span
+                        className="text-xs ml-2 shrink-0"
+                        style={{ color: "var(--color-text-3)" }}
+                      >
+                        {Math.round(pv.weight * 100)}%
+                      </span>
+                    </div>
+                    <div
+                      className="h-1.5 rounded-full overflow-hidden"
+                      style={{ background: "var(--color-border)" }}
+                    >
+                      <div
+                        className="h-full rounded-full"
+                        style={{
+                          width: `${Math.round(pv.weight * 100)}%`,
+                          background: i === 0 ? "#C4A040" : i === 1 ? "#8A7F72" : "#5A5348",
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+              <p
+                className="text-xs pt-1"
+                style={{ color: "var(--color-text-3)" }}
+              >
+                Most-read verses across all readers this week
+              </p>
+            </div>
           </section>
         )}
 

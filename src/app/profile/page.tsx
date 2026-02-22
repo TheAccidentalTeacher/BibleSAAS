@@ -130,6 +130,7 @@ export default async function ProfilePage() {
             { href: "/profile/family", label: "Family Unit", desc: "Share verses & threads with family" },
             { href: "/profile/chats", label: "Chat History", desc: "Past conversations with Charles" },
             { href: "/profile/companions", label: "Companions", desc: "Switch voice or build your own companion" },
+            { href: "/profile/groups", label: "Study Groups", desc: "Verse threads and prayer with your group" },
             { href: "/profile/settings", label: "Notification Settings", desc: "Email & push notification preferences" },
             { href: "/profile/upgrade", label: "Plans & Billing", desc: "Upgrade your plan or manage subscription" },
           ].map(({ href, label, desc }) => (
