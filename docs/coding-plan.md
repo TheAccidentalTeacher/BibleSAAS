@@ -3,7 +3,7 @@
 
 > **For use by:** Claude Sonnet 4.6 / Claude Opus 4  
 > **Reference files:** `docs/project-notes.md` (all 31 sessions), `docs/charles-persona.md`, `sql/` (13 schema files + README)  
-> **Stack:** Next.js 14 App Router · Supabase · Vercel · Anthropic API · Resend · Stripe · Tailwind CSS
+> **Stack:** Next.js 15 App Router · Supabase · Vercel · Anthropic API · Resend · Stripe · Tailwind CSS v4
 
 ---
 
@@ -20,27 +20,105 @@
 | 5 | Highlights, Bookmarks & Annotations | ✅ Complete | `75986c4` |
 | 6 | Dashboard & Reading Plans | ✅ Complete | `eadb869` |
 | 7 | Streaks, XP & Gamification | ✅ Complete | `e21412a` |
-| 8 | Memory Verses (SM-2 spaced repetition) | 🔴 Not started | — |
-| 9 | Journey Screen (character cards) | 🔴 Not started | — |
-| 10 | Cross-Reference Trails | 🔴 Not started | — |
-| 11 | Word Study (Strong's + morphology) | 🔴 Not started | — |
-| 12 | Audio (ESV / API.Bible audio layer) | 🔴 Not started | — |
-| 13 | Geography & Archaeology Layer | 🔴 Not started | — |
-| 14 | Community & Sharing | 🔴 Not started | — |
-| 15 | Stripe / Subscription Management | 🔴 Not started | — |
-| 16 | Weekly Charles Letter (email) | 🔴 Not started | — |
-| 17 | PWA + Offline Support | 🔴 Not started | — |
-| 18 | Admin Panel | 🔴 Not started | — |
-| 19 | Year-in-Review PDF | 🔴 Not started | — |
+| 8 | Journal & Prayer Journal | 🟡 Partial | — |
+| 9 | Memory Verse System | 🔴 Not started | — |
+| 10 | Audio Layer | 🔴 Not started | — |
+| 11 | Sharing & Internal Messaging (Verse Threads) | 🔴 Not started | — |
+| 12 | Word Study & Library | 🔴 Not started | — |
+| 13 | TSK Cross-Reference Trails | 🔴 Not started | — |
+| 14 | Journey Screen & Progress Visualization | 🔴 Not started | — |
+| 15 | AI Chat (Ask Charles) | 🔴 Not started | — |
+| 16 | Notifications & Email | 🔴 Not started | — |
+| 17 | PWA & Offline Mode | 🔴 Not started | — |
+| 18 | Monetization & Stripe | 🔴 Not started | — |
+| 19 | Companion System & Persona Builder | 🔴 Not started | — |
+| 20 | Community Features (Study Groups) | 🔴 Not started | — |
+| 21 | Export & "Your Bible" PDF | 🔴 Not started | — |
+| 22 | Advanced AI Features | 🔴 Not started | — |
+| 23 | Sermon Notes, Catechism & The Long Game | 🔴 Not started | — |
+| 24 | Geographic & Archaeological Layer | 🔴 Not started | — |
+| 25 | Pre-Launch Hardening | 🔴 Not started | — |
+| 26 | Data Integrity & Seeding Verification | 🔴 Not started | — |
+| 27 | Commercial Launch Preparation | 🔴 Not started | — |
+
+### Phase 8 partial status (as of 2026-02-21)
+Phase 8 is partially complete because Phase 4 built the journal back-end infrastructure:
+- ✅ `src/app/api/journal/submit/route.ts` — journal entries + answers API
+- ✅ `src/app/read/[book]/[chapter]/oia-sheet.tsx` — OIA question sheet with answer submission
+- ✅ `src/app/api/content/generate/route.ts` — Charles OIA + personalized content generation
+- ❌ `/profile/journal` — journal history screen (list of all past entries) not built
+- ❌ `/profile/prayer` — prayer journal screen not built
+- ❌ Lament mode not built (no `is_lament_session` UI path)
+- ❌ Charles `follow_up_at` notification loop not built
+
+**Phase 8 next session must build:** Journal history screen, prayer journal CRUD, lament mode entry.
+
+### ⚡ NEXT UP — Phase 8 (complete the partial)
+Start here in the next coding session. Database tables already exist: `journal_entries`, `journal_answers`, `prayer_journal`, `prayer_updates`.
+
+---
 
 ### Infrastructure state (2026-02-21)
-- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS (main branch)
-- **Build:** `npm run build` → 0 errors, 23 routes (dynamic + static)
-- **CI:** GitHub Actions — Type Check ✅ · SQL Validate ✅ · Secret Scan ✅ (fixed 2026-02-21)
+- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS — latest commit `22be2eb`
+- **Build:** `npm run build` → ✅ 0 errors, 23 routes (dynamic + static)
+- **CI:** GitHub Actions — Type Check ✅ · SQL Validate ✅ · Secret Scan ✅
+- **Dev server:** Running locally at `http://localhost:3000` (terminal PID active)
+- **Test account:** `test@biblesaas.com` / `BibleTest2026!` — pre-confirmed, ready to use
 - **Vercel:** Not yet connected — ready to deploy (see Vercel setup instructions below)
-- **Supabase:** SQL schema files ready in `sql/` — migrations not yet applied to any project
-- **Bible data:** WEB/KJV/ASV/YLT served from Supabase `chapters` table — requires `npm run seed:translations` in Supabase before reading screen works
-- **Node:** v24.13.1 · npm v11.8.0
+- **Supabase project:** `yjeegeqnjkvevrnrsybu` — ALL 13 migrations applied ✅
+- **Bible data:** 1189 chapters (WEB translation) seeded via `npm run seed:translations` ✅
+- **Seed scripts available:** `scripts/seed-translations.ts` (done), `scripts/create-test-user.ts`
+- **Node:** v24.13.1 · npm v11.8.0 · Next.js 16.1.6
+
+### Files built (src/ inventory as of 2026-02-21)
+```
+src/app/
+  api/bookmarks/route.ts          — bookmark CRUD
+  api/content/generate/route.ts   — Charles OIA + personalized content
+  api/highlights/route.ts         — highlight CRUD
+  api/journal/submit/route.ts     — journal entry + answers
+  api/onboarding/chat/route.ts    — Charles onboarding conversation
+  api/onboarding/complete/route.ts — extract profile + mark complete
+  api/reading-plans/route.ts      — assign / list reading plans
+  api/reading-progress/route.ts   — mark chapter read, award XP/streak
+  auth/actions.ts                 — login, signup, logout server actions
+  auth/callback/route.ts          — Supabase OAuth callback
+  auth/login/page.tsx
+  auth/signup/page.tsx
+  auth/verify/page.tsx
+  dashboard/page.tsx + dashboard-client.tsx + plan-picker.tsx
+  gift/setup/[token]/page.tsx + actions.ts
+  journey/page.tsx                — skeleton (Phase 14)
+  library/page.tsx                — skeleton (Phase 12)
+  onboarding/page.tsx + onboarding-chat.tsx
+  profile/page.tsx                — XP bar, level, streak stats, achievements
+  profile/bookmarks/page.tsx
+  read/[book]/[chapter]/page.tsx + reading-view.tsx + oia-sheet.tsx
+    + charles-card.tsx + spurgeon-card.tsx + translation-picker.tsx
+    + verse-action-menu.tsx
+  trails/page.tsx                 — skeleton (Phase 13)
+  globals.css                     — Tailwind v4 CSS-only theme
+  layout.tsx
+
+src/components/
+  gamification/achievement-toast.tsx
+  layout/bottom-nav.tsx
+  ui/button.tsx + form-feedback.tsx + input.tsx
+
+src/lib/
+  achievements.ts                 — server-side achievement engine
+  achievements-data.ts            — client-safe achievement definitions
+  bible.ts                        — chapter fetch + cache logic
+  bible/api-bible.ts + esv.ts + index.ts + local.ts + types.ts
+  charles/content.ts + prompts.ts — Charles response generation
+  streaks.ts                      — streak + grace day engine
+  supabase/client.ts + server.ts + middleware.ts
+  tier.ts                         — subscription tier helpers
+  xp.ts                           — XP award + level engine
+
+src/styles/tokens.css             — full design token system
+src/types/app.ts + database.ts    — TypeScript types
+```
 
 ### Key architectural decisions made
 - Tailwind v4 (CSS-only `@theme inline {}` in globals.css — NO `tailwind.config.ts`)
@@ -71,9 +149,9 @@
    | `STRIPE_WEBHOOK_SECRET` | Set `whsec_dummy` until Phase 15 |
    | `RESEND_API_KEY` | resend.com — can be `re_dummy` until Phase 16 |
 
-6. **Before deploying:** Run SQL migrations in Supabase SQL editor (files in `sql/` — run in order 01→12)
-7. **Seed Bible text:** Run `npm run seed:translations` (populates `chapters` table with WEB + KJV). Without this, the reading screen shows "Bible content not yet available" but auth/dashboard/onboarding still work.
-8. **Deploy** — the app will load, auth will work. Bible reading requires step 7.
+6. **Supabase migrations:** Already applied to project `yjeegeqnjkvevrnrsybu` ✅ — use the combined file `sql/all-migrations.sql` if setting up a new project (one paste in SQL editor).
+7. **Bible text seed:** Already seeded (1189 WEB chapters) ✅ — re-run `npm run seed:translations` only if using a new Supabase project. Checkpointing resumes safely.
+8. **Deploy** — the app will load immediately. Auth, onboarding, dashboard, reading screen all work.
 
 ---
 
