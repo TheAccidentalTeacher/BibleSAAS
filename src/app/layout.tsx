@@ -6,6 +6,7 @@ import {
   Roboto_Mono,
 } from "next/font/google";
 import "./globals.css";
+import ClientProviders from "@/components/providers";
 
 /**
  * Bible reading text — user-selectable (eb_garamond is default).
@@ -75,7 +76,7 @@ export default function RootLayout({
         robotoMono.variable,
       ].join(" ")}
     >
-      <body className="antialiased">{children}</body>
+      <body className="antialiased"><ClientProviders>{children}</ClientProviders></body>
     </html>
   );
 }

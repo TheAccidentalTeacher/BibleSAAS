@@ -26,7 +26,9 @@ import {
   FlaskConical,
   MessageSquare,
   Flame,
+  Headphones,
 } from "lucide-react";
+import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";
 import CharlesCard from "./charles-card";
 import OIASheet from "./oia-sheet";
@@ -127,6 +129,48 @@ export default function ReadingView({
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [bookCode, chapter]);
+
+  // ── Audio player state ──────────────────────────────────────────
+  const audioState = useAudioState();
+  const audioActions = useAudioActions();
+  const isThisChapterAudio = audioState.book === bookCode && audioState.chapter === chapter;
+
+  async function handleListen() {
+    if (isThisChapterAudio) {
+      // Toggle play/pause
+      audioState.isPlaying ? audioActions.pause() : audioActions.play();
+      return;
+    }
+    if (!chapterData) return;
+    // Check for saved progress
+    let resumeSeconds = 0;
+    try {
+      const r = await fetch(`/api/audio/progress?book=${bookCode}&chapter=${chapter}`);
+      if (r.ok) {
+        const p = await r.json() as { position_seconds: number; completed: boolean };
+        if (!p.completed) resumeSeconds = p.position_seconds;
+      }
+    } catch (_) { /* ignore */ }
+
+    audioActions.loadChapter({
+      book: bookCode,
+      bookName,
+      chapter,
+      verses: chapterData.verses.map((v) => ({ verse: v.verse, text: v.text })),
+      mode: "tts",   // TTS mode (no ESV Audio key)
+      audioUrl: null,
+      resumeSeconds,
+    });
+    // Small delay for state to settle, then play
+    setTimeout(() => audioActions.play(), 50);
+  }
+
+  // Auto-scroll to current read-along verse
+  useEffect(() => {
+    if (!isThisChapterAudio || !audioState.readAlong || !audioState.currentVerse) return;
+    const el = document.getElementById(`verse-${audioState.currentVerse}`);
+    el?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [audioState.currentVerse, isThisChapterAudio, audioState.readAlong]);
 
   // ── Highlights & Bookmarks ──────────────────────────────────────────────
   const [highlights, setHighlights] = useState<HighlightState[]>([]);
@@ -390,6 +434,18 @@ export default function ReadingView({
           <Share2 size={18} />
         </button>
 
+        {/* Listen */}
+        {chapterData && (
+          <button
+            onClick={handleListen}
+            aria-label={isThisChapterAudio && audioState.isPlaying ? "Pause audio" : "Listen to chapter"}
+            className="flex items-center justify-center w-8 h-8 rounded"
+            style={{ color: isThisChapterAudio ? "var(--color-accent)" : "var(--color-text-2)" }}
+          >
+            <Headphones size={18} />
+          </button>
+        )}
+
         {/* Streak badge */}
         {streak > 0 && (
           <div
@@ -520,16 +576,24 @@ export default function ReadingView({
                     (h.verse_end === null || v.verse <= h.verse_end)
                 ) ?? null;
                 const bm = bookmarks.find((b) => b.verse === v.verse) ?? null;
+                const isReadAlongVerse =
+                  isThisChapterAudio &&
+                  audioState.readAlong &&
+                  audioState.currentVerse === v.verse;
                 return (
                   <span
                     key={v.verse}
                     className="reading-verse"
+                    id={`verse-${v.verse}`}
                     style={{
                       display: "block",
                       marginTop: v.paragraph_start ? "1.5em" : "0",
-                      background: hl ? HIGHLIGHT_BG[hl.color] : undefined,
-                      borderRadius: hl ? "4px" : undefined,
-                      transition: "background 0.15s",
+                      background: isReadAlongVerse
+                        ? "rgba(245,158,11,0.20)"
+                        : hl ? HIGHLIGHT_BG[hl.color] : undefined,
+                      borderRadius: (isReadAlongVerse || hl) ? "4px" : undefined,
+                      outline: isReadAlongVerse ? "1.5px solid rgba(245,158,11,0.5)" : undefined,
+                      transition: "background 0.2s, outline 0.2s",
                     }}
                   >
                     {/* Verse number — tap to open action menu */}

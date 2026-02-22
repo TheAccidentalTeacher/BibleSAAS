@@ -406,6 +406,21 @@ export interface MemoryVerseReviewRow {
   meta: Record<string, unknown>;
 }
 
+export interface AudioProgressRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  book: string;
+  chapter: number;
+  position_seconds: number;
+  completed: boolean;
+  listened_at: string;
+  playback_speed: number;
+  auto_advance: boolean;
+  readalong_on: boolean;
+  meta: Record<string, unknown>;
+}
+
 // ─── Database type (Supabase-compatible shape) ────────────────────────────────
 // NOTE: `Relationships: []` is required by postgrest-js GenericTable —
 // it will NOT resolve table types without it.
@@ -653,6 +668,24 @@ export type Database = {
           reviewed_at?: string;
         };
         Update: never;
+        Relationships: [];
+      };
+      audio_progress: {
+        Row: AudioProgressRow;
+        Insert: {
+          user_id: string;
+          book: string;
+          chapter: number;
+          position_seconds?: number;
+          completed?: boolean;
+          playback_speed?: number;
+          auto_advance?: boolean;
+          readalong_on?: boolean;
+          meta?: Record<string, unknown>;
+          id?: string;
+          listened_at?: string;
+        };
+        Update: Partial<Omit<AudioProgressRow, "id">>;
         Relationships: [];
       };
       spurgeon_index: {
