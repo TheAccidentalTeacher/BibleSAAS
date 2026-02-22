@@ -24,6 +24,7 @@ import {
   Share2,
   BookOpen,
   FlaskConical,
+  GitFork,
   MessageSquare,
   Flame,
   Headphones,
@@ -41,11 +42,21 @@ import VerseActionMenu, {
 } from "./verse-action-menu";
 import MemorizeSheet from "./memorize-sheet";
 import ShareSheet from "./share-sheet";
+import TskRefSheet from "./tsk-ref-sheet";
 import VerseThreadPanel from "./verse-thread-panel";
 import WordNotePopover from "./word-note-popover";
 import AchievementToast from "@/components/gamification/achievement-toast";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
+
+// TSK density dot colors (rare → very_high)
+const TSK_TIER_DOT: Record<string, string> = {
+  rare: "#9ca3af",
+  low: "#6ee7b7",
+  medium: "#34d399",
+  high: "#f59e0b",
+  very_high: "#ef4444",
+};
 
 // Fallback OIA questions for free / no-content scenarios
 const FALLBACK_QUESTIONS: OIAQuestion[] = [
@@ -202,6 +213,14 @@ export default function ReadingView({
   const [threadVerses, setThreadVerses] = useState<Set<number>>(new Set());
   const [familyAccentColor, setFamilyAccentColor] = useState("#7C6B5A");
 
+  // ── TSK cross-references ─────────────────────────────────────────────────────
+  const [tskStats, setTskStats] = useState<Record<number, { count: number; tier: string }>>({});
+  const [tskSheetVerse, setTskSheetVerse] = useState<number | null>(null);
+
+  // ── Active trail ─────────────────────────────────────────────────────────────
+  const [activeTrailId, setActiveTrailId] = useState<string | null>(null);
+  const [activeTrailStepCount, setActiveTrailStepCount] = useState<number>(0);
+
   // ── Word note popover ────────────────────────────────────────────────────────
   interface WordNote {
     original: string;
@@ -299,6 +318,37 @@ export default function ReadingView({
     setThreadVerses(new Set());
     void loadThreadMarkers();
     return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  // Load TSK verse stats for density dots
+  useEffect(() => {
+    let cancelled = false;
+    async function loadTskStats() {
+      const res = await fetch(`/api/tsk/chapter?book=${bookCode}&chapter=${chapter}`);
+      if (cancelled) return;
+      if (res.ok) {
+        const j = await res.json() as { byVerse: Record<number, { count: number; tier: string }> };
+        setTskStats(j.byVerse ?? {});
+      }
+    }
+    setTskStats({});
+    void loadTskStats();
+    return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  // Restore active trail from localStorage on chapter change
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("activeTrail");
+      if (stored) {
+        const parsed = JSON.parse(stored) as { id: string; stepCount: number };
+        setActiveTrailId(parsed.id);
+        setActiveTrailStepCount(parsed.stepCount);
+      } else {
+        setActiveTrailId(null);
+        setActiveTrailStepCount(0);
+      }
+    } catch { /* ignore */ }
   }, [bookCode, chapter]);
 
   // Load family unit accent color (once on mount)
@@ -719,6 +769,31 @@ export default function ReadingView({
                         </span>
                       )}
                     </button>
+                    {/* TSK density dot */}
+                    {tskStats[v.verse] && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setTskSheetVerse(v.verse);
+                        }}
+                        aria-label={`${tskStats[v.verse].count} cross-references for verse ${v.verse}`}
+                        title={`${tskStats[v.verse].count} cross-references (TSK)`}
+                        style={{
+                          display: "inline-block",
+                          width: 6,
+                          height: 6,
+                          borderRadius: "50%",
+                          background: TSK_TIER_DOT[tskStats[v.verse].tier] ?? "#9ca3af",
+                          marginLeft: 2,
+                          verticalAlign: "super",
+                          cursor: "pointer",
+                          border: "none",
+                          padding: 0,
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
                     {/* Verse words — each word is tappable for word note */}
                     {v.text.split(/(\s+)/).map((token, idx) => {
                       if (/^\s+$/.test(token)) return token;
@@ -908,6 +983,70 @@ export default function ReadingView({
           note={shareTarget.note}
           onClose={() => setShareTarget(null)}
         />
+      )}
+
+      {/* ── TSK Ref Sheet ── */}
+      {tskSheetVerse !== null && chapterData && (() => {
+        const vData = chapterData.verses.find((v) => v.verse === tskSheetVerse);
+        if (!vData) return null;
+        return (
+          <TskRefSheet
+            book={bookCode}
+            chapter={chapter}
+            verse={tskSheetVerse}
+            verseText={vData.text}
+            activeTrailId={activeTrailId}
+            activeTrailStepCount={activeTrailStepCount}
+            onTrailStarted={(id, steps) => {
+              setActiveTrailId(id);
+              setActiveTrailStepCount(steps);
+              setTskSheetVerse(null);
+            }}
+            onStepAdded={(steps) => {
+              setActiveTrailStepCount(steps);
+              setTskSheetVerse(null);
+            }}
+            onViewTrail={() => {
+              if (activeTrailId) router.push(`/trails/${activeTrailId}`);
+            }}
+            onClose={() => setTskSheetVerse(null)}
+          />
+        );
+      })()}
+
+      {/* ── Active Trail Pill ── */}
+      {activeTrailId && (
+        <div
+          className="fixed bottom-20 left-1/2 -translate-x-1/2 z-40 flex items-center gap-3 px-4 py-2.5 rounded-full shadow-lg"
+          style={{
+            background: "var(--color-accent)",
+            color: "var(--color-bg)",
+            maxWidth: "calc(100vw - 2rem)",
+          }}
+        >
+          <GitFork size={14} />
+          <span className="text-xs font-semibold">
+            Trail · {activeTrailStepCount} step{activeTrailStepCount !== 1 ? "s" : ""}
+          </span>
+          <button
+            type="button"
+            className="text-xs font-bold underline"
+            onClick={() => router.push(`/trails/${activeTrailId}`)}
+          >
+            View
+          </button>
+          <button
+            type="button"
+            className="text-xs font-bold"
+            onClick={() => {
+              localStorage.removeItem("activeTrail");
+              setActiveTrailId(null);
+              setActiveTrailStepCount(0);
+            }}
+          >
+            ✕
+          </button>
+        </div>
       )}
 
       {/* ── Verse Thread Panel ── */}
