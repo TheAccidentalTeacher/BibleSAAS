@@ -127,6 +127,7 @@ export default async function ProfilePage() {
             { href: "/profile/prayer", label: "Prayer Journal", desc: "Prayers, laments & answered prayer" },
             { href: "/profile/memory-verses", label: "Memory Verses", desc: "Spaced repetition verse memorization" },
             { href: "/profile/bookmarks", label: "Bookmarks", desc: "Saved verses" },
+            { href: "/profile/family", label: "Family Unit", desc: "Share verses & threads with family" },
           ].map(({ href, label, desc }) => (
             <Link
               key={href}

@@ -40,6 +40,8 @@ import VerseActionMenu, {
   HIGHLIGHT_BG,
 } from "./verse-action-menu";
 import MemorizeSheet from "./memorize-sheet";
+import ShareSheet from "./share-sheet";
+import VerseThreadPanel from "./verse-thread-panel";
 import AchievementToast from "@/components/gamification/achievement-toast";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
@@ -187,6 +189,18 @@ export default function ReadingView({
   const [memoryDueVerses, setMemoryDueVerses] = useState<Set<number>>(new Set());
   const [memorySheetVerse, setMemorySheetVerse] = useState<number | null>(null);
 
+  // ── Share sheet ─────────────────────────────────────────────────────────────
+  const [shareTarget, setShareTarget] = useState<{
+    verse: number;
+    text: string;
+    note: string | null;
+  } | null>(null);
+
+  // ── Verse threads ────────────────────────────────────────────────────────────
+  const [threadVerse, setThreadVerse] = useState<number | null>(null);
+  const [threadVerses, setThreadVerses] = useState<Set<number>>(new Set());
+  const [familyAccentColor, setFamilyAccentColor] = useState("#7C6B5A");
+
   // Load highlights + bookmarks when chapter changes
   useEffect(() => {
     let cancelled = false;
@@ -246,6 +260,32 @@ export default function ReadingView({
     void loadMemoryMarkers();
     return () => { cancelled = true; };
   }, [bookCode, chapter]);
+
+  // Load verse thread markers for this chapter
+  useEffect(() => {
+    let cancelled = false;
+    async function loadThreadMarkers() {
+      const res = await fetch(`/api/verse-thread?book=${bookCode}&chapter=${chapter}`);
+      if (cancelled) return;
+      if (res.ok) {
+        const j = await res.json() as { has_threads: number[] };
+        setThreadVerses(new Set(j.has_threads ?? []));
+      }
+    }
+    setThreadVerses(new Set());
+    void loadThreadMarkers();
+    return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  // Load family unit accent color (once on mount)
+  useEffect(() => {
+    fetch("/api/family")
+      .then((r) => r.ok ? r.json() : null)
+      .then((j: { unit?: { accent_color?: string } } | null) => {
+        if (j?.unit?.accent_color) setFamilyAccentColor(j.unit.accent_color);
+      })
+      .catch(() => {/* ignore */});
+  }, []);
 
   const handleHighlight = useCallback(async (verse: number, color: HighlightColor) => {
     const res = await fetch("/api/highlights", {
@@ -427,6 +467,13 @@ export default function ReadingView({
 
         {/* Share */}
         <button
+          onClick={() => {
+            if (chapterData?.verses?.length) {
+              const v = chapterData.verses[0];
+              const hl = highlights.find((h) => v.verse >= h.verse_start && (h.verse_end === null || v.verse <= h.verse_end));
+              setShareTarget({ verse: v.verse, text: v.text, note: hl?.note ?? null });
+            }
+          }}
           aria-label="Share"
           className="flex items-center justify-center w-8 h-8 rounded"
           style={{ color: "var(--color-text-2)" }}
@@ -636,6 +683,17 @@ export default function ReadingView({
                           ★
                         </span>
                       )}
+                      {/* Thread flame dot */}
+                      {threadVerses.has(v.verse) && (
+                        <span
+                          aria-label="Has thread"
+                          title="Family thread on this verse"
+                          className="absolute -bottom-1 -left-0.5 text-[9px] leading-none"
+                          style={{ color: familyAccentColor }}
+                        >
+                          🔥
+                        </span>
+                      )}
                     </button>
                     {v.text}{" "}
                   </span>
@@ -732,12 +790,19 @@ export default function ReadingView({
           }
           isBookmarked={bookmarks.some((b) => b.verse === activeMenu.verse)}
           isMemorized={memorizedVerses.has(activeMenu.verse)}
+          hasThread={threadVerses.has(activeMenu.verse)}
           onHighlight={handleHighlight}
           onRemoveHighlight={handleRemoveHighlight}
           onAddNote={handleAddNote}
           onBookmark={handleBookmark}
           onRemoveBookmark={handleRemoveBookmark}
           onMemorize={(v) => setMemorySheetVerse(v)}
+          onShare={(v) => {
+            const vData = chapterData?.verses.find((x) => x.verse === v);
+            const hl = vData ? highlights.find((h) => v >= h.verse_start && (h.verse_end === null || v <= h.verse_end)) : null;
+            if (vData) setShareTarget({ verse: v, text: vData.text, note: hl?.note ?? null });
+          }}
+          onThread={(v) => setThreadVerse(v)}
           onClose={() => setActiveMenu(null)}
         />
       )}
@@ -767,6 +832,45 @@ export default function ReadingView({
         earned={earnedAchievements}
         onDismiss={() => setEarnedAchievements([])}
       />
+
+      {/* ── Share Sheet ── */}
+      {shareTarget && (
+        <ShareSheet
+          book={bookCode}
+          bookName={bookName}
+          chapter={chapter}
+          verse={shareTarget.verse}
+          verseText={shareTarget.text}
+          translation={translation}
+          note={shareTarget.note}
+          onClose={() => setShareTarget(null)}
+        />
+      )}
+
+      {/* ── Verse Thread Panel ── */}
+      {threadVerse !== null && chapterData && (() => {
+        const vData = chapterData.verses.find((v) => v.verse === threadVerse);
+        if (!vData) return null;
+        return (
+          <VerseThreadPanel
+            book={bookCode}
+            bookName={bookName}
+            chapter={chapter}
+            verse={threadVerse}
+            verseText={vData.text}
+            accentColor={familyAccentColor}
+            onClose={() => {
+              setThreadVerse(null);
+              // Reload thread markers to reflect new messages
+              void fetch(`/api/verse-thread?book=${bookCode}&chapter=${chapter}`)
+                .then((r) => r.ok ? r.json() : null)
+                .then((j: { has_threads?: number[] } | null) => {
+                  if (j?.has_threads) setThreadVerses(new Set(j.has_threads));
+                });
+            }}
+          />
+        );
+      })()}
     </div>
   );
 }

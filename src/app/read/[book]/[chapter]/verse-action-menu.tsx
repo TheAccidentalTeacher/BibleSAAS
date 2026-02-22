@@ -13,7 +13,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { X, Bookmark, BookmarkCheck, MessageSquare, Trash2, Brain } from "lucide-react";
+import { X, Bookmark, BookmarkCheck, MessageSquare, Trash2, Brain, Share2, Flame } from "lucide-react";
 
 export type HighlightColor = "yellow" | "green" | "blue" | "pink" | "orange" | "purple";
 
@@ -55,12 +55,15 @@ interface VerseActionMenuProps {
   existingHighlight: HighlightState | null;
   isBookmarked: boolean;
   isMemorized: boolean;
+  hasThread?: boolean;
   onHighlight: (verse: number, color: HighlightColor) => void;
   onRemoveHighlight: (id: string) => void;
   onAddNote: (id: string, note: string) => void;
   onBookmark: (verse: number) => void;
   onRemoveBookmark: (verse: number) => void;
   onMemorize: (verse: number) => void;
+  onShare: (verse: number) => void;
+  onThread: (verse: number) => void;
   onClose: () => void;
 }
 
@@ -70,12 +73,15 @@ export default function VerseActionMenu({
   existingHighlight,
   isBookmarked,
   isMemorized,
+  hasThread = false,
   onHighlight,
   onRemoveHighlight,
   onAddNote,
   onBookmark,
   onRemoveBookmark,
   onMemorize,
+  onShare,
+  onThread,
   onClose,
 }: VerseActionMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
@@ -273,6 +279,28 @@ export default function VerseActionMenu({
         >
           <Brain size={13} />
           {isMemorized ? "In Memory Queue" : "Memorize"}
+        </button>
+      </div>
+
+      {/* Share + Thread buttons */}
+      <div className="mt-2 flex gap-2">
+        <button
+          onClick={() => { onShare(verse); onClose(); }}
+          className="flex-1 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border justify-center"
+          style={{ background: "var(--color-surface-2)", borderColor: "var(--color-border)", color: "var(--color-text-1)" }}
+        >
+          <Share2 size={13} /> Share
+        </button>
+        <button
+          onClick={() => { onThread(verse); onClose(); }}
+          className="flex-1 flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border justify-center"
+          style={{
+            background: hasThread ? "rgba(239,116,22,0.10)" : "var(--color-surface-2)",
+            borderColor: hasThread ? "#ef7416" : "var(--color-border)",
+            color: hasThread ? "#ef7416" : "var(--color-text-1)",
+          }}
+        >
+          <Flame size={13} /> {hasThread ? "View Thread" : "Start Thread"}
         </button>
       </div>
     </div>

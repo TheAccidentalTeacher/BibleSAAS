@@ -107,8 +107,10 @@ export interface FamilyMemberRow {
   id: string;
   family_unit_id: string;
   user_id: string;
-  role: "admin" | "member";
-  color_hex: string;
+  role: string;
+  share_progress: boolean;
+  share_highlights: boolean;
+  read_receipts_visible: boolean;
   joined_at: string;
 }
 
@@ -421,6 +423,38 @@ export interface AudioProgressRow {
   meta: Record<string, unknown>;
 }
 
+export interface VerseThreadMessageRow {
+  [key: string]: unknown;
+  id: string;
+  family_unit_id: string;
+  sender_id: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  body: string;
+  parent_id: string | null;
+  delivery_date: string | null;
+  read_by: Record<string, string>;
+  created_at: string;
+  deleted_at: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface SharedContentRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  content_type: "verse" | "highlight" | "journal_answer" | "trail" | "streak";
+  source_id: string | null;
+  payload: Record<string, unknown>;
+  share_token: string;
+  is_active: boolean;
+  view_count: number;
+  created_at: string;
+  expires_at: string | null;
+  meta: Record<string, unknown>;
+}
+
 // ─── Database type (Supabase-compatible shape) ────────────────────────────────
 // NOTE: `Relationships: []` is required by postgrest-js GenericTable —
 // it will NOT resolve table types without it.
@@ -516,7 +550,7 @@ export type Database = {
       };
       family_members: {
         Row: FamilyMemberRow;
-        Insert: { family_unit_id: string; user_id: string; role?: "admin" | "member"; color_hex: string; id?: string; joined_at?: string };
+        Insert: { family_unit_id: string; user_id: string; role?: string; share_progress?: boolean; share_highlights?: boolean; read_receipts_visible?: boolean; id?: string; joined_at?: string };
         Update: Partial<Omit<FamilyMemberRow, "id">>;
         Relationships: [];
       };
@@ -686,6 +720,44 @@ export type Database = {
           listened_at?: string;
         };
         Update: Partial<Omit<AudioProgressRow, "id">>;
+        Relationships: [];
+      };
+      verse_thread_messages: {
+        Row: VerseThreadMessageRow;
+        Insert: {
+          family_unit_id: string;
+          sender_id: string;
+          book: string;
+          chapter: number;
+          verse: number;
+          body: string;
+          parent_id?: string | null;
+          delivery_date?: string | null;
+          read_by?: Record<string, string>;
+          deleted_at?: string | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<VerseThreadMessageRow, "id">>;
+        Relationships: [];
+      };
+      shared_content: {
+        Row: SharedContentRow;
+        Insert: {
+          user_id: string;
+          content_type: SharedContentRow["content_type"];
+          payload: Record<string, unknown>;
+          source_id?: string | null;
+          share_token?: string;
+          is_active?: boolean;
+          view_count?: number;
+          expires_at?: string | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Omit<SharedContentRow, "id">>;
         Relationships: [];
       };
       spurgeon_index: {
