@@ -78,3 +78,81 @@ export function meetsMinimumTier(
 ): boolean {
   return TIER_RANK[userTier] >= TIER_RANK[minimumTier]
 }
+
+/** Human-readable tier display names */
+export const TIER_LABELS: Record<SubscriptionTier, string> = {
+  free: "Reader",
+  standard: "Disciple",
+  premium: "Scholar",
+  your_edition: "Living Bible",
+};
+
+export type BillingInterval = "monthly" | "annual";
+
+/** Marketing tier data for the /profile/upgrade page */
+export const TIER_MARKETING = [
+  {
+    tier: "free" as SubscriptionTier,
+    name: "Reader",
+    price: { monthly: 0, annual: 0 },
+    tagline: "Start your journey — free forever",
+    features: [
+      "Bible reading (WEB, KJV, ASV, YLT)",
+      "Chapter-by-chapter progress",
+      "Bookmarks & highlights",
+      "Streak tracking",
+      "Vault commentary (classic Spurgeon)",
+    ],
+    cta: null, // current plan indicator, no action
+  },
+  {
+    tier: "standard" as SubscriptionTier,
+    name: "Disciple",
+    price: { monthly: 9, annual: 79 },
+    tagline: "Your personal study companion",
+    features: [
+      "Everything in Reader",
+      "Charles AI commentary (personalized)",
+      "OIA Study Questions",
+      "Chat with Charles",
+      "All translations (ESV, NASB, NIV, CSB…)",
+      "Memory verse system",
+      "Prayer journal",
+      "Weekly letter from Charles",
+    ],
+    highlight: true,
+    cta: "Start 7-day free trial",
+  },
+  {
+    tier: "premium" as SubscriptionTier,
+    name: "Scholar",
+    price: { monthly: 19, annual: 159 },
+    tagline: "Deep study, multiple perspectives",
+    features: [
+      "Everything in Disciple",
+      "Audio player",
+      "Compare up to 4 translations",
+      "TSK cross-references (detailed)",
+      "PDF export",
+      "Word study tools",
+      "Trail system (cross-reference chains)",
+    ],
+    cta: "Start 7-day free trial",
+  },
+  {
+    tier: "your_edition" as SubscriptionTier,
+    name: "Living Bible",
+    price: { monthly: 39, annual: 299 },
+    tagline: "A Bible that knows you deeply",
+    features: [
+      "Everything in Scholar",
+      "Persona Builder (custom companion)",
+      "Your Edition branding",
+      "Birthday letters & verse vault",
+      "Year in Review",
+      "Family sharing (up to 6)",
+    ],
+    cta: "Start 7-day free trial",
+  },
+] as const;
+

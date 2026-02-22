@@ -130,6 +130,7 @@ export default async function ProfilePage() {
             { href: "/profile/family", label: "Family Unit", desc: "Share verses & threads with family" },
             { href: "/profile/chats", label: "Chat History", desc: "Past conversations with Charles" },
             { href: "/profile/settings", label: "Notification Settings", desc: "Email & push notification preferences" },
+            { href: "/profile/upgrade", label: "Plans & Billing", desc: "Upgrade your plan or manage subscription" },
           ].map(({ href, label, desc }) => (
             <Link
               key={href}
@@ -173,7 +174,7 @@ export default async function ProfilePage() {
             </div>
             {tier === "free" && (
               <a
-                href="/upgrade"
+                href="/profile/upgrade"
                 className="text-[13px] text-[var(--color-accent)] hover:underline"
               >
                 Upgrade ↗
