@@ -1,0 +1,24 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/daily-trail",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/memory-verse-reminders",
+      "schedule": "0 7 * * *"
+    },
+    {
+      "path": "/api/cron/daily-reading",
+      "schedule": "0 7,12,17 * * *"
+    },
+    {
+      "path": "/api/cron/birthday-letters",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/portrait-regen",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}

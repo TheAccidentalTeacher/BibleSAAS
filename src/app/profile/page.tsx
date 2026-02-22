@@ -128,6 +128,8 @@ export default async function ProfilePage() {
             { href: "/profile/memory-verses", label: "Memory Verses", desc: "Spaced repetition verse memorization" },
             { href: "/profile/bookmarks", label: "Bookmarks", desc: "Saved verses" },
             { href: "/profile/family", label: "Family Unit", desc: "Share verses & threads with family" },
+            { href: "/profile/chats", label: "Chat History", desc: "Past conversations with Charles" },
+            { href: "/profile/settings", label: "Notification Settings", desc: "Email & push notification preferences" },
           ].map(({ href, label, desc }) => (
             <Link
               key={href}
