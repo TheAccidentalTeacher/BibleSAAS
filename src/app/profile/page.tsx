@@ -131,6 +131,7 @@ export default async function ProfilePage() {
             { href: "/profile/chats", label: "Chat History", desc: "Past conversations with Charles" },
             { href: "/profile/companions", label: "Companions", desc: "Switch voice or build your own companion" },
             { href: "/profile/groups", label: "Study Groups", desc: "Verse threads and prayer with your group" },
+            { href: "/profile/export", label: "Export & Data", desc: "Download your Bible, journal and study records" },
             { href: "/profile/settings", label: "Notification Settings", desc: "Email & push notification preferences" },
             { href: "/profile/upgrade", label: "Plans & Billing", desc: "Upgrade your plan or manage subscription" },
           ].map(({ href, label, desc }) => (
