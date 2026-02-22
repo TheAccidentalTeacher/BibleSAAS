@@ -4,7 +4,7 @@
  * Subject: [Name] left you a note on [Book] [Chapter]:[Verse]
  */
 
-import { Section, Text, Button, Link } from "@react-email/components";
+import { Section, Text, Button } from "@react-email/components";
 import EmailWrapper from "./email-wrapper";
 
 interface VerseThreadEmailProps {

@@ -20,7 +20,7 @@ const PRECACHE_PAGES = ["/", "/dashboard", "/offline"];
 
 // ── Install ──────────────────────────────────────────────────────────────────
 self.addEventListener("install", (event) => {
-  // @ts-ignore
+  // @ts-expect-error
   event.waitUntil(
     caches.open(PAGES_CACHE).then((cache) =>
       cache.addAll(PRECACHE_PAGES).catch(() => {
@@ -28,13 +28,13 @@ self.addEventListener("install", (event) => {
       })
     )
   );
-  // @ts-ignore
+  // @ts-expect-error
   self.skipWaiting();
 });
 
 // ── Activate ─────────────────────────────────────────────────────────────────
 self.addEventListener("activate", (event) => {
-  // @ts-ignore
+  // @ts-expect-error
   event.waitUntil(
     caches.keys().then((keys) =>
       Promise.all(
@@ -44,13 +44,13 @@ self.addEventListener("activate", (event) => {
       )
     )
   );
-  // @ts-ignore
+  // @ts-expect-error
   self.clients.claim();
 });
 
 // ── Fetch ─────────────────────────────────────────────────────────────────────
 self.addEventListener("fetch", (event) => {
-  // @ts-ignore
+  // @ts-expect-error
   const { request } = event;
   const url = new URL(request.url);
 
@@ -59,7 +59,7 @@ self.addEventListener("fetch", (event) => {
 
   // ── Static assets: CacheFirst ──────────────────────────────────────────────
   if (url.pathname.startsWith("/_next/static/")) {
-    // @ts-ignore
+    // @ts-expect-error
     event.respondWith(
       caches.open(STATIC_CACHE).then((cache) =>
         cache.match(request).then(
@@ -83,7 +83,7 @@ self.addEventListener("fetch", (event) => {
 
   // ── Page navigations: NetworkFirst with offline fallback ──────────────────
   if (request.mode === "navigate") {
-    // @ts-ignore
+    // @ts-expect-error
     event.respondWith(
       fetch(request)
         .then((response) => {
@@ -107,15 +107,15 @@ self.addEventListener("fetch", (event) => {
 
 // ── Background Sync ──────────────────────────────────────────────────────────
 self.addEventListener("sync", (event) => {
-  // @ts-ignore
+  // @ts-expect-error
   if (event.tag === "pending-sync") {
-    // @ts-ignore
+    // @ts-expect-error
     event.waitUntil(notifyClientToSync());
   }
 });
 
 async function notifyClientToSync() {
-  // @ts-ignore
+  // @ts-expect-error
   const clients = await self.clients.matchAll({ type: "window" });
   for (const client of clients) {
     client.postMessage({ type: "SYNC_PENDING" });
