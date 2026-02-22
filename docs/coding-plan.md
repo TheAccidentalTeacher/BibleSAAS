@@ -20,8 +20,8 @@
 | 5 | Highlights, Bookmarks & Annotations | ✅ Complete | `75986c4` |
 | 6 | Dashboard & Reading Plans | ✅ Complete | `eadb869` |
 | 7 | Streaks, XP & Gamification | ✅ Complete | `e21412a` |
-| 8 | Journal & Prayer Journal | 🟡 Partial | — |
-| 9 | Memory Verse System | 🔴 Not started | — |
+| 8 | Journal & Prayer Journal | ✅ Complete | `475423d` |
+| 9 | Memory Verse System | ✅ Complete | `747652b` |
 | 10 | Audio Layer | 🔴 Not started | — |
 | 11 | Sharing & Internal Messaging (Verse Threads) | 🔴 Not started | — |
 | 12 | Word Study & Library | 🔴 Not started | — |
@@ -53,8 +53,9 @@ Phase 8 is partially complete because Phase 4 built the journal back-end infrast
 
 **Phase 8 next session must build:** Journal history screen, prayer journal CRUD, lament mode entry.
 
-### ⚡ NEXT UP — Phase 8 (complete the partial)
-Start here in the next coding session. Database tables already exist: `journal_entries`, `journal_answers`, `prayer_journal`, `prayer_updates`.
+### ⚡ NEXT UP — Phase 10 (Audio Layer)
+Start here in the next coding session. Phase 8 (Journal & Prayer) and Phase 9 (Memory Verses) are fully complete.
+Phase 10 spec: `/api/audio/route.ts`, `AudioPlayer` persistent mini-player, verse sync, TTS via ElevenLabs or browser `speechSynthesis`.
 
 ---
 
