@@ -235,6 +235,51 @@ export interface CommentaryEntryRow {
   meta: Record<string, unknown>;
 }
 
+export interface BibleCharacterRow {
+  [key: string]: unknown;
+  id: string;
+  name: string;
+  alternate_names: string[] | null;
+  primary_role: string | null;
+  era: string | null;
+  tribe_nation: string | null;
+  first_mention_book: string | null;
+  first_mention_chapter: number | null;
+  first_mention_verse: number | null;
+  description: string | null;
+  is_athlete_of_faith: boolean;
+  is_in_hebrews_11: boolean;
+  rarity: "faithful" | "renowned" | "mighty" | "eternal" | "the_word";
+  meta: Record<string, unknown>;
+}
+
+export interface CatechismEntryRow {
+  [key: string]: unknown;
+  id: string;
+  catechism: "WSC" | "WLC" | "HC";
+  question_number: number;
+  lord_day: number | null;
+  section: string | null;
+  question_text: string;
+  answer_text: string;
+  scripture_refs: string[] | null;
+  proof_texts: Array<{ ref: string; book?: string; chapter?: number; verse?: number; note?: string }>;
+  keywords: string[] | null;
+  charles_note: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface WordOccurrenceRow {
+  [key: string]: unknown;
+  id: string;
+  strongs_number: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  count: number;
+  meta: Record<string, unknown>;
+}
+
 export interface HighlightRow {
   [key: string]: unknown;
   id: string;
@@ -987,6 +1032,60 @@ export type Database = {
           id?: string;
         };
         Update: Partial<Omit<CommentaryEntryRow, "id">>;
+        Relationships: [];
+      };
+      bible_characters: {
+        Row: BibleCharacterRow;
+        Insert: {
+          name: string;
+          alternate_names?: string[] | null;
+          primary_role?: string | null;
+          era?: string | null;
+          tribe_nation?: string | null;
+          first_mention_book?: string | null;
+          first_mention_chapter?: number | null;
+          first_mention_verse?: number | null;
+          description?: string | null;
+          is_athlete_of_faith?: boolean;
+          is_in_hebrews_11?: boolean;
+          rarity?: "faithful" | "renowned" | "mighty" | "eternal" | "the_word";
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<BibleCharacterRow, "id">>;
+        Relationships: [];
+      };
+      catechism_entries: {
+        Row: CatechismEntryRow;
+        Insert: {
+          catechism: "WSC" | "WLC" | "HC";
+          question_number: number;
+          lord_day?: number | null;
+          section?: string | null;
+          question_text: string;
+          answer_text: string;
+          scripture_refs?: string[] | null;
+          proof_texts?: Array<{ ref: string; book?: string; chapter?: number; verse?: number; note?: string }>;
+          keywords?: string[] | null;
+          charles_note?: string | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<CatechismEntryRow, "id">>;
+        Relationships: [];
+      };
+      word_occurrences: {
+        Row: WordOccurrenceRow;
+        Insert: {
+          strongs_number: string;
+          book: string;
+          chapter: number;
+          verse: number;
+          count?: number;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<WordOccurrenceRow, "id">>;
         Relationships: [];
       };
       spurgeon_index: {
