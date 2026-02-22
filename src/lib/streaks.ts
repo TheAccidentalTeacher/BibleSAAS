@@ -8,7 +8,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { StreakRow } from "@/types/database";
-import { awardXP } from "./xp";
+import { awardXP } from "./xp-server";
 import { checkAndAwardAchievements } from "./achievements";
 
 export type ActivityType =

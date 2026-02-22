@@ -5,8 +5,6 @@
  * from multiple places (API routes, lib functions, client UI).
  */
 
-import { createClient } from "@/lib/supabase/server";
-
 // ── XP amounts ──────────────────────────────────────────────────────────────
 export const XP_AMOUNTS: Record<string, number> = {
   chapter_read: 10,
@@ -61,65 +59,4 @@ export interface AwardXpResult {
   totalXp: number;
   level: LevelInfo;
   leveledUp: boolean;
-}
-
-export async function awardXP(
-  userId: string,
-  eventType: string,
-  xpOverride?: number,
-  context: Record<string, unknown> = {}
-): Promise<AwardXpResult> {
-  const supabase = await createClient();
-  const xpEarned = xpOverride ?? XP_AMOUNTS[eventType] ?? 0;
-
-  if (xpEarned <= 0) {
-    // Still need to return current state
-    const { data: s } = await supabase
-      .from("streaks")
-      .select("total_xp, current_level")
-      .eq("user_id", userId)
-      .maybeSingle();
-    const totalXp = (s as { total_xp?: number } | null)?.total_xp ?? 0;
-    return { xpEarned: 0, totalXp, level: getLevelForXp(totalXp), leveledUp: false };
-  }
-
-  // Insert XP event
-  await supabase.from("xp_events").insert({
-    user_id: userId,
-    event_type: eventType,
-    xp_earned: xpEarned,
-    context,
-  });
-
-  // Fetch current streak row to get total_xp
-  const { data: streakData } = await supabase
-    .from("streaks")
-    .select("total_xp, current_level")
-    .eq("user_id", userId)
-    .maybeSingle();
-
-  const prevTotalXp = (streakData as { total_xp?: number } | null)?.total_xp ?? 0;
-  const prevLevel = (streakData as { current_level?: number } | null)?.current_level ?? 1;
-  const newTotalXp = prevTotalXp + xpEarned;
-  const newLevelInfo = getLevelForXp(newTotalXp);
-  const leveledUp = newLevelInfo.level > prevLevel;
-
-  if (streakData) {
-    await supabase
-      .from("streaks")
-      .update({ total_xp: newTotalXp, current_level: newLevelInfo.level })
-      .eq("user_id", userId);
-  } else {
-    // First XP for this user — upsert streaks row
-    await supabase.from("streaks").upsert({
-      user_id: userId,
-      total_xp: newTotalXp,
-      current_level: newLevelInfo.level,
-      current_streak: 0,
-      longest_streak: 0,
-      total_days: 0,
-    });
-  }
-
-  return { xpEarned, totalXp: newTotalXp, level: newLevelInfo, leveledUp };
 }

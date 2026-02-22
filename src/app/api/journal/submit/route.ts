@@ -37,7 +37,7 @@ import { buildContentSystemPrompt } from "@/lib/charles/content";
 import { ANTHROPIC_MODEL } from "@/lib/charles/prompts";
 import { getChapter } from "@/lib/bible/index";
 import type { ProfileRow } from "@/types/database";
-import { awardXP } from "@/lib/xp";
+import { awardXP } from "@/lib/xp-server";
 import { checkAndAwardAchievements } from "@/lib/achievements";
 
 interface AnswerInput {

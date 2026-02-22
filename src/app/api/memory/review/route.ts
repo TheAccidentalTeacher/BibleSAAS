@@ -10,7 +10,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { calcSM2 } from "@/lib/sm2";
-import { awardXP } from "@/lib/xp";
+import { awardXP } from "@/lib/xp-server";
 import type { MemoryVerseRow } from "@/types/database";
 
 export async function POST(req: NextRequest) {

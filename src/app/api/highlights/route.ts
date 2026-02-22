@@ -10,7 +10,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { HighlightRow } from "@/types/database";
-import { awardXP } from "@/lib/xp";
+import { awardXP } from "@/lib/xp-server";
 
 // ── GET ─────────────────────────────────────────────────────────────────────
 export async function GET(req: Request) {

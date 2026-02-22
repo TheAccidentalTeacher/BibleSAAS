@@ -9,7 +9,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { UserReadingPlanRow, PlanChapterRow } from "@/types/database";
 import { recordStudyActivity } from "@/lib/streaks";
-import { awardXP } from "@/lib/xp";
+import { awardXP } from "@/lib/xp-server";
 import { checkAndAwardAchievements } from "@/lib/achievements";
 
 export async function POST(req: Request) {

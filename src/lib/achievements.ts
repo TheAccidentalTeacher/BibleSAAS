@@ -7,7 +7,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { AchievementRow, UserAchievementRow } from "@/types/database";
-import { awardXP } from "./xp";
+import { awardXP } from "./xp-server";
 import {
   ACHIEVEMENT_DEFINITIONS,
   type AchievementDef,
