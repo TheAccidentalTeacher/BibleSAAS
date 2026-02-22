@@ -126,6 +126,115 @@ export interface ChapterRow {
   cached_at: string;
 }
 
+export interface StrongsLexiconRow {
+  [key: string]: unknown;
+  id: string;
+  strongs_number: string;
+  language: "hebrew" | "greek";
+  original_word: string;
+  transliteration: string | null;
+  pronunciation: string | null;
+  part_of_speech: string | null;
+  short_def: string | null;
+  long_def: string | null;
+  usage_notes: string | null;
+  kjv_usage: string | null;
+  source: string | null;
+  hebrew_root: string | null;
+  root_strongs: string | null;
+  semantic_domain: string | null;
+  occurrence_heatmap: Record<string, unknown>;
+  total_occurrences: number;
+  charles_study: Record<string, unknown>;
+  charles_study_at: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface MorphologyDataRow {
+  [key: string]: unknown;
+  id: string;
+  book: string;
+  chapter: number;
+  verse: number;
+  word_position: number;
+  original_word: string;
+  normalized_form: string | null;
+  strongs_number: string | null;
+  language: "hebrew" | "greek" | null;
+  morphology_code: string | null;
+  morphology_desc: string | null;
+  meta: Record<string, unknown>;
+}
+
+export interface UserWordStudyHistoryRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  strongs_number: string;
+  first_studied_at: string;
+  last_studied_at: string;
+  study_count: number;
+  source_book: string | null;
+  source_chapter: number | null;
+  meta: Record<string, unknown>;
+}
+
+export interface BibleDictionaryEntryRow {
+  [key: string]: unknown;
+  id: string;
+  source: string;
+  term: string;
+  slug: string;
+  body: string;
+  passage_refs: string[];
+  charles_note: string | null;
+  is_primary_source: boolean;
+  meta: Record<string, unknown>;
+}
+
+export interface UserLibraryHistoryRow {
+  [key: string]: unknown;
+  id: string;
+  user_id: string;
+  entry_type: string;
+  entry_id: string;
+  entry_slug: string | null;
+  entry_label: string | null;
+  first_visited_at: string;
+  last_visited_at: string;
+  visit_count: number;
+  meta: Record<string, unknown>;
+}
+
+export interface HymnIndexRow {
+  [key: string]: unknown;
+  id: string;
+  title: string;
+  first_line: string | null;
+  author: string | null;
+  year_written: number | null;
+  tune_name: string | null;
+  meter: string | null;
+  lyrics: string;
+  explicit_refs: string[];
+  thematic_tags: string[];
+  meta: Record<string, unknown>;
+}
+
+export interface CommentaryEntryRow {
+  [key: string]: unknown;
+  id: string;
+  source: string;
+  book: string;
+  chapter: number;
+  verse_start: number | null;
+  verse_end: number | null;
+  section_title: string | null;
+  body: string;
+  is_vault_featured: boolean;
+  meta: Record<string, unknown>;
+}
+
 export interface HighlightRow {
   [key: string]: unknown;
   id: string;
@@ -758,6 +867,126 @@ export type Database = {
           created_at?: string;
         };
         Update: Partial<Omit<SharedContentRow, "id">>;
+        Relationships: [];
+      };
+      strongs_lexicon: {
+        Row: StrongsLexiconRow;
+        Insert: {
+          strongs_number: string;
+          language: "hebrew" | "greek";
+          original_word: string;
+          transliteration?: string | null;
+          short_def?: string | null;
+          long_def?: string | null;
+          total_occurrences?: number;
+          occurrence_heatmap?: Record<string, unknown>;
+          charles_study?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<StrongsLexiconRow, "id">>;
+        Relationships: [];
+      };
+      morphology_data: {
+        Row: MorphologyDataRow;
+        Insert: {
+          book: string;
+          chapter: number;
+          verse: number;
+          word_position: number;
+          original_word: string;
+          normalized_form?: string | null;
+          strongs_number?: string | null;
+          language?: "hebrew" | "greek" | null;
+          morphology_code?: string | null;
+          morphology_desc?: string | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<MorphologyDataRow, "id">>;
+        Relationships: [];
+      };
+      user_word_study_history: {
+        Row: UserWordStudyHistoryRow;
+        Insert: {
+          user_id: string;
+          strongs_number: string;
+          first_studied_at?: string;
+          last_studied_at?: string;
+          study_count?: number;
+          source_book?: string | null;
+          source_chapter?: number | null;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<UserWordStudyHistoryRow, "id">>;
+        Relationships: [];
+      };
+      bible_dictionary_entries: {
+        Row: BibleDictionaryEntryRow;
+        Insert: {
+          source: string;
+          term: string;
+          slug: string;
+          body: string;
+          passage_refs?: string[];
+          charles_note?: string | null;
+          is_primary_source?: boolean;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<BibleDictionaryEntryRow, "id">>;
+        Relationships: [];
+      };
+      user_library_history: {
+        Row: UserLibraryHistoryRow;
+        Insert: {
+          user_id: string;
+          entry_type: string;
+          entry_id: string;
+          entry_slug?: string | null;
+          entry_label?: string | null;
+          first_visited_at?: string;
+          last_visited_at?: string;
+          visit_count?: number;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<UserLibraryHistoryRow, "id">>;
+        Relationships: [];
+      };
+      hymn_index: {
+        Row: HymnIndexRow;
+        Insert: {
+          title: string;
+          first_line?: string | null;
+          author?: string | null;
+          year_written?: number | null;
+          tune_name?: string | null;
+          meter?: string | null;
+          lyrics: string;
+          explicit_refs?: string[];
+          thematic_tags?: string[];
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<HymnIndexRow, "id">>;
+        Relationships: [];
+      };
+      commentary_entries: {
+        Row: CommentaryEntryRow;
+        Insert: {
+          source: string;
+          book: string;
+          chapter: number;
+          verse_start?: number | null;
+          verse_end?: number | null;
+          section_title?: string | null;
+          body: string;
+          is_vault_featured?: boolean;
+          meta?: Record<string, unknown>;
+          id?: string;
+        };
+        Update: Partial<Omit<CommentaryEntryRow, "id">>;
         Relationships: [];
       };
       spurgeon_index: {

@@ -42,6 +42,7 @@ import VerseActionMenu, {
 import MemorizeSheet from "./memorize-sheet";
 import ShareSheet from "./share-sheet";
 import VerseThreadPanel from "./verse-thread-panel";
+import WordNotePopover from "./word-note-popover";
 import AchievementToast from "@/components/gamification/achievement-toast";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
@@ -200,6 +201,29 @@ export default function ReadingView({
   const [threadVerse, setThreadVerse] = useState<number | null>(null);
   const [threadVerses, setThreadVerses] = useState<Set<number>>(new Set());
   const [familyAccentColor, setFamilyAccentColor] = useState("#7C6B5A");
+
+  // ── Word note popover ────────────────────────────────────────────────────────
+  interface WordNote {
+    original: string;
+    transliteration: string | null;
+    strongs_number: string;
+    language: string;
+    short_def: string | null;
+    synthesis: string | null;
+    total_occurrences: number | null;
+  }
+  const [wordNote, setWordNote] = useState<{ note: WordNote; anchorY: number } | null>(null);
+  const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleWordLongPress = useCallback(async (verse: number, wordPos: number, anchorY: number) => {
+    const res = await fetch(`/api/word-note?book=${bookCode}&chapter=${chapter}&verse=${verse}&word_pos=${wordPos}`);
+    if (res.ok) {
+      const data = await res.json() as { found: boolean; word?: WordNote };
+      if (data.found && data.word) {
+        setWordNote({ note: data.word, anchorY });
+      }
+    }
+  }, [bookCode, chapter]);
 
   // Load highlights + bookmarks when chapter changes
   useEffect(() => {
@@ -695,7 +719,37 @@ export default function ReadingView({
                         </span>
                       )}
                     </button>
-                    {v.text}{" "}
+                    {/* Verse words — each word is tappable for word note */}
+                    {v.text.split(/(\s+)/).map((token, idx) => {
+                      if (/^\s+$/.test(token)) return token;
+                      const wordPos = Math.ceil((idx + 1) / 2);
+                      return (
+                        <span
+                          key={idx}
+                          onTouchStart={(e) => {
+                            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                            const ay = rect.bottom + window.scrollY;
+                            longPressTimer.current = setTimeout(() => {
+                              void handleWordLongPress(v.verse, wordPos, ay);
+                            }, 500);
+                          }}
+                          onTouchEnd={() => {
+                            if (longPressTimer.current) clearTimeout(longPressTimer.current);
+                          }}
+                          onTouchMove={() => {
+                            if (longPressTimer.current) clearTimeout(longPressTimer.current);
+                          }}
+                          onContextMenu={(e) => {
+                            e.preventDefault();
+                            const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+                            void handleWordLongPress(v.verse, wordPos, rect.bottom + window.scrollY);
+                          }}
+                          style={{ cursor: "default", userSelect: "none" }}
+                        >
+                          {token}
+                        </span>
+                      );
+                    })}{" "}
                   </span>
                 );
               })}
@@ -832,6 +886,15 @@ export default function ReadingView({
         earned={earnedAchievements}
         onDismiss={() => setEarnedAchievements([])}
       />
+
+      {/* ── Word Note Popover ── */}
+      {wordNote && (
+        <WordNotePopover
+          note={wordNote.note}
+          anchorY={wordNote.anchorY}
+          onClose={() => setWordNote(null)}
+        />
+      )}
 
       {/* ── Share Sheet ── */}
       {shareTarget && (
