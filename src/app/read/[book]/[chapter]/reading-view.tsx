@@ -29,7 +29,6 @@ import {
   Flame,
   Headphones,
   Hand,
-  Music,
 } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";

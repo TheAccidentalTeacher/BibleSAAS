@@ -25,7 +25,7 @@ type ExportJobType = "your_bible_pdf" | "data_json" | "data_csv";
 export default function ExportClient({ jobs: initialJobs, deletionRequestedAt, tier }: ExportClientProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [jobs, setJobs] = useState(initialJobs);
+  const jobs = initialJobs;
   const [generating, setGenerating] = useState<ExportJobType | null>(null);
   const [error, setError] = useState<string | null>(null);
 
