@@ -1,23 +1,23 @@
-import { redirect } from "next/navigation";
+import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import BottomNav from "@/components/layout/bottom-nav";
-import JourneyClient from "./journey-client";
-import type { JourneyData } from "./journey-types";
 import type { StreakRow } from "@/types/database";
 
-export const metadata = { title: "Journey — Bible Study App" };
-
-export default async function JourneyPage() {
+/**
+ * GET /api/journey
+ * Returns all data needed to power the 5 Journey views.
+ */
+export async function GET() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/login");
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
-  // All reading progress
+  // All reading progress (max 1,189 rows per user)
   const { data: progressRows } = await supabase
     .from("reading_progress")
     .select("book_code, chapter_number")
     .eq("user_id", user.id);
 
+  // Group by book_code → sets of chapter numbers
   const byBook: Record<string, number[]> = {};
   for (const row of progressRows ?? []) {
     const r = row as { book_code: string; chapter_number: number };
@@ -25,17 +25,15 @@ export default async function JourneyPage() {
     byBook[r.book_code].push(r.chapter_number);
   }
 
-  // Streak / XP
+  // Streak + XP
   const { data: streakRaw } = await supabase
     .from("streaks")
     .select("current_streak, longest_streak, total_xp, current_level, total_days")
     .eq("user_id", user.id)
     .maybeSingle();
-  const streakData = (streakRaw ?? {}) as Partial<
-    Pick<StreakRow, "current_streak" | "longest_streak" | "total_xp" | "current_level" | "total_days">
-  >;
+  const streakData = (streakRaw ?? {}) as Partial<Pick<StreakRow, "current_streak" | "longest_streak" | "total_xp" | "current_level" | "total_days">>;
 
-  // Activity counts
+  // Counts
   const [memoryRes, masteredRes, journalRes, highlightRes, bookmarkRes, trailRes] =
     await Promise.all([
       supabase.from("memory_verses").select("id", { count: "exact", head: true }).eq("user_id", user.id),
@@ -48,7 +46,7 @@ export default async function JourneyPage() {
 
   const totalChaptersRead = Object.values(byBook).reduce((s, v) => s + v.length, 0);
 
-  const data: JourneyData = {
+  return NextResponse.json({
     byBook,
     totalChaptersRead,
     streakData: {
@@ -59,19 +57,12 @@ export default async function JourneyPage() {
       totalDays: streakData.total_days ?? 0,
     },
     counts: {
-      memory:    memoryRes.count    ?? 0,
-      mastered:  masteredRes.count  ?? 0,
-      journal:   journalRes.count   ?? 0,
+      memory: memoryRes.count ?? 0,
+      mastered: masteredRes.count ?? 0,
+      journal: journalRes.count ?? 0,
       highlight: highlightRes.count ?? 0,
-      bookmark:  bookmarkRes.count  ?? 0,
-      trails:    trailRes.count     ?? 0,
+      bookmark: bookmarkRes.count ?? 0,
+      trails: trailRes.count ?? 0,
     },
-  };
-
-  return (
-    <>
-      <JourneyClient data={data} />
-      <BottomNav />
-    </>
-  );
+  });
 }
