@@ -13,7 +13,7 @@ export default async function GroupDetailPage({ params }: Props) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/auth/login");
 
   // Verify membership
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -7,7 +7,7 @@ export const metadata = { title: "Family Unit" };
 export default async function FamilyPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/auth/sign-in");
+  if (!user) redirect("/auth/login");
 
   // Fetch membership
   const { data: membership } = await supabase

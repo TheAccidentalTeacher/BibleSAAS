@@ -9,7 +9,7 @@ export default async function YearInReviewPage() {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-  if (!user) redirect("/sign-in");
+  if (!user) redirect("/auth/login");
 
   // Fetch profile for tier
   const { data: profile } = await supabase

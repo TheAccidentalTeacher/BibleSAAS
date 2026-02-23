@@ -47,6 +47,22 @@
   /* Reading screen gutter */
   --verse-num-gutter: 28px;
   --verse-left-margin: 40px;    /* room for flame icon + thread indicator */
+
+  /* ── Aliases ──────────────────────────────────────────────────────────
+     Some pages use alternate variable names — map them to our tokens.  */
+  --background: var(--color-bg);
+  --foreground: var(--color-text-1);
+  --surface: var(--color-surface);
+  --muted: var(--color-text-3);
+  --accent: var(--color-accent);
+  --border: var(--color-border);
+
+  --color-bg-primary: var(--color-bg);
+  --color-bg-elevated: var(--color-surface-2);
+  --color-text-primary: var(--color-text-1);
+  --color-text-secondary: var(--color-text-2);
+
+  --font-sans: var(--font-ui);
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────

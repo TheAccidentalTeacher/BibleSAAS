@@ -161,8 +161,7 @@ export default async function ProfilePage() {
                 {displayName ?? <span className="text-[var(--color-text-3)]">Not set</span>}
               </p>
             </div>
-            {/* Edit display name — Phase 6 */}
-            <span className="text-[12px] text-[var(--color-text-3)]">edit (coming soon)</span>
+            <Link href="/profile/edit-name" className="text-[12px] text-[var(--color-accent)] hover:underline">Edit</Link>
           </div>
 
           {/* Email */}
@@ -203,12 +202,18 @@ export default async function ProfilePage() {
           </form>
         </div>
 
-        {/* Danger zone — Phase 6 */}
+        {/* Danger zone */}
         <div className="mt-6 rounded-[var(--radius-card)] border border-red-500/20 bg-red-500/5 px-5 py-4">
           <p className="label text-red-400 mb-1">Danger zone</p>
-          <p className="text-[13px] text-[var(--color-text-3)]">
-            Account deletion and data export will be available in a future update.
+          <p className="text-[13px] text-[var(--color-text-3)] mb-3">
+            Manage your data or permanently delete your account.
           </p>
+          <Link
+            href="/profile/export"
+            className="inline-block text-[13px] text-red-400 border border-red-500/30 rounded-lg px-4 py-2 hover:bg-red-500/10 transition-colors"
+          >
+            Export data &amp; Account deletion →
+          </Link>
         </div>
       </div>
     </main>

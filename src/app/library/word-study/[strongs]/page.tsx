@@ -24,7 +24,7 @@ export default async function WordStudyPage({ params }: Props) {
   const strongsNum = strongs.toUpperCase();
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  if (!user) redirect("/auth/login");
 
   const { data: rawEntry } = await supabase
     .from("strongs_lexicon")
