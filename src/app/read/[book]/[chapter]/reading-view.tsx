@@ -17,6 +17,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import {
   ArrowLeft,
   ArrowRight,
@@ -30,6 +31,7 @@ import {
   Headphones,
   Hand,
   ScrollText,
+  SlidersHorizontal,
 } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";
@@ -90,6 +92,7 @@ interface ReadingViewProps {
   nextChapter: { book: string; chapter: number } | null;
   currentStreak: number;
   hymns: HymnEntry[];
+  ttsVoiceId: string;
 }
 
 export default function ReadingView({
@@ -106,6 +109,7 @@ export default function ReadingView({
   prevChapter,
   nextChapter,
   hymns,
+  ttsVoiceId,
 }: ReadingViewProps) {
   const router = useRouter();
 
@@ -210,8 +214,9 @@ export default function ReadingView({
       bookName,
       chapter,
       verses: chapterData.verses.map((v) => ({ verse: v.verse, text: v.text })),
-      mode: "tts",   // TTS mode (no ESV Audio key)
+      mode: "tts",
       audioUrl: null,
+      voiceId: ttsVoiceId,
       resumeSeconds,
     });
     // Small delay for state to settle, then play
@@ -625,6 +630,16 @@ export default function ReadingView({
             <Headphones size={18} />
           </button>
         )}
+
+        {/* Display settings shortcut */}
+        <Link
+          href="/profile/display-settings"
+          aria-label="Display settings"
+          className="flex items-center justify-center w-8 h-8 rounded"
+          style={{ color: "var(--color-text-2)" }}
+        >
+          <SlidersHorizontal size={16} />
+        </Link>
 
         {/* Streak badge */}
         {streak > 0 && (

@@ -20,6 +20,7 @@ export async function saveDisplaySettings(formData: FormData) {
 
   // Spurgeon toggle stored in meta since there's no dedicated column
   const spurgeon_enabled = formData.get("spurgeon_enabled") === "on";
+  const tts_voice_id = (formData.get("tts_voice_id") as string) || "en-US-Neural2-D";
 
   // Read existing meta to merge
   const { data: existing } = await supabase
@@ -44,7 +45,7 @@ export async function saveDisplaySettings(formData: FormData) {
         catechism_layer_enabled,
         show_cross_refs,
         show_verse_numbers,
-        meta: { ...existingMeta, spurgeon_enabled },
+        meta: { ...existingMeta, spurgeon_enabled, tts_voice_id },
       },
       { onConflict: "user_id" }
     );

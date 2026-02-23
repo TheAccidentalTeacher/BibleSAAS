@@ -110,6 +110,7 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
   // ----- Spurgeon entries -----
   // Default to enabled unless user has explicitly disabled via meta.spurgeon_enabled = false
   const spurgeonEnabled = displaySettings?.meta?.spurgeon_enabled !== false;
+  const ttsVoiceId = (displaySettings?.meta?.tts_voice_id as string) ?? "en-US-Neural2-D";
   let spurgeonEntries: SpurgeonEntry[] = [];
   if (spurgeonEnabled) {
     const { data: spurgeonData } = await supabase
@@ -150,6 +151,7 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
       prevChapter={prev ? { book: prev.book, chapter: prev.chapter } : null}
       nextChapter={next ? { book: next.book, chapter: next.chapter } : null}
       hymns={hymns}
+      ttsVoiceId={ttsVoiceId}
     />
   );
 }

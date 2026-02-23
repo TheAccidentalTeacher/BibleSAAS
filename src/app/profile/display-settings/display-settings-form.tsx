@@ -50,8 +50,18 @@ interface Props {
     show_cross_refs: boolean;
     show_verse_numbers: boolean;
     spurgeon_enabled: boolean;
+    tts_voice_id: string;
   };
 }
+
+const TTS_VOICES = [
+  { value: "en-US-Neural2-D", label: "Deep American Male",  desc: "Authoritative, documentary-narrator style" },
+  { value: "en-US-Neural2-J", label: "Warm American Male",  desc: "Conversational and approachable" },
+  { value: "en-US-Neural2-A", label: "American Female",     desc: "Clear and warm" },
+  { value: "en-GB-Neural2-B", label: "British Male",        desc: "Classic BBC style" },
+  { value: "en-GB-Neural2-D", label: "Rich British Male",   desc: "Deep and formal" },
+  { value: "en-GB-Neural2-F", label: "British Female",      desc: "Elegant and clear" },
+];
 
 export default function DisplaySettingsForm({ initial }: Props) {
   const router = useRouter();
@@ -66,6 +76,7 @@ export default function DisplaySettingsForm({ initial }: Props) {
   const [crossRefs,    setCrossRefs]    = useState(initial.show_cross_refs);
   const [verseNums,    setVerseNums]    = useState(initial.show_verse_numbers);
   const [spurgeon,     setSpurgeon]     = useState(initial.spurgeon_enabled);
+  const [ttsVoice,     setTtsVoice]     = useState(initial.tts_voice_id);
 
   // Live preview — update html element immediately
   const applyTheme = (t: string) => {
@@ -235,6 +246,37 @@ export default function DisplaySettingsForm({ initial }: Props) {
             <option key={t.code} value={t.code}>{t.code} — {t.name}</option>
           ))}
         </select>
+      </section>
+
+      {/* ── Narration Voice ── */}
+      <section>
+        <SectionLabel>Narration Voice</SectionLabel>
+        <p className="text-xs mb-4" style={{ color: "var(--color-text-3)" }}>
+          Powered by Google Neural2 — high-quality, natural-sounding voices.
+        </p>
+        <input type="hidden" name="tts_voice_id" value={ttsVoice} />
+        <div className="grid grid-cols-1 gap-2">
+          {TTS_VOICES.map((v) => (
+            <button
+              key={v.value}
+              type="button"
+              onClick={() => setTtsVoice(v.value)}
+              className="flex items-start gap-3 rounded-xl px-4 py-3 border-2 text-left transition-all"
+              style={{
+                background: "var(--color-surface)",
+                borderColor: ttsVoice === v.value ? "var(--color-accent)" : "var(--color-border)",
+              }}
+            >
+              <div className="flex-1">
+                <p className="text-sm font-semibold" style={{ color: "var(--color-text-1)" }}>{v.label}</p>
+                <p className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>{v.desc}</p>
+              </div>
+              {ttsVoice === v.value && (
+                <div className="w-4 h-4 rounded-full mt-0.5 flex-shrink-0" style={{ background: "var(--color-accent)" }} />
+              )}
+            </button>
+          ))}
+        </div>
       </section>
 
       {/* ── Reading Layers ── */}

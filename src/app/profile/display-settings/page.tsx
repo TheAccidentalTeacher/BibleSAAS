@@ -44,6 +44,7 @@ export default async function DisplaySettingsPage({
     show_cross_refs:         ds?.show_cross_refs         ?? true,
     show_verse_numbers:      ds?.show_verse_numbers      ?? true,
     spurgeon_enabled:        ds?.meta?.spurgeon_enabled  !== false,
+    tts_voice_id:            (ds?.meta?.tts_voice_id as string) ?? "en-US-Neural2-D",
   };
 
   return (

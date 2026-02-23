@@ -110,7 +110,7 @@ export default async function RootLayout({
 }>) {
   // ── Read user display preferences for SSR theme application ──
   let dataTheme = "default";
-  let dataMode: string | undefined;
+  let dataMode: string | undefined = "sepia"; // soft default for new/logged-out users
   let fontReading = 'var(--font-garamond), "Georgia", serif';
   let textBodySize = "18px";
 
@@ -131,7 +131,8 @@ export default async function RootLayout({
           bible_reading_font?: string;
         };
         if (row.visual_theme) dataTheme = row.visual_theme;
-        if (row.theme === "light" || row.theme === "sepia") dataMode = row.theme;
+        if (row.theme === "dark") dataMode = undefined;
+        else if (row.theme === "light" || row.theme === "sepia") dataMode = row.theme;
         const fontMap: Record<string, string> = {
           eb_garamond: 'var(--font-garamond), "Georgia", serif',
           lora: 'var(--font-lora), "Georgia", serif',
