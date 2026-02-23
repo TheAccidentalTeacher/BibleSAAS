@@ -61,12 +61,14 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
   // ----- Fetch display settings once -----
   const { data: rawDisplaySettings } = await supabase
     .from("user_display_settings")
-    .select("default_translation, spurgeon_layer")
+    .select("translation, catechism_layer_enabled, show_cross_refs, meta")
     .eq("user_id", user.id)
     .maybeSingle();
   const displaySettings = rawDisplaySettings as unknown as {
-    default_translation?: string;
-    spurgeon_layer?: boolean;
+    translation?: string;
+    catechism_layer_enabled?: boolean;
+    show_cross_refs?: boolean;
+    meta?: Record<string, unknown>;
   } | null;
 
   if (qsTranslation) {
@@ -75,8 +77,8 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
     );
     if (valid) translation = valid.code;
   } else {
-    if (displaySettings?.default_translation) {
-      translation = displaySettings.default_translation;
+    if (displaySettings?.translation) {
+      translation = displaySettings.translation;
     }
   }
 
@@ -106,7 +108,8 @@ export default async function ReadPage({ params, searchParams }: PageProps) {
   const currentStreak = streakRow?.current_streak ?? 0;
 
   // ----- Spurgeon entries -----
-  const spurgeonEnabled = displaySettings?.spurgeon_layer ?? false;
+  // Default to enabled unless user has explicitly disabled via meta.spurgeon_enabled = false
+  const spurgeonEnabled = displaySettings?.meta?.spurgeon_enabled !== false;
   let spurgeonEntries: SpurgeonEntry[] = [];
   if (spurgeonEnabled) {
     const { data: spurgeonData } = await supabase

@@ -69,19 +69,15 @@ export async function signUpWithPassword(
 ): Promise<string | null> {
   const email = formData.get("email")?.toString().trim();
   const password = formData.get("password")?.toString();
-  const birthYearRaw = formData.get("birth_year")?.toString();
+  const ageConfirmed = formData.get("age_confirmed")?.toString();
 
   if (!email) return "Please enter your email address.";
   if (!password) return "Please enter a password.";
   if (password.length < 8) return "Password must be at least 8 characters.";
 
-  // COPPA age check
-  if (birthYearRaw) {
-    const birthYear = parseInt(birthYearRaw, 10);
-    const currentYear = new Date().getFullYear();
-    if (isNaN(birthYear) || currentYear - birthYear < MINIMUM_AGE) {
-      return `You must be at least ${MINIMUM_AGE} years old to use this app.`;
-    }
+  // COPPA age confirmation — required checkbox
+  if (ageConfirmed !== "yes") {
+    return `You must confirm you are at least ${MINIMUM_AGE} years old to use this app.`;
   }
 
   const supabase = await createClient();

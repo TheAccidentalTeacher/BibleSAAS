@@ -182,8 +182,22 @@ html[data-theme="puzzle"] {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   VAULT TREATMENT  (always consistent — ignores user theme)
-   Parchment / sepia surface for source documents (commentaries, TSK, etc.)
+   SEPIA MODE  (user-toggleable warm reading mode)
+   html[data-mode="sepia"]  — warm parchment feel on any theme
+───────────────────────────────────────────────────────────────────────────── */
+html[data-mode="sepia"] {
+  --color-bg: #F2E8D9;
+  --color-surface: #FDF6EC;
+  --color-surface-2: #EDE0CB;
+  --color-border: #D8C9B0;
+  --color-text-1: #2C1F10;
+  --color-text-2: #6B5440;
+  --color-text-3: #9C8060;
+  --color-accent: #8B5E1A;
+  --color-accent-dim: #6A4610;
+}
+
+
    Applied via .vault-card class — never on base UI
 ───────────────────────────────────────────────────────────────────────────── */
 :root {

@@ -12,7 +12,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
-import { findBook } from "@/lib/bible";
+import { getBook } from "@/lib/bible";
 import { type ReadingChapter, type ReadingVerse } from "./types";
 import type { ChapterRow } from "@/types/database";
 
@@ -121,7 +121,7 @@ export async function getApiBibleChapter(
   const bibleId = API_BIBLE_IDS[code];
   if (!bibleId) return null;
 
-  const book = findBook(bookCode);
+  const book = getBook(bookCode.toUpperCase() as Parameters<typeof getBook>[0]);
   if (!book) return null;
 
   const apiKey = process.env.API_BIBLE_KEY;
@@ -132,16 +132,16 @@ export async function getApiBibleChapter(
   const { data: cached } = await supabase
     .from("chapters")
     .select("*")
-    .eq("book_code", bookCode.toUpperCase())
-    .eq("chapter_number", chapter)
-    .eq("translation_code", code)
+    .eq("book", book.name)
+    .eq("chapter", chapter)
+    .eq("translation", code)
     .maybeSingle();
 
   if (cached) {
     const row = cached as unknown as ChapterRow;
     const notExpired = !row.expires_at || new Date(row.expires_at) > new Date();
     if (notExpired) {
-      const verses = (row.verses as ReadingVerse[]) ?? [];
+      const verses = (row.text_json as ReadingVerse[]) ?? [];
       return {
         book_code: bookCode.toUpperCase(),
         book_name: book.name,
@@ -149,7 +149,7 @@ export async function getApiBibleChapter(
         translation: code,
         verses,
         attribution: null,
-        cached_at: row.cached_at,
+        cached_at: row.fetched_at,
         expires_at: row.expires_at,
       };
     }
@@ -194,14 +194,14 @@ export async function getApiBibleChapter(
     .from("chapters")
     .upsert(
       {
-        book_code: bookCode.toUpperCase(),
-        chapter_number: chapter,
-        translation_code: code,
-        verses,
-        cached_at: now.toISOString(),
+        book: book.name,
+        chapter,
+        translation: code,
+        text_json: verses,
+        fetched_at: now.toISOString(),
         expires_at: expiresAt,
       },
-      { onConflict: "book_code,chapter_number,translation_code" }
+      { onConflict: "book,chapter,translation" }
     );
 
   if (upsertError) {

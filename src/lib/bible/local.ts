@@ -10,7 +10,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
-import { findBook } from "@/lib/bible";
+import { getBook } from "@/lib/bible";
 import { type ReadingChapter, type ReadingVerse } from "./types";
 import type { ChapterRow } from "@/types/database";
 
@@ -32,7 +32,7 @@ export async function getLocalChapter(
   chapter: number,
   translation: "WEB" | "KJV" | "ASV" | "YLT"
 ): Promise<ReadingChapter | null> {
-  const book = findBook(bookCode);
+  const book = getBook(bookCode.toUpperCase() as Parameters<typeof getBook>[0]);
   if (!book) return null;
 
   const supabase = await createClient();
@@ -40,9 +40,9 @@ export async function getLocalChapter(
   const { data, error } = await supabase
     .from("chapters")
     .select("*")
-    .eq("book_code", bookCode.toUpperCase())
-    .eq("chapter_number", chapter)
-    .eq("translation_code", translation.toUpperCase())
+    .eq("book", book.name)
+    .eq("chapter", chapter)
+    .eq("translation", translation.toUpperCase())
     .maybeSingle();
 
   if (error) {
@@ -59,7 +59,7 @@ export async function getLocalChapter(
   }
 
   const row = data as unknown as ChapterRow;
-  const verses = (row.verses as ReadingVerse[]) ?? [];
+  const verses = (row.text_json as ReadingVerse[]) ?? [];
 
   return {
     book_code: bookCode.toUpperCase(),
@@ -68,7 +68,7 @@ export async function getLocalChapter(
     translation: translation.toUpperCase(),
     verses,
     attribution: null, // Public domain — no attribution required
-    cached_at: row.cached_at,
+    cached_at: row.fetched_at,
     expires_at: null, // Public domain — never expires
   };
 }

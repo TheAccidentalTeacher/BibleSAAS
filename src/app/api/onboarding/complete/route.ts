@@ -142,11 +142,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 4. Update display settings with archetype defaults
-    await supabase
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (supabase as any)
       .from("user_display_settings")
       .update({
         visual_theme: extracted.archetype_hint ?? "default",
-        default_reading_mode: extracted.default_reading_mode ?? "read",
         ...displayDefaults,
       })
       .eq("user_id", user.id);
@@ -174,10 +174,10 @@ function archetypeToDisplayDefaults(archetype: VisualTheme): Record<string, unkn
         catechism_layer_enabled: true,
       };
     case "library":
-      // Scholar archetype
+      // Scholar archetype — Spurgeon + Catechism enabled, stored in meta
       return {
-        spurgeon_layer: true,
         catechism_layer_enabled: true,
+        meta: { spurgeon_enabled: true },
       };
     case "runner":
       // Tim's archetype — keep gamification on, runner theme set via visual_theme
@@ -185,7 +185,7 @@ function archetypeToDisplayDefaults(archetype: VisualTheme): Record<string, unkn
     case "puzzle":
       // New believer / seeker
       return {
-        default_reading_mode: "study" as const,
+        just_read_default: true,
       };
     default:
       return {};

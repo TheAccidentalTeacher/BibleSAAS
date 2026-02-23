@@ -15,7 +15,9 @@
     "seed:strongs": "ts-node scripts/seed-strongs.ts",
     "seed:spurgeon": "ts-node scripts/seed-spurgeon.ts",
     "seed:commentaries": "ts-node scripts/seed-commentaries.ts",
-    "seed:catechism": "ts-node scripts/seed-catechism.ts"
+    "seed:catechism": "ts-node scripts/seed-catechism.ts",
+    "seed:confession": "ts-node scripts/seed-confession-1689.ts",
+    "seed:geography": "ts-node scripts/seed-geography.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.78.0",

@@ -23,10 +23,10 @@ export default function MiniPlayer() {
 
   return (
     <>
-      {/* Mini bar — sits above bottom nav (add margin-bottom on page content where BottomNav is 64px) */}
+      {/* Mini bar — sits above bottom nav (nav is 60px + safe-area-inset-bottom) */}
       <div
-        className="fixed bottom-16 left-0 right-0 z-30"
-        style={{ zIndex: 30 }}
+        className="fixed left-0 right-0 z-30"
+        style={{ bottom: "calc(60px + env(safe-area-inset-bottom))" }}
       >
         <div
           className="mx-3 rounded-2xl border shadow-lg overflow-hidden"

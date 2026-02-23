@@ -16,7 +16,9 @@ import type {
   ReadingProgressRow,
   UserStreakRow,
   JournalEntryRow,
+  DailyTrailRow,
 } from "@/types/database";
+import type { OnThisDayEntry } from "@/app/api/on-this-day/route";
 
 export const metadata = { title: "Dashboard — Bible Study App" };
 
@@ -154,7 +156,44 @@ export default async function DashboardPage() {
     .eq("mastered", false)
     .lte("next_review", todayDate);
   const memoryVerseDueCount = memoryDueCount ?? 0;
+  // ── On This Day ────────────────────────────────────────────────────────────────────────────────
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const todayMD = `${String(now.getUTCMonth() + 1).padStart(2, "0")}-${String(now.getUTCDate()).padStart(2, "0")}`;
+  const oneYearAgo = new Date(currentYear - 1, now.getMonth(), now.getDate()).toISOString();
 
+  const { data: otdData } = await supabase
+    .from("journal_entries")
+    .select("id, book, chapter, note, created_at")
+    .eq("user_id", user.id)
+    .lte("created_at", oneYearAgo)
+    .not("book", "is", null)
+    .order("created_at", { ascending: false })
+    .limit(20);
+
+  const onThisDay: OnThisDayEntry[] = ((otdData ?? []) as Array<{
+    id: string;
+    book: string | null;
+    chapter: number | null;
+    note: string | null;
+    created_at: string;
+  }>)
+    .filter((e) => {
+      if (!e.book || !e.chapter) return false;
+      const d = new Date(e.created_at);
+      const entryMD = `${String(d.getUTCMonth() + 1).padStart(2, "0")}-${String(d.getUTCDate()).padStart(2, "0")}`;
+      return entryMD === todayMD;
+    })
+    .slice(0, 5)
+    .map((e) => ({
+      id: e.id,
+      book: e.book!,
+      bookName: getBook(e.book!)?.name ?? e.book!,
+      chapter: e.chapter!,
+      note: (e.note ?? "").slice(0, 120),
+      studied_at: e.created_at,
+      years_ago: currentYear - new Date(e.created_at).getUTCFullYear(),
+    }));
   // ── Verse Pulse (top 3 this week) ─────────────────────────────────────────────
   const thisWeekStart = new Date();
   thisWeekStart.setDate(thisWeekStart.getDate() - thisWeekStart.getDay()); // Sunday
@@ -169,6 +208,21 @@ export default async function DashboardPage() {
   const pulseVerses: { verse_ref: string; weight: number }[] =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (pulseData ?? []).map((r: any) => ({ verse_ref: r.verse_ref as string, weight: r.weight as number }));
+
+  // ── Daily Trails ──────────────────────────────────────────────────────────
+  const todayStr = new Date().toISOString().slice(0, 10);
+  const { data: trailData } = await supabase
+    .from("daily_trails")
+    .select("slot, origin_book, origin_chapter")
+    .eq("trail_date", todayStr);
+
+  const dailyTrails = ((trailData ?? []) as unknown as Pick<DailyTrailRow, "slot" | "origin_book" | "origin_chapter">[])
+    .map((r) => ({
+      slot: r.slot,
+      bookCode: r.origin_book,
+      bookName: getBook(r.origin_book as Parameters<typeof getBook>[0])?.name ?? r.origin_book,
+      chapter: r.origin_chapter,
+    }));
 
   return (
     <>
@@ -185,6 +239,8 @@ export default async function DashboardPage() {
         recentJournal={recentJournal}
         memoryVerseDueCount={memoryVerseDueCount}
         pulseVerses={pulseVerses}
+        onThisDay={onThisDay}
+        dailyTrails={dailyTrails}
       />
       <BottomNav />
     </>

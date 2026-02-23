@@ -60,16 +60,19 @@ export interface UserDisplaySettingsRow {
   [key: string]: unknown;
   user_id: string;
   visual_theme: VisualTheme;
+  theme: "dark" | "light" | "sepia";
   bible_reading_font: BibleFont;
-  font_size: number;
-  default_reading_mode: ReadingMode;
-  default_translation: string;
+  font_size: "small" | "medium" | "large" | "xlarge";
+  default_study_mode: "study" | "pray" | "listen";
+  translation: string;
   gamification_enabled: boolean;
-  spurgeon_layer: boolean;
   catechism_layer_enabled: boolean;
-  tsk_layer_enabled: boolean;
-  created_at: string;
-  updated_at: string;
+  show_verse_numbers: boolean;
+  show_red_letter: boolean;
+  show_cross_refs: boolean;
+  show_on_this_day: boolean;
+  just_read_default: boolean;
+  meta: Record<string, unknown>;
 }
 
 export interface NotificationSettingsRow {
@@ -117,13 +120,14 @@ export interface FamilyMemberRow {
 export interface ChapterRow {
   [key: string]: unknown;
   id: string;
-  book_code: string;
-  chapter_number: number;
-  translation_code: string;
-  verses: unknown; // JSON array from database
-  full_text: string | null;
+  book: string;
+  chapter: number;
+  translation: string;
+  text_json: unknown; // JSON array of {verse, text} objects
+  fetched_at: string;
   expires_at: string | null;
-  cached_at: string;
+  chapter_themes: unknown | null;
+  meta: unknown | null;
 }
 
 export interface StrongsLexiconRow {
@@ -786,16 +790,19 @@ export type Database = {
         Insert: {
           user_id: string;
           visual_theme?: VisualTheme;
+          theme?: "dark" | "light" | "sepia";
           bible_reading_font?: BibleFont;
-          font_size?: number;
-          default_reading_mode?: ReadingMode;
-          default_translation?: string;
+          font_size?: "small" | "medium" | "large" | "xlarge";
+          default_study_mode?: "study" | "pray" | "listen";
+          translation?: string;
           gamification_enabled?: boolean;
-          spurgeon_layer?: boolean;
           catechism_layer_enabled?: boolean;
-          tsk_layer_enabled?: boolean;
-          created_at?: string;
-          updated_at?: string;
+          show_verse_numbers?: boolean;
+          show_red_letter?: boolean;
+          show_cross_refs?: boolean;
+          show_on_this_day?: boolean;
+          just_read_default?: boolean;
+          meta?: Record<string, unknown>;
         };
         Update: Partial<Omit<UserDisplaySettingsRow, "user_id">>;
         Relationships: [];
@@ -836,7 +843,7 @@ export type Database = {
       };
       chapters: {
         Row: ChapterRow;
-        Insert: { book_code: string; chapter_number: number; translation_code: string; verses: unknown; full_text?: string | null; expires_at?: string | null; id?: string; cached_at?: string };
+        Insert: { book: string; chapter: number; translation: string; text_json: unknown; expires_at?: string | null; fetched_at?: string; chapter_themes?: unknown | null; meta?: unknown | null; id?: string };
         Update: Partial<Omit<ChapterRow, "id">>;
         Relationships: [];
       };

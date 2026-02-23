@@ -157,7 +157,7 @@ In every case, Charles is not generating content. He is doing theology — bring
 *Paste this at the start of a new session when the conversation window is running low.*
 
 ---
-**PROJECT:** Personalized Bible SaaS platform. Vercel hosted. No App Store. ESV API (dev/personal, non-commercial during dev). Supabase + Auth (multi-user schema from day one). Next.js App Router. `claude-sonnet-4-6` for ALL AI generation. Claude Opus 4 for coding.
+**PROJECT:** Personalized Bible SaaS platform. Vercel hosted. No App Store. ESV API (dev/personal, non-commercial during dev). Supabase + Auth (multi-user schema from day one). Next.js App Router. `claude-sonnet-4-5` for ALL AI generation. Claude Opus 4 for coding.
 
 **FIRST USER:** Tim — 15, aspiring chef, 3-sport athlete (XC, basketball, track), son of the developer. Dad is building this as a labor of love AND a commercial product.
 

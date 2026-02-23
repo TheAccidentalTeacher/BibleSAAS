@@ -291,3 +291,123 @@ export const CHAT_TITLE_SYSTEM = `You are a title-generating assistant. Given th
 
 export const buildChatTitlePrompt = (userMessage: string, assistantReply: string) =>
   `User asked: "${userMessage.slice(0, 200)}"\n\nAssistant replied: "${assistantReply.slice(0, 300)}"\n\nGenerate a short title:`;
+
+// ─── Sermon Outline Generator ─────────────────────────────────────────────────
+
+export type SermonOutlineMode = "sermon" | "small_group" | "family_devotions";
+
+export interface SermonMovement {
+  heading: string;
+  verses: string;       // e.g. "vv. 1–5"
+  exegesis: string;
+  bridge: string;       // contemporary connection
+  cross_refs: string[];
+}
+
+export interface SermonOutlineJSON {
+  text: string;                     // passage reference e.g. "Romans 8:1–11"
+  context: string;                  // 1-2 sentences of biblical-theological context
+  main_idea: string;                // one-sentence big idea
+  movements: SermonMovement[];
+  application_directions: string[];
+  exegetical_footnotes: string[];
+  illustrative_threads: string[];
+  // small_group extras
+  discussion_questions?: string[];
+  prayer_direction?: string;
+  // family_devotions extras
+  kid_friendly_summary?: string;
+  activity?: string;
+  prayer_starter?: string;
+}
+
+const SERMON_MODE_LABELS: Record<SermonOutlineMode, string> = {
+  sermon: "Sunday Sermon Skeleton",
+  small_group: "Small Group Guide",
+  family_devotions: "Family Devotions",
+};
+
+const SERMON_MODE_INSTRUCTIONS: Record<SermonOutlineMode, string> = {
+  sermon: `You are producing a sermon skeleton for a pastor or preacher.
+- Include 2–4 movements (major structural units), each with sharp headings, tight exegesis, a contemporary bridge, and 2–3 cross-references.
+- The main_idea must be a single proposition sentence — the sermon in one breath.
+- application_directions: 3–5 direct, concrete application angles (not generic).
+- exegetical_footnotes: 3–5 brief notes on Greek/Hebrew terms, textual issues, or grammar worth noting.
+- illustrative_threads: 3–5 evocative image/story directions (not full illustrations — just the thread to pull).`,
+
+  small_group: `You are producing a small group discussion guide.
+- Include 2–3 movements, each with a clear heading, exegesis summary, and 2 discussion questions.
+- discussion_questions (top-level): 4–6 questions ordered from observation → interpretation → application.
+- prayer_direction: a short paragraph guiding the group toward a specific prayer focus.
+- application_directions: 2–3 shared/corporate application directions.
+- illustrative_threads: 2–3 relatable contemporary story angles.
+- exegetical_footnotes: 1–2 brief background notes that help non-scholars.`,
+
+  family_devotions: `You are producing a family devotions guide for parents reading with children (ages 6–14).
+- Keep language accessible but not patronizing.
+- Include 2–3 movements with simple headings kids can understand.
+- kid_friendly_summary: a 2–3 sentence plain-English restatement of the passage's main point.
+- discussion_questions: 3–4 questions a parent can ask their children (age-appropriate, thought-provoking).
+- activity: one concrete hands-on or conversational activity that reinforces the text.
+- prayer_starter: a brief prayer prompt the family can use to close.
+- application_directions: 2–3 family-level applications.`,
+};
+
+/**
+ * Returns the system prompt for sermon outline generation.
+ */
+export function buildSermonOutlineSystem(mode: SermonOutlineMode): string {
+  return `${BASE_PERSONA}
+
+## Your Task
+You are generating a ${SERMON_MODE_LABELS[mode]} for the provided Bible passage.
+
+${SERMON_MODE_INSTRUCTIONS[mode]}
+
+## Output Format
+Return ONLY valid JSON matching SermonOutlineJSON (no markdown wrapper, no preamble):
+{
+  "text": "Book Chapter:Verse–Verse",
+  "context": "...",
+  "main_idea": "...",
+  "movements": [
+    {
+      "heading": "...",
+      "verses": "vv. X–Y",
+      "exegesis": "...",
+      "bridge": "...",
+      "cross_refs": ["...", "..."]
+    }
+  ],
+  "application_directions": ["...", "..."],
+  "exegetical_footnotes": ["...", "..."],
+  "illustrative_threads": ["...", "..."]${mode === "small_group" ? `,
+  "discussion_questions": ["...", "..."],
+  "prayer_direction": "..."` : ""}${mode === "family_devotions" ? `,
+  "discussion_questions": ["...", "..."],
+  "kid_friendly_summary": "...",
+  "activity": "...",
+  "prayer_starter": "..."` : ""}
+}
+
+## Tone & Quality Rules
+- Every movement heading must be a real claim, not a topic. ("The Spirit displaces the flesh" not "The Spirit.")
+- Exegesis must cite specific words/phrases from the text.
+- Bridges must be concrete, not generic. ("The person who keeps checking the scale after every meal" not "people who struggle with anxiety.")
+- Cross-references must actually illuminate this passage — no decorative citations.`;
+}
+
+/**
+ * Returns the user-turn prompt for sermon outline generation.
+ */
+export function buildSermonOutlinePrompt(
+  bookName: string,
+  chapter: number,
+  chapterText: string,
+  mode: SermonOutlineMode
+): string {
+  return `Generate a ${SERMON_MODE_LABELS[mode]} for ${bookName} ${chapter}.
+
+Chapter text:
+${chapterText.slice(0, 4000)}`;
+}

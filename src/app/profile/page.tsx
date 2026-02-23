@@ -133,6 +133,7 @@ export default async function ProfilePage() {
             { href: "/profile/groups", label: "Study Groups", desc: "Verse threads and prayer with your group" },
             { href: "/profile/export", label: "Export & Data", desc: "Download your Bible, journal and study records" },
             { href: "/profile/year-in-review", label: "Year in Review", desc: "Your annual study letter from Charles" },
+            { href: "/profile/display-settings", label: "Display & Theme", desc: "Themes, fonts, font size, reading layers" },
             { href: "/profile/settings", label: "Notification Settings", desc: "Email & push notification preferences" },
             { href: "/profile/upgrade", label: "Plans & Billing", desc: "Upgrade your plan or manage subscription" },
           ].map(({ href, label, desc }) => (

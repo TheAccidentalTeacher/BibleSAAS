@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState } from "react";
 import Link from "next/link";
 import { signUpWithPassword, signInWithMagicLink } from "@/app/auth/actions";
 import { Button } from "@/components/ui/button";
@@ -8,8 +8,6 @@ import { Input } from "@/components/ui/input";
 import { FormError } from "@/components/ui/form-feedback";
 
 export default function SignupPage() {
-  const [showBirthYear, setShowBirthYear] = useState(false);
-
   const [signupError, signupAction, signupPending] = useActionState(
     signUpWithPassword,
     null
@@ -18,8 +16,6 @@ export default function SignupPage() {
     signInWithMagicLink,
     null
   );
-
-  const currentYear = new Date().getFullYear();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-[var(--color-bg)] px-4">
@@ -60,26 +56,20 @@ export default function SignupPage() {
               minLength={8}
             />
 
-            {/* Age gate toggle */}
-            <button
-              type="button"
-              onClick={() => setShowBirthYear(!showBirthYear)}
-              className="text-left text-[13px] text-[var(--color-text-3)] hover:text-[var(--color-text-2)] transition-colors"
-            >
-              {showBirthYear ? "▲ Hide age confirmation" : "▼ I am under 18 — confirm age"}
-            </button>
-
-            {showBirthYear && (
-              <Input
-                id="birth_year"
-                name="birth_year"
-                type="number"
-                label={`Birth year (must be ${currentYear - 13} or earlier)`}
-                placeholder={String(currentYear - 13)}
-                min={currentYear - 120}
-                max={currentYear - 13}
+            {/* Age confirmation checkbox — required by COPPA */}
+            <label className="flex items-start gap-2.5 cursor-pointer">
+              <input
+                type="checkbox"
+                name="age_confirmed"
+                value="yes"
+                required
+                className="mt-0.5 w-4 h-4 flex-shrink-0 accent-[var(--color-accent)] cursor-pointer"
               />
-            )}
+              <span className="text-[13px] text-[var(--color-text-3)] leading-snug">
+                I confirm I am <strong className="text-[var(--color-text-2)]">13 years of age or older</strong>.
+                Parents may create accounts for younger family members.
+              </span>
+            </label>
 
             <FormError message={signupError} />
 

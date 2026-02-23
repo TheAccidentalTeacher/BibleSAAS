@@ -31,10 +31,12 @@ export default function BottomNav() {
 
   return (
     <nav
-      className="fixed bottom-0 left-0 right-0 z-30 flex h-[60px] border-t"
+      className="fixed bottom-0 left-0 right-0 z-30 flex border-t"
       style={{
         background: "var(--color-surface)",
         borderColor: "var(--color-border)",
+        height: "calc(60px + env(safe-area-inset-bottom))",
+        paddingBottom: "env(safe-area-inset-bottom)",
       }}
     >
       {TABS.map(({ href, label, Icon }) => {

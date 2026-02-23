@@ -2,9 +2,11 @@
 
 > A personalized, AI-powered study Bible platform. Every user gets their own edition — same Scripture, radically different experience based on who they are.
 
-Built with Next.js 14 App Router · Supabase · Anthropic Claude · Vercel · Stripe
+Built with Next.js 16 App Router · Supabase · Anthropic Claude · Vercel · Stripe
 
 [![CI](https://github.com/TheAccidentalTeacher/BibleSAAS/actions/workflows/ci.yml/badge.svg)](https://github.com/TheAccidentalTeacher/BibleSAAS/actions/workflows/ci.yml)
+
+> **Status: Active development — Phase 26 of 27 complete.** All core features are built and seeded. Entering commercial launch preparation (Phase 27).
 
 ---
 
@@ -14,19 +16,24 @@ BibleSaaS is a mobile-first web platform (PWA) where the AI layer knows who you 
 
 **The product is not "AI added to a Bible app." The product is the personalization engine.** The Bible text is the constant; how it lands is the variable.
 
-### Core features (planned)
+### Core features (built)
 
 - **Conversational onboarding** — Charles (the AI persona) learns who you are before showing you anything
 - **OIA study system** — Observe, Interpret, Apply questions tuned to the individual user
 - **Living portrait** — AI-maintained profile updated across every journal entry and session; drives all personalization
-- **TSK cross-reference trails** — Treasury of Scripture Knowledge graph, surfaced as navigable trails
-- **Full commentary library** — Spurgeon, Matthew Henry, Calvin, Adam Clarke, all synthesized by Charles
-- **Memory verse system** — SM-2 spaced repetition with typing and cloze practice modes
+- **TSK cross-reference trails** — Treasury of Scripture Knowledge graph (~344K refs), surfaced as navigable constellation trails
+- **Full commentary library** — Spurgeon, Matthew Henry, Calvin, Adam Clarke (2,777 entries), all synthesized by Charles
+- **Memory verse system** — SM-2 spaced repetition with typing, cloze, and flashcard practice modes
 - **Prayer journal** — Category-tagged prayers with follow-up and answered-prayer tracking
-- **Audio Bible** — Narrated chapters with read-along verse highlighting
+- **Audio Bible** — Narrated chapters with read-along verse highlighting and mini-player
 - **Your Edition PDF** — Personalized exportable study Bible with the user's own highlights and journal
 - **Gamification layer** — Streaks, XP, levels, hidden achievements (opt-out for users who don't want it)
 - **Gifted accounts** — One user gifts a personalized edition to someone else, including a personal letter
+- **Geographic map** — Fog-of-war Biblical locations map (77 locations) unlocked as you read
+- **Catechisms** — Westminster Shorter, Westminster Larger, Heidelberg, 1689 Confession (396 Q&As)
+- **Sermon outline builder** — AI-structured sermon outlines with Markdown export
+- **AI companion selection** — Choose Charles's voice style from multiple theological companions
+- **Legal pages** — `/privacy`, `/terms`, `/credits` with full ESV attribution
 
 ### The AI companion
 
@@ -38,13 +45,13 @@ BibleSaaS is a mobile-first web platform (PWA) where the AI layer knows who you 
 
 | Layer | Technology | Why |
 |---|---|---|
-| Framework | Next.js 14 App Router | RSC + streaming, file-based routing, Vercel-native |
+| Framework | Next.js 16.1.6 App Router | RSC + streaming, file-based routing, Vercel-native |
 | Database + Auth | Supabase (Postgres + GoTrue) | RLS, real-time, storage, Edge Functions, managed |
-| AI | Anthropic Claude (`claude-sonnet-4-6`, `claude-haiku-4`) | Best-in-class reasoning; Sonnet for personalization, Haiku for bulk jobs |
+| AI | Anthropic Claude (`claude-sonnet-4-5`, `claude-haiku-4`) | Best-in-class reasoning; Sonnet for personalization, Haiku for bulk jobs |
 | Hosting | Vercel | Preview deploys, edge functions, zero-config Next.js |
 | Payments | Stripe | Subscriptions + one-time purchases + gifting |
 | Email | Resend | Transactional email (magic links, weekly letters, year-in-review) |
-| Styling | Tailwind CSS | Utility-first; pairs well with design token system |
+| Styling | Tailwind CSS 4 | Utility-first; pairs well with design token system |
 | Offline | Dexie.js (IndexedDB) + Background Sync API | Chapter caching, offline reads (WEB/KJV only — ESV license restriction) |
 | PWA | `next-pwa` | Installable, home screen, service worker |
 | Fonts | EB Garamond, Inter, Barlow Condensed, Roboto Mono | Established reading typography + clean UI |
@@ -61,14 +68,28 @@ BibleSaaS is a mobile-first web platform (PWA) where the AI layer knows who you 
 
 ## Project Status
 
-> **Pre-development.** The repository currently contains the complete technical specification, database schema, and phase-by-phase coding plan. Application code begins in Phase 0.
+> **Active development — Phase 26 of 27 complete.** The application is feature-complete. Phase 27 covers commercial launch (LLC formation, ESV commercial license, Stripe production, Vercel prod config).
 
 | Artifact | Status |
 |---|---|
 | Database schema (13 files, ~60 tables) | ✅ Complete |
-| Phase-by-phase coding plan (27 phases) | ✅ Complete |
+| Supabase migrations | ✅ Applied |
+| Phase-by-phase coding plan (27 phases) | ✅ Phases 1–26 complete |
+| Bible translations (WEB, KJV) | ✅ Seeded — 1,189 chapters each |
+| TSK cross-references | ✅ Seeded — 344,799 entries |
+| Strong's lexicon (Hebrew + Greek) | ✅ Seeded — 14,197 entries |
+| Spurgeon Morning & Evening | ✅ Seeded — 732 entries |
+| Commentary entries (MH, Calvin, Clarke) | ✅ Seeded — 2,777 entries |
+| Catechisms (WSC, WLC, HC, 1689) | ✅ Seeded — 396 Q&As |
+| Geographic locations | ✅ Seeded — 77 locations, 210 passage links |
+| Application code (213 TS/TSX files) | ✅ All routes built |
+| Background jobs (8 cron routes) | ✅ All verified HTTP 200 |
 | AI persona specification | ✅ Complete |
-| Application code | 🔜 Phase 0 |
+| Legal pages (/privacy, /terms, /credits) | ✅ Live |
+| TypeScript errors | ✅ 0 |
+| ESV commercial license | ⏳ Pending LLC formation (Phase 27) |
+| Stripe production keys | ⏳ Phase 27 |
+| Custom domain | ⏳ Phase 27 |
 
 ---
 
@@ -82,34 +103,40 @@ BibleSaaS is a mobile-first web platform (PWA) where the AI layer knows who you 
 ├── docs/                        # Project documentation
 │   ├── coding-plan.md           # 27-phase implementation plan (the primary build guide)
 │   ├── project-notes.md         # All 31 brainstorm/design sessions
-│   ├── charles-persona.md       # AI companion personality and theological DNA spec
-│   └── adr/                     # Architecture Decision Records
-│       ├── 001-tech-stack.md
-│       ├── 002-ai-model-selection.md
-│       ├── 003-bible-text-licensing.md
-│       └── 004-personalization-architecture.md
+│   └── charles-persona.md       # AI companion personality and theological DNA spec
 ├── sql/                         # Human-readable schema documentation
 │   ├── README.md                # Table index and design principles
-│   ├── 01-core-auth-profiles.md
-│   ├── 02-reading-plans.md
-│   └── ...                      # 13 files total
-├── supabase/                    # Supabase project files
+│   └── ...                      # 13 files covering all ~60 tables
+├── supabase/
 │   ├── config.toml
-│   └── migrations/              # Executable .sql migration files (extracted from sql/ docs)
-│       └── README.md            # How to run migrations
-├── scripts/                     # Seed scripts (run once at deploy time)
-│   ├── extract-migrations.ts    # Generates supabase/migrations/*.sql from sql/*.md
-│   ├── seed-translations.ts     # WEB, KJV, ASV, YLT chapter data
-│   ├── seed-tsk.ts              # Treasury of Scripture Knowledge (~500K cross-reference pairs)
+│   └── migrations/              # Executable .sql migration files
+├── scripts/                     # Seed scripts (idempotent, resumable via seed_checkpoints)
+│   ├── seed-translations.ts     # WEB + KJV chapters
+│   ├── seed-tsk.ts              # TSK cross-references
 │   ├── seed-strongs.ts          # Strong's Hebrew + Greek lexicon
-│   ├── seed-spurgeon.ts         # Morning & Evening + Treasury of David
+│   ├── seed-spurgeon.ts         # Morning & Evening devotional
 │   ├── seed-commentaries.ts     # Matthew Henry, Calvin, Adam Clarke
-│   ├── seed-catechism.ts        # Westminster Shorter/Larger, Heidelberg
-│   └── ...                      # See docs/coding-plan.md Phase 0 for full list
-├── .env.example                 # Environment variable template
-├── CONTRIBUTING.md
-├── LICENSE
-└── SECURITY.md
+│   ├── seed-catechism.ts        # Westminster + Heidelberg catechisms
+│   ├── seed-confession-1689.ts  # 1689 Baptist Confession
+│   ├── seed-geography.ts        # 77 Biblical geographic locations
+│   └── test-crons.ps1           # Smoke-test all 8 cron jobs
+└── src/
+    ├── app/                     # Next.js App Router pages (46 pages, 61 API routes)
+    │   ├── auth/                # login, signup, verify, callback
+    │   ├── dashboard/           # Home — streak, reading plan, On This Day
+    │   ├── read/[book]/[chapter]/ # Chapter reading view
+    │   ├── journey/             # Fog-of-war progress + geographic map
+    │   ├── trails/              # TSK cross-reference constellation trails
+    │   ├── library/             # Commentary Vault, word studies, catechism
+    │   ├── profile/             # Settings, memory verses, journal, prayer, companions
+    │   ├── chat/                # Full-screen Charles chat
+    │   ├── onboarding/          # Conversational AI onboarding
+    │   ├── gift/                # Gift flow
+    │   ├── privacy|terms|credits/ # Legal pages
+    │   └── api/                 # 61 route handlers (cron, chat, content, stripe, …)
+    ├── components/              # Shared React components (audio, layout, trails, ui)
+    ├── lib/                     # Server utilities (charles/, supabase/, portrait.ts)
+    └── middleware.ts            # Auth session refresh + rate limiting
 ```
 
 ---
@@ -119,11 +146,11 @@ BibleSaaS is a mobile-first web platform (PWA) where the AI layer knows who you 
 ### Prerequisites
 
 - Node.js 20+
-- A [Supabase](https://supabase.com) project
+- A [Supabase](https://supabase.com) project (with migrations applied)
 - An [Anthropic](https://console.anthropic.com) API key
-- A [Stripe](https://stripe.com) account (for payment features; skip for local dev)
+- A [Stripe](https://stripe.com) account (for payment features; test keys work for local dev)
 - An [ESV API](https://api.esv.org) key (free tier for development)
-- A [Resend](https://resend.com) account
+- A [Resend](https://resend.com) account (or use `re_dummy` locally)
 
 ### 1. Clone and install
 
@@ -145,7 +172,7 @@ See [`.env.example`](.env.example) for all required variables and descriptions.
 
 ### 3. Database setup
 
-Run migrations in order via the Supabase SQL editor or Supabase CLI:
+Run migrations in order via the Supabase dashboard SQL editor or Supabase CLI:
 
 ```bash
 # Using Supabase CLI
@@ -154,16 +181,19 @@ supabase db push
 # Or manually: run each file in supabase/migrations/ in sequence
 ```
 
-> **Note:** Full migration extraction from `sql/` docs is part of Phase 0. See [`docs/coding-plan.md`](docs/coding-plan.md#phase-0--foundation--infrastructure) Step 0.3.
-
 ### 4. Seed public domain data
 
-```bash
-# Seed Bible translations (WEB, KJV, ASV, YLT)
-npx ts-node scripts/seed-translations.ts
+All seed scripts are idempotent (safe to re-run) and resumable via the `seed_checkpoints` table.
 
-# Seed cross-reference data, commentaries, lexicon, etc.
-# See docs/coding-plan.md Phase 0.6 for the full order
+```bash
+npm run seed:translations   # WEB + KJV chapters (1,189 each)
+npm run seed:tsk            # TSK cross-references (~344K entries)
+npm run seed:strongs        # Strong's Hebrew + Greek lexicon
+npm run seed:spurgeon       # Morning & Evening devotional
+npm run seed:commentaries   # Matthew Henry, Calvin, Adam Clarke
+npm run seed:catechism      # Westminster + Heidelberg catechisms
+npm run seed:confession     # 1689 Baptist Confession
+npm run seed:geography      # 77 Biblical geographic locations
 ```
 
 ### 5. Run the development server
@@ -198,10 +228,10 @@ Chapter-specific content: intro, connections[], questions[], word_note, closing
 
 | Use case | Model | Reason |
 |---|---|---|
-| Onboarding chat, OIA responses, sermon outlines, chat | `claude-sonnet-4-6` | Quality, reasoning depth |
-| Portrait regeneration | `claude-sonnet-4-6` | User-facing output must be high quality |
+| Onboarding chat, OIA responses, sermon outlines, chat | `claude-sonnet-4-5` | Quality, reasoning depth |
+| Portrait regeneration | `claude-sonnet-4-5` | User-facing output must be high quality |
 | Word study synthesis (batch) | `claude-haiku-4` | ~3,000 lexicon entries; cost-sensitive |
-| Weekly letters, Year in Review | `claude-sonnet-4-6` | Personal narrative; quality matters |
+| Weekly letters, Year in Review | `claude-sonnet-4-5` | Personal narrative; quality matters |
 
 ### RLS strategy
 

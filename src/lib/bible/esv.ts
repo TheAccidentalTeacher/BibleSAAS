@@ -9,7 +9,7 @@
  */
 
 import { createClient } from "@/lib/supabase/server";
-import { findBook } from "@/lib/bible";
+import { getBook } from "@/lib/bible";
 import { type ReadingChapter, type ReadingVerse, ESV_ATTRIBUTION } from "./types";
 import type { ChapterRow } from "@/types/database";
 
@@ -21,7 +21,7 @@ const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
  * e.g. "GEN", 1 → "Genesis 1"
  */
 function toEsvQuery(bookCode: string, chapter: number): string {
-  const book = findBook(bookCode);
+  const book = getBook(bookCode.toUpperCase() as Parameters<typeof getBook>[0]);
   if (!book) throw new Error(`Unknown book code: ${bookCode}`);
   return `${book.name} ${chapter}`;
 }
@@ -85,16 +85,16 @@ export async function getEsvChapter(
   const apiKey = process.env.ESV_API_KEY;
 
   const supabase = await createClient();
-  const book = findBook(bookCode);
+  const book = getBook(bookCode.toUpperCase() as Parameters<typeof getBook>[0]);
   if (!book) return null;
 
   // ----- Check cache -----
   const { data: cached } = await supabase
     .from("chapters")
     .select("*")
-    .eq("book_code", bookCode.toUpperCase())
-    .eq("chapter_number", chapter)
-    .eq("translation_code", "ESV")
+    .eq("book", book.name)
+    .eq("chapter", chapter)
+    .eq("translation", "ESV")
     .maybeSingle();
 
   if (cached) {
@@ -102,7 +102,7 @@ export async function getEsvChapter(
     // Check TTL
     const notExpired = !row.expires_at || new Date(row.expires_at) > new Date();
     if (notExpired) {
-      const verses = (row.verses as ReadingVerse[]) ?? [];
+      const verses = (row.text_json as ReadingVerse[]) ?? [];
       return {
         book_code: bookCode.toUpperCase(),
         book_name: book.name,
@@ -110,7 +110,7 @@ export async function getEsvChapter(
         translation: "ESV",
         verses,
         attribution: ESV_ATTRIBUTION,
-        cached_at: row.cached_at,
+        cached_at: row.fetched_at,
         expires_at: row.expires_at,
       };
     }
@@ -159,18 +159,18 @@ export async function getEsvChapter(
 
   // ----- Write to cache -----
   const upsertPayload = {
-    book_code: bookCode.toUpperCase(),
-    chapter_number: chapter,
-    translation_code: "ESV",
-    verses,
-    cached_at: now.toISOString(),
+    book: book.name,
+    chapter,
+    translation: "ESV",
+    text_json: verses,
+    fetched_at: now.toISOString(),
     expires_at: expiresAt,
   };
 
   const { error: upsertError } = await supabase
     .from("chapters")
     .upsert(upsertPayload, {
-      onConflict: "book_code,chapter_number,translation_code",
+      onConflict: "book,chapter,translation",
     });
 
   if (upsertError) {

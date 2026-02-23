@@ -67,10 +67,47 @@ export async function POST(req: Request) {
     chapter: body.chapter,
   });
 
+  // ── Geographic discovery side-effect ────────────────────────────────────────
+  // Look up which locations are mentioned in this book+chapter
+  const { data: passageLocs } = await supabase
+    .from("passage_locations")
+    .select("location_id")
+    .eq("book", body.book)
+    .eq("chapter", body.chapter);
+
+  let newlyDiscovered: string[] = [];
+  if (passageLocs && passageLocs.length > 0) {
+    const locationIds = passageLocs.map((p: { location_id: string }) => p.location_id);
+
+    // Check which are already discovered by this user
+    const { data: existing } = await supabase
+      .from("user_map_discoveries")
+      .select("location_id")
+      .eq("user_id", user.id)
+      .in("location_id", locationIds);
+
+    const alreadyFound = new Set((existing ?? []).map((e: { location_id: string }) => e.location_id));
+    newlyDiscovered = locationIds.filter((id) => !alreadyFound.has(id));
+
+    if (locationIds.length > 0) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (supabase.from("user_map_discoveries") as any).upsert(
+        locationIds.map((locationId: string) => ({
+          user_id: user.id,
+          location_id: locationId,
+          discovered_via_book: body.book,
+          discovered_via_chapter: body.chapter,
+        })),
+        { onConflict: "user_id,location_id" }
+      );
+    }
+  }
+
   return NextResponse.json({
     ok: true,
     streak: streak.current_streak,
     xp: xpResult,
     achievements: earned,
+    newlyDiscovered,
   });
 }

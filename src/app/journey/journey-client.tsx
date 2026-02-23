@@ -7,7 +7,7 @@ import JourneyStats from "./views/journey-stats";
 import JourneyPhases from "./views/journey-phases";
 import JourneyConstellation from "./views/journey-constellation";
 import JourneySkillTree from "./views/journey-skill-tree";
-import JourneyMap from "./views/journey-map";
+import JourneyFogMap from "./views/journey-fog-map";
 
 interface Props {
   data: JourneyData;
@@ -55,7 +55,7 @@ export default function JourneyClient({ data }: Props) {
         {activeView === "phases"        && <JourneyPhases        data={data} />}
         {activeView === "skill-tree"    && <JourneySkillTree     data={data} />}
         {activeView === "constellation" && <JourneyConstellation data={data} />}
-        {activeView === "map"           && <JourneyMap           data={data} />}
+        {activeView === "map"           && <JourneyFogMap       data={data} />}
       </div>
     </div>
   );

@@ -93,30 +93,36 @@ const BOOKS: { name: string; apiName: string; chapters: number }[] = [
 ];
 
 const TOTAL_CHAPTERS = BOOKS.reduce((sum, b) => sum + b.chapters, 0);
-const SEED_NAME = 'web_kjv_chapters';
-const TRANSLATION = 'WEB';
 const DELAY_MS = 700; // be polite to the free API
+
+const TRANSLATIONS = [
+  { name: 'WEB', apiKey: 'web', seedName: 'web_chapters' },
+  { name: 'KJV', apiKey: 'kjv', seedName: 'kjv_chapters' },
+];
 
 function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function getCheckpoint(): Promise<{ last_book: string; last_chapter: number } | null> {
+type CheckpointResult = { last_book: string; last_chapter: number } | null | 'complete';
+
+async function getCheckpoint(seedName: string): Promise<CheckpointResult> {
   const { data } = await supabase
     .from('seed_checkpoints')
     .select('last_checkpoint, status')
-    .eq('seed_name', SEED_NAME)
+    .eq('seed_name', seedName)
     .single();
 
-  if (!data || data.status === 'complete') return null;
-  return data.last_checkpoint as { last_book: string; last_chapter: number } | null;
+  if (!data) return null;  // no row — start fresh
+  if (data.status === 'complete') return 'complete';
+  return (data.last_checkpoint as { last_book: string; last_chapter: number }) ?? null;
 }
 
-async function saveCheckpoint(book: string, chapter: number, rowsInserted: number) {
+async function saveCheckpoint(seedName: string, book: string, chapter: number, rowsInserted: number) {
   await supabase
     .from('seed_checkpoints')
     .upsert({
-      seed_name: SEED_NAME,
+      seed_name: seedName,
       last_checkpoint: { last_book: book, last_chapter: chapter },
       rows_inserted: rowsInserted,
       status: 'in_progress',
@@ -124,11 +130,11 @@ async function saveCheckpoint(book: string, chapter: number, rowsInserted: numbe
     }, { onConflict: 'seed_name' });
 }
 
-async function markComplete(rowsInserted: number) {
+async function markComplete(seedName: string, rowsInserted: number) {
   await supabase
     .from('seed_checkpoints')
     .upsert({
-      seed_name: SEED_NAME,
+      seed_name: seedName,
       last_checkpoint: { last_book: 'Revelation', last_chapter: 22 },
       rows_inserted: rowsInserted,
       status: 'complete',
@@ -137,8 +143,8 @@ async function markComplete(rowsInserted: number) {
     }, { onConflict: 'seed_name' });
 }
 
-async function fetchChapter(apiName: string, chapter: number): Promise<{ verse: number; text: string }[]> {
-  const url = `https://bible-api.com/${apiName}+${chapter}?translation=web`;
+async function fetchChapter(apiName: string, chapter: number, translationKey: string): Promise<{ verse: number; text: string }[]> {
+  const url = `https://bible-api.com/${apiName}+${chapter}?translation=${translationKey}`;
 
   for (let attempt = 1; attempt <= 5; attempt++) {
     try {
@@ -166,40 +172,37 @@ async function fetchChapter(apiName: string, chapter: number): Promise<{ verse: 
   return [];
 }
 
-async function main() {
-  console.log('=== BibleSaaS — WEB Translation Seed ===');
-  console.log(`Total chapters to seed: ${TOTAL_CHAPTERS}`);
-  console.log('');
+async function seedTranslation(translationName: string, apiKey: string, seedName: string) {
+  console.log(`\n=== ${translationName} Translation ===`);
 
-  // Resume from checkpoint if available
-  const checkpoint = await getCheckpoint();
+  const checkpoint = await getCheckpoint(seedName);
+  if (checkpoint === 'complete') {
+    console.log(`  Already complete — skipping.`);
+    return;
+  }
+
   const resumeBook = checkpoint?.last_book ?? null;
   const resumeChapter = checkpoint?.last_chapter ?? 0;
   let skipping = resumeBook !== null;
 
   if (skipping) {
-    console.log(`Resuming from: ${resumeBook} chapter ${resumeChapter + 1}`);
-    console.log('');
+    console.log(`  Resuming from: ${resumeBook} chapter ${resumeChapter + 1}`);
+  } else {
+    console.log(`  Starting from Genesis 1`);
   }
 
   let rowsInserted = 0;
-  let rowsSkipped = 0;
   let chaptersProcessed = 0;
 
   for (const book of BOOKS) {
-    // Skip books before resume point
-    if (skipping) {
-      if (book.name !== resumeBook) {
-        chaptersProcessed += book.chapters;
-        continue;
-      }
+    if (skipping && book.name !== resumeBook) {
+      chaptersProcessed += book.chapters;
+      continue;
     }
 
     for (let chapter = 1; chapter <= book.chapters; chapter++) {
-      // Skip chapters before resume point within resume book
       if (skipping && chapter <= resumeChapter) {
         chaptersProcessed++;
-        rowsSkipped++;
         continue;
       }
       skipping = false;
@@ -209,7 +212,7 @@ async function main() {
       process.stdout.write(`  [${pct}%] ${book.name} ${chapter}/${book.chapters}... `);
 
       try {
-        const verses = await fetchChapter(book.apiName, chapter);
+        const verses = await fetchChapter(book.apiName, chapter, apiKey);
 
         if (verses.length === 0) {
           console.log('SKIP (no verses)');
@@ -221,10 +224,10 @@ async function main() {
           .upsert({
             book: book.name,
             chapter,
-            translation: TRANSLATION,
+            translation: translationName,
             text_json: verses,
             fetched_at: new Date().toISOString(),
-            expires_at: null,  // public domain — stored permanently
+            expires_at: null,
           }, { onConflict: 'book,chapter,translation' });
 
         if (error) {
@@ -234,9 +237,8 @@ async function main() {
           console.log(`OK (${verses.length} verses)`);
         }
 
-        // Save checkpoint every 10 chapters
         if (rowsInserted % 10 === 0) {
-          await saveCheckpoint(book.name, chapter, rowsInserted);
+          await saveCheckpoint(seedName, book.name, chapter, rowsInserted);
         }
 
         await sleep(DELAY_MS);
@@ -244,21 +246,26 @@ async function main() {
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
         console.log(`FAILED: ${message}`);
-        await saveCheckpoint(book.name, chapter - 1, rowsInserted);
+        await saveCheckpoint(seedName, book.name, chapter - 1, rowsInserted);
         console.log('\nSeed interrupted. Run again to resume from this point.');
         process.exit(1);
       }
     }
   }
 
-  await markComplete(rowsInserted);
+  await markComplete(seedName, rowsInserted);
+  console.log(`\n  ${translationName} complete: ${rowsInserted} chapters inserted.`);
+}
 
-  console.log('');
-  console.log('=== Seed Complete ===');
-  console.log(`  Inserted: ${rowsInserted} chapters`);
-  console.log(`  Skipped:  ${rowsSkipped} chapters (already existed)`);
-  console.log('');
-  console.log('The reading screen is now live. Run: npm run dev');
+async function main() {
+  console.log('=== BibleSaaS — Bible Translation Seed ===');
+  console.log(`Total chapters per translation: ${TOTAL_CHAPTERS}`);
+
+  for (const t of TRANSLATIONS) {
+    await seedTranslation(t.name, t.apiKey, t.seedName);
+  }
+
+  console.log('\n=== All translations complete. Run: npm run dev ===');
 }
 
 main().catch(err => {

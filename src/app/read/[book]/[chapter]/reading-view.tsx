@@ -29,6 +29,7 @@ import {
   Flame,
   Headphones,
   Hand,
+  ScrollText,
 } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";
@@ -50,6 +51,9 @@ import AchievementToast from "@/components/gamification/achievement-toast";
 import { useOfflineChapter } from "@/hooks/useOfflineChapter";
 import { useOnlineStatus } from "@/hooks/useOnlineStatus";
 import PrayModePanel from "./pray-mode-panel";
+import SermonOutlineSheet from "./sermon-outline-sheet";
+import CatechismVerseSheet from "./catechism-verse-sheet";
+import type { CatechismVerseMap } from "@/app/api/catechism/verse-refs/route";
 import HymnCard, { type HymnEntry } from "./hymn-card";
 import type { ReadingChapter } from "@/lib/bible/types";
 import type { ChapterContent, OIAQuestion } from "@/lib/charles/content";
@@ -119,6 +123,7 @@ export default function ReadingView({
   const [charlesDismissed, setCharlesDismissed] = useState(false);
   const [studyOpen, setStudyOpen] = useState(false);
   const [prayModeOpen, setPrayModeOpen] = useState(false);
+  const [outlineOpen, setOutlineOpen] = useState(false);
   const [activeHymn, setActiveHymn] = useState<HymnEntry | null>(null);
   const [content, setContent] = useState<ChapterContent | null>(null);
   const [contentLoading, setContentLoading] = useState(false);
@@ -251,6 +256,10 @@ export default function ReadingView({
   const [tskStats, setTskStats] = useState<Record<number, { count: number; tier: string }>>({});
   const [tskSheetVerse, setTskSheetVerse] = useState<number | null>(null);
 
+  // ── Catechism verse refs ──────────────────────────────────────────────────────
+  const [catechismRefs, setCatechismRefs] = useState<CatechismVerseMap>({});
+  const [catechismSheetVerse, setCatechismSheetVerse] = useState<number | null>(null);
+
   // ── Active trail ─────────────────────────────────────────────────────────────
   const [activeTrailId, setActiveTrailId] = useState<string | null>(null);
   const [activeTrailStepCount, setActiveTrailStepCount] = useState<number>(0);
@@ -367,6 +376,22 @@ export default function ReadingView({
     }
     setTskStats({});
     void loadTskStats();
+    return () => { cancelled = true; };
+  }, [bookCode, chapter]);
+
+  // Load catechism verse refs for "C" margin dots
+  useEffect(() => {
+    let cancelled = false;
+    async function loadCatechismRefs() {
+      const res = await fetch(`/api/catechism/verse-refs?book=${bookCode}&chapter=${chapter}`);
+      if (cancelled) return;
+      if (res.ok) {
+        const j = await res.json() as { byVerse: CatechismVerseMap };
+        setCatechismRefs(j.byVerse ?? {});
+      }
+    }
+    setCatechismRefs({});
+    void loadCatechismRefs();
     return () => { cancelled = true; };
   }, [bookCode, chapter]);
 
@@ -694,6 +719,27 @@ export default function ReadingView({
         </button>
       </div>
 
+      {/* ── Study quick-actions bar (visible in Study mode) ── */}
+      {mode === "study" && (
+        <div
+          className="flex items-center gap-2 px-5 py-2 border-b overflow-x-auto"
+          style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
+        >
+          <button
+            onClick={() => setOutlineOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border transition-colors flex-shrink-0"
+            style={{
+              background: "var(--color-surface-2)",
+              borderColor: "var(--color-border)",
+              color: "var(--color-text-2)",
+            }}
+          >
+            <ScrollText size={12} />
+            Outline
+          </button>
+        </div>
+      )}
+
       {/* ── Main text area ── */}
       <main className="flex-1 px-5 pb-28 pt-6 max-w-[680px] mx-auto w-full">
         {/* Spurgeon morning card — above chapter */}
@@ -881,6 +927,39 @@ export default function ReadingView({
                           flexShrink: 0,
                         }}
                       />
+                    )}
+                    {/* Catechism "C" dot */}
+                    {catechismRefs[v.verse] && catechismRefs[v.verse].length > 0 && (
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setCatechismSheetVerse(v.verse);
+                        }}
+                        aria-label={`${catechismRefs[v.verse].length} catechism question${catechismRefs[v.verse].length !== 1 ? 's' : ''} reference verse ${v.verse}`}
+                        title={`${catechismRefs[v.verse].length} catechism reference${catechismRefs[v.verse].length !== 1 ? 's' : ''}`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          width: 13,
+                          height: 13,
+                          borderRadius: "50%",
+                          background: "rgba(196,160,64,0.25)",
+                          border: "1px solid #C4A040",
+                          marginLeft: 2,
+                          verticalAlign: "super",
+                          cursor: "pointer",
+                          padding: 0,
+                          flexShrink: 0,
+                          fontSize: 8,
+                          fontWeight: 700,
+                          color: "#C4A040",
+                          lineHeight: 1,
+                        }}
+                      >
+                        C
+                      </button>
                     )}
                     {/* Verse words — each word is tappable for word note */}
                     {v.text.split(/(\s+)/).map((token, idx) => {
@@ -1180,6 +1259,32 @@ export default function ReadingView({
       {/* ── Hymn Card ── */}
       {activeHymn && (
         <HymnCard hymn={activeHymn} onClose={() => setActiveHymn(null)} />
+      )}
+
+      {/* ── Sermon Outline Sheet ── */}
+      {outlineOpen && (
+        <SermonOutlineSheet
+          bookCode={bookCode}
+          bookName={bookName}
+          chapter={chapter}
+          chapterText={
+            chapterData
+              ? chapterData.verses.map((v) => `${v.verse} ${v.text}`).join(" ")
+              : ""
+          }
+          onClose={() => setOutlineOpen(false)}
+        />
+      )}
+
+      {/* ── Catechism Verse Sheet ── */}
+      {catechismSheetVerse !== null && catechismRefs[catechismSheetVerse] && (
+        <CatechismVerseSheet
+          bookName={bookName}
+          chapter={chapter}
+          verse={catechismSheetVerse}
+          entries={catechismRefs[catechismSheetVerse]}
+          onClose={() => setCatechismSheetVerse(null)}
+        />
       )}
     </div>
   );

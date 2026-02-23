@@ -1,17 +1,17 @@
-ï»¿# Bible Study App â€” Project Notes
+# Bible Study App — Project Notes
 
 ## Overview
 A mobile-first, AI-powered **personalized study Bible platform** (also accessible on desktop), hosted on Vercel.
 Uses the English Standard Version (ESV) of the Bible.
 Users study chapter by chapter with AI-generated questions, deep commentary, cross-references, highlights, journaling, and a fully personalized experience.
 
-**Direction:** Build for personal use first (father + son â€” Tim), architect for commercial release. Tim is the first real user and his profile (aspiring chef, specific interests) will drive the personalization model that future users will also benefit from.
+**Direction:** Build for personal use first (father + son — Tim), architect for commercial release. Tim is the first real user and his profile (aspiring chef, specific interests) will drive the personalization model that future users will also benefit from.
 
-**Bigger vision:** Not just a Bible app â€” a *personalized living study Bible* where the AI layer knows who you are and tailors everything â€” commentary, questions, connections â€” to your life, interests, and history with the text.
+**Bigger vision:** Not just a Bible app — a *personalized living study Bible* where the AI layer knows who you are and tailors everything — commentary, questions, connections — to your life, interests, and history with the text.
 
 ---
 
-## Commercial Vision â€” The SaaS Model
+## Commercial Vision — The SaaS Model
 
 **Core concept:** A single web platform (Vercel) where every user's login creates their own personalized "edition" of the Bible. Same Scripture, radically different experience based on who you are. Tim's instance looks like Tim's Bible. A nurse's looks like a nurse's Bible. The personalization engine is the product.
 
@@ -19,138 +19,138 @@ Users study chapter by chapter with AI-generated questions, deep commentary, cro
 - No 30% revenue cut to Apple or Google
 - No App Store review process or content restrictions
 - PWA handles home screen installation on both iOS and Android
-- Faster iteration â€” deploy updates instantly without App Store approval
-- Users access via browser or installed PWA â€” feels native enough
+- Faster iteration — deploy updates instantly without App Store approval
+- Users access via browser or installed PWA — feels native enough
 
 **Revenue model options (to brainstorm deeply):**
 - **Tiered subscriptions:** Free (basic reading), Standard (AI questions + journal), Premium (full personalization engine, all commentary layers, TSK, Spurgeon, audio)
-- **A la carte feature unlocks:** Buy the Chef Layer, buy the Spurgeon Layer, buy the TSK cross-reference engine â€” pick what matters to you
+- **A la carte feature unlocks:** Buy the Chef Layer, buy the Spurgeon Layer, buy the TSK cross-reference engine — pick what matters to you
 - **One-time lifetime purchase:** Appeals to users who hate subscriptions
-- **"Your Edition" premium:** Highest tier â€” full AI profile, personalized commentary, exportable personalized study Bible PDF
-- **Gifting:** Father buys Tim a personalized edition â€” that's a real product people would give
+- **"Your Edition" premium:** Highest tier — full AI profile, personalized commentary, exportable personalized study Bible PDF
+- **Gifting:** Father buys Tim a personalized edition — that's a real product people would give
 
 **The "personalized edition" framing:**
-Every user doesn't just get an account â€” they get *their Bible*. On signup they go through an onboarding flow that seeds their AI profile. From that moment, Claude knows who they are and everything is filtered through that lens. The platform is one codebase; the experience is a thousand different books.
+Every user doesn't just get an account — they get *their Bible*. On signup they go through an onboarding flow that seeds their AI profile. From that moment, Claude knows who they are and everything is filtered through that lens. The platform is one codebase; the experience is a thousand different books.
 
 ---
 
-## User Archetypes â€” The Personalization Spectrum
+## User Archetypes — The Personalization Spectrum
 
-This is the heart of what makes this product different. The AI doesn't just add a name to the top of the screen â€” it fundamentally rewrites how the text is approached, what questions are asked, what connections are surfaced, what tone is used, and how the UI itself feels. These archetypes are real people, not market segments.
+This is the heart of what makes this product different. The AI doesn't just add a name to the top of the screen — it fundamentally rewrites how the text is approached, what questions are asked, what connections are surfaced, what tone is used, and how the UI itself feels. These archetypes are real people, not market segments.
 
 ---
 
-### TIM â€” The First User. The Reason This Exists.
+### TIM — The First User. The Reason This Exists.
 
 **Who he is:**
 - 15 years old (Gen Z, born ~2011)
-- Aspiring chef â€” this isn't a hobby, it's an identity
-- **3-sport athlete:** cross country, basketball, and track â€” discipline, endurance, team, competition, the body as instrument
-- Son of the developer â€” this app is a digital act of love from his father
-- Grew up with YouTube, Reels, TikTok â€” learns visually, learns by watching people DO things
-- Short-form native â€” he can focus deeply but it has to be earned
+- Aspiring chef — this isn't a hobby, it's an identity
+- **3-sport athlete:** cross country, basketball, and track — discipline, endurance, team, competition, the body as instrument
+- Son of the developer — this app is a digital act of love from his father
+- Grew up with YouTube, Reels, TikTok — learns visually, learns by watching people DO things
+- Short-form native — he can focus deeply but it has to be earned
 - Probably skeptical of anything that feels like homework or church obligation
-- Identity is still forming â€” who am I, what do I believe, where do I fit
-- A kid who already lives inside discipline and endurance (training) and creativity (kitchen) â€” the Bible has enormous things to say to both
+- Identity is still forming — who am I, what do I believe, where do I fit
+- A kid who already lives inside discipline and endurance (training) and creativity (kitchen) — the Bible has enormous things to say to both
 
 **What his experience needs to feel like:**
-- His â€” not his dad's. Not a church curriculum. HIS Bible.
-- Visually engaging from the first screen â€” not walls of text
+- His — not his dad's. Not a church curriculum. HIS Bible.
+- Visually engaging from the first screen — not walls of text
 - Questions that actually connect to his life: kitchen, training, school, friendships, identity, worth, purpose
-- Short entry points â€” he can go deep if he wants but doesn't have to
+- Short entry points — he can go deep if he wants but doesn't have to
 - The chef lens is always on: every passage filtered for food, craft, hospitality, creativity, the dignity of physical work
 - The athlete lens is equally on: endurance, discipline, suffering that produces, team, winning and losing well
 - Gaming-adjacent engagement: streaks feel like a game, not a guilt trip. Achievements unlock. Progress is visual.
-- Sharing should go to where he actually lives â€” not email. Probably copy-to-clipboard for pasting wherever.
+- Sharing should go to where he actually lives — not email. Probably copy-to-clipboard for pasting wherever.
 - Journal prompts need to be conversational: "What would you have done?" not "Identify the homiletical principle."
 - AI tone for Tim: peer-level, curious, never preachy, occasionally surprising
 
 **Additional athletic passage connections for Tim:**
-- 1 Corinthians 9:24-27: "Run in such a way as to get the prize" â€” Paul uses a runner's metaphor. Tim *is* a runner.
-- Hebrews 12:1-2: "Run with endurance the race set before us" â€” cross country theology
-- Philippians 4:13: "I can do all things through him who strengthens me" â€” every locker room has this verse; what does it actually mean?
-- 2 Timothy 4:7: "I have fought the good fight, I have finished the race" â€” finishing well
-- Isaiah 40:31: "They shall run and not be weary" â€” this lands differently after mile 8 of a cross country race
+- 1 Corinthians 9:24-27: "Run in such a way as to get the prize" — Paul uses a runner's metaphor. Tim *is* a runner.
+- Hebrews 12:1-2: "Run with endurance the race set before us" — cross country theology
+- Philippians 4:13: "I can do all things through him who strengthens me" — every locker room has this verse; what does it actually mean?
+- 2 Timothy 4:7: "I have fought the good fight, I have finished the race" — finishing well
+- Isaiah 40:31: "They shall run and not be weary" — this lands differently after mile 8 of a cross country race
 
 **What his experience needs to feel like:**
-- His â€” not his dad's. Not a church curriculum. HIS Bible.
-- Visually engaging from the first screen â€” not walls of text
+- His — not his dad's. Not a church curriculum. HIS Bible.
+- Visually engaging from the first screen — not walls of text
 - Questions that actually connect to his life: kitchen, school, friendships, identity, worth, purpose
-- Short entry points â€” he can go deep if he wants but doesn't have to
+- Short entry points — he can go deep if he wants but doesn't have to
 - The chef lens is always on: every passage filtered for food, craft, hospitality, creativity, the dignity of physical work
 - Gaming-adjacent engagement: streaks feel like a game, not a guilt trip. Achievements unlock. Progress is visual.
-- Sharing should go to where he actually lives â€” not email. Probably copy-to-clipboard for pasting wherever.
+- Sharing should go to where he actually lives — not email. Probably copy-to-clipboard for pasting wherever.
 - Journal prompts need to be conversational: "What would you have done?" not "Identify the homiletical principle."
 - AI tone for Tim: peer-level, curious, never preachy, occasionally surprising
 
 **Passages that will hit different for Tim:**
-- Genesis 18: Abraham's meal for three strangers â€” ancient hospitality, what he served, how he cooked it, why it mattered
-- Exodus 16: Manna â€” what did it taste like? ("like wafers made with honey" â€” Exodus 16:31). Was collecting it meditative? What did God teach through food provision?
-- Leviticus 2-3: Grain and fellowship offerings â€” these are *recipes*. Flour, oil, salt, fire. A chef reads this completely differently.
-- 1 Kings 17: The widow's last flour and oil â€” feeding someone when you have nothing left
-- John 6: Feeding 5,000 â€” logistics of feeding a crowd. What would Tim do with 5 loaves and 2 fish?
-- John 21: Jesus cooking fish on the beach for his disciples after the resurrection â€” the risen Lord of the universe made breakfast. Why does that matter?
-- Luke 15: The prodigal son's father kills the fattened calf â€” a celebration feast as the language of reconciliation
+- Genesis 18: Abraham's meal for three strangers — ancient hospitality, what he served, how he cooked it, why it mattered
+- Exodus 16: Manna — what did it taste like? ("like wafers made with honey" — Exodus 16:31). Was collecting it meditative? What did God teach through food provision?
+- Leviticus 2-3: Grain and fellowship offerings — these are *recipes*. Flour, oil, salt, fire. A chef reads this completely differently.
+- 1 Kings 17: The widow's last flour and oil — feeding someone when you have nothing left
+- John 6: Feeding 5,000 — logistics of feeding a crowd. What would Tim do with 5 loaves and 2 fish?
+- John 21: Jesus cooking fish on the beach for his disciples after the resurrection — the risen Lord of the universe made breakfast. Why does that matter?
+- Luke 15: The prodigal son's father kills the fattened calf — a celebration feast as the language of reconciliation
 
 **Tim's AI system prompt seeds:**
 ```
 Tim is 15 years old. He is an aspiring chef and a 3-sport athlete (cross country, basketball, track).
 He thinks in flavors, textures, craft, endurance, and teamwork.
 Connect this passage to food, cooking, hospitality, athletics, discipline, or physical creativity wherever genuine.
-Ask questions that are honest about real life at 15 â€” identity, belonging, purpose, doubt, competition, calling.
+Ask questions that are honest about real life at 15 — identity, belonging, purpose, doubt, competition, calling.
 Never be preachy. Be curious. Be real. Keep application questions grounded in his actual world.
 His journal entries may be short. That's fine. Ask one question so good he has to answer it.
 His father built this app for him. That relationship is sacred. Honor it.
 ```
 
-**The birthday feature â€” LOCKED IN:**
-On Tim's birthday, the day's study includes a note woven in by Claude â€” not a notification banner, not a popup. Something found inside the text itself. Claude knows his age, knows what he's been reading, knows what themes have been surfacing in his journals. It writes something to him. His father can also pre-write a birthday message that surfaces that day â€” a letter from dad, delivered through the Bible. This is the most personal thing the app does. It exists because a father is building this for his son.
+**The birthday feature — LOCKED IN:**
+On Tim's birthday, the day's study includes a note woven in by Claude — not a notification banner, not a popup. Something found inside the text itself. Claude knows his age, knows what he's been reading, knows what themes have been surfacing in his journals. It writes something to him. His father can also pre-write a birthday message that surfaces that day — a letter from dad, delivered through the Bible. This is the most personal thing the app does. It exists because a father is building this for his son.
 
 ---
 
-### ARCHETYPE 2 â€” The 45-Year-Old SAHM (Stay-at-Home Mom)
+### ARCHETYPE 2 — The 45-Year-Old SAHM (Stay-at-Home Mom)
 
 **Who she is:**
-- Reading at 5am before the kids wake up â€” 20 minutes, maybe 30 on a good day
+- Reading at 5am before the kids wake up — 20 minutes, maybe 30 on a good day
 - Has read the Bible before but wants to go deeper
 - Life context: marriage, parenting, household, community, probably exhausted
 - Wants to feel seen and not alone in the text
-- Devotional instinct â€” she wants something she can carry into her day
+- Devotional instinct — she wants something she can carry into her day
 
 **What her experience needs:**
-- Quiet, warm, unhurried UI â€” nothing urgent or gamified
+- Quiet, warm, unhurried UI — nothing urgent or gamified
 - Questions that connect to *her life*: patience, sacrifice, provision, motherhood, identity beyond roles
 - Commentary that surfaces women in Scripture as full human beings, not footnotes
 - Short enough to finish but substantial enough to matter
 - Passage connections to parenting, hospitality, community
-- AI tone: warm, substantive, quietly encouraging â€” not saccharine
+- AI tone: warm, substantive, quietly encouraging — not saccharine
 - Sharing: probably email or SMS to a friend or her husband
 
 ---
 
-### ARCHETYPE 3 â€” The 87-Year-Old Prayer Warrior
+### ARCHETYPE 3 — The 87-Year-Old Prayer Warrior
 
 **Who she is:**
 - Has read the Bible cover to cover multiple times
-- Prayer is her primary mode â€” she reads to pray, not just to understand
+- Prayer is her primary mode — she reads to pray, not just to understand
 - Deep familiarity with the text means she wants depth, not explanation
-- Hymn connections matter to her â€” she hears Psalm 23 and thinks of a specific hymn
-- Probably has physical limitations â€” font size matters enormously, navigation must be simple
-- Time is not a constraint â€” she may sit with one verse for 20 minutes
+- Hymn connections matter to her — she hears Psalm 23 and thinks of a specific hymn
+- Probably has physical limitations — font size matters enormously, navigation must be simple
+- Time is not a constraint — she may sit with one verse for 20 minutes
 
 **What her experience needs:**
-- Large font, high contrast, minimal UI clutter â€” accessibility first
-- No streaks or gamification â€” that's irrelevant to her
+- Large font, high contrast, minimal UI clutter — accessibility first
+- No streaks or gamification — that's irrelevant to her
 - Spurgeon and Matthew Henry front and center
-- "Pray this passage" mode â€” prompts to turn every verse into prayer
-- Connections to classic hymns (public domain â€” another dataset to consider)
-- AI tone: reverent, deep, historically rich â€” she wants scholarship, not simplification
-- Her journal entries are probably prayers â€” the journal should feel like a prayer journal
+- "Pray this passage" mode — prompts to turn every verse into prayer
+- Connections to classic hymns (public domain — another dataset to consider)
+- AI tone: reverent, deep, historically rich — she wants scholarship, not simplification
+- Her journal entries are probably prayers — the journal should feel like a prayer journal
 - Cross-references and TSK are features she'll actually use
 
 ---
 
-### ARCHETYPE 4 â€” The Skeptical Seeker (Gen Z / Millennial)
+### ARCHETYPE 4 — The Skeptical Seeker (Gen Z / Millennial)
 
 **Who they are:**
 - Maybe not a Christian yet, or newly curious
@@ -160,15 +160,15 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 - Probably uses the free tier first
 
 **What their experience needs:**
-- No assumed belief â€” questions that honor genuine doubt
-- Historical and archaeological context front and center â€” they want to know this is real
+- No assumed belief — questions that honor genuine doubt
+- Historical and archaeological context front and center — they want to know this is real
 - AI tone: intellectually honest, never defensive, genuinely curious alongside them
-- Word studies matter â€” they want to know what the text *actually* says in Greek
-- Cross-Reference Bingo might be the feature that hooks them â€” it feels like exploration not obligation
+- Word studies matter — they want to know what the text *actually* says in Greek
+- Cross-Reference Bingo might be the feature that hooks them — it feels like exploration not obligation
 
 ---
 
-### ARCHETYPE 5 â€” The Seminary Student / Serious Scholar
+### ARCHETYPE 5 — The Seminary Student / Serious Scholar
 
 **Who they are:**
 - Wants every tool: Greek/Hebrew, morphology, BDB, Thayer's, multiple translations
@@ -178,31 +178,31 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 - May use this to prep sermons or lessons
 
 **What their experience needs:**
-- Power-user mode â€” all the lexical tools front and center
+- Power-user mode — all the lexical tools front and center
 - Side-by-side translation comparison
 - Structured export (notes, quotes, references)
 - AI as a research partner, not a shepherd
 
 ---
 
-### ARCHETYPE 6 â€” The New Believer
+### ARCHETYPE 6 — The New Believer
 
 **Who they are:**
 - Maybe just started following Jesus, or just started reading the Bible seriously
-- Everything is new â€” doesn't know the stories, the structure, the context
+- Everything is new — doesn't know the stories, the structure, the context
 - Can feel overwhelmed or lost
 - Needs scaffolding and encouragement
 
 **What their experience needs:**
-- "What's happening here" context before every chapter â€” no assumed knowledge
-- Simple, clear questions â€” not intimidating
-- Celebration of small wins â€” reading Genesis 1 for the first time *should* feel like an achievement
+- "What's happening here" context before every chapter — no assumed knowledge
+- Simple, clear questions — not intimidating
+- Celebration of small wins — reading Genesis 1 for the first time *should* feel like an achievement
 - AI tone: friendly guide, patient, celebratory
 - Chronological reading plan as the default recommendation
 
 ---
 
-### The Personalization Engine â€” Cross-Cutting Concerns
+### The Personalization Engine — Cross-Cutting Concerns
 
 **Onboarding questionnaire seeds the profile:**
 - Name, age range, occupation/role
@@ -214,91 +214,91 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 - Specific connections they want: history, archaeology, science, culture, personal application
 
 **The profile grows over time:**
-- AI reads journal entries and infers what resonates â€” if Tim keeps writing about provision and identity, that gets weighted
+- AI reads journal entries and infers what resonates — if Tim keeps writing about provision and identity, that gets weighted
 - Highlight patterns reveal what arrests attention
 - Reading pace and completion rates inform how questions are pitched
 - User can manually update their profile any time
 
 **What gets passed to Claude per request:**
-- Full user profile summary (concise â€” token budget matters)
+- Full user profile summary (concise — token budget matters)
 - Current passage reference and cached text
 - User's reading history on related passages (brief)
 - Any prior journal entries on this chapter (for returning visits)
 - The specific generation task (questions / commentary / word study / chef lens / etc.)
 
-**The creative leap â€” AI-inferred personalization:**
+**The creative leap — AI-inferred personalization:**
 - After 30 chapters of journal entries, Claude can *know* Tim in a way the questionnaire never could
 - "Tim consistently engages with themes of worth and vocation. He struggles with application but asks sharp observational questions. His entries often mention his dad."
-- This becomes part of the system prompt automatically â€” a living portrait
+- This becomes part of the system prompt automatically — a living portrait
 - This is the real moat. No other app does this.
 
 ---
 
 ## Decisions Made
 
-### 1. ESV Licensing â€” NEEDS REVISIT
+### 1. ESV Licensing — NEEDS REVISIT
 - Initially personal use; now targeting commercial release
 - **Must contact Crossway** for a commercial license before launching publicly
 - Free API (api.esv.org) fine for development and personal use phase
 - **Fallback plan:** Launch with a public domain translation (KJV/WEB), add ESV as licensed tier later
 - Cache all passage text in DB to minimize API calls at scale
 
-### 2. Questions Model â€” RESOLVED
+### 2. Questions Model — RESOLVED
 - **Hybrid AI-generated + cached**
-- Question framework: Observation â†’ Interpretation â†’ Application (OIA pattern)
+- Question framework: Observation ? Interpretation ? Application (OIA pattern)
 - AI generates questions once per chapter on first access, result cached in DB
 - No regeneration cost per session
 
-### 3. Users â€” REVISED
+### 3. Users — REVISED
 - **Multi-user with authentication** (Supabase Auth)
 - Build starts with personal use (father + son) but schema supports many users from day one
 - Per-user: journal entries, reading progress, streaks, reading plan selection
 - No painful auth retrofit later
 
-### 4. Reading Order / Navigation Modes â€” RESOLVED
+### 4. Reading Order / Navigation Modes — RESOLVED
 - Book-by-book (default)
 - Chronological year plan
-- Topical (future â€” complex, deprioritized)
+- Topical (future — complex, deprioritized)
 - Single book selection
 - All modes coexist as selectable "plans"
 
-### 5. Study Experience â€” RESOLVED
+### 5. Study Experience — RESOLVED
 - Passage displayed **in-app** (via ESV API)
 - **Questions shown before reading** (to guide focus)
 - **Questions shown again after reading** (for reflection/response)
 - Users **save journal answers** per chapter
-- **Solo study only** â€” no community layer
+- **Solo study only** — no community layer
 
 ---
 
 ## Open Decisions
 
-### A. AI Provider â€” RESOLVED
-- **Anthropic Claude Sonnet 4.6** (claude-sonnet-4-5 or latest â€” confirm exact API model string at runtime)
+### A. AI Provider — RESOLVED
+- **Anthropic Claude Sonnet 4.5** (claude-sonnet-4-5 or latest — confirm exact API model string at runtime)
 - OpenAI key kept as fallback
 - Keys stored in `.env.local` only
 
-### B. Database â€” RESOLVED
+### B. Database — RESOLVED
 - **Supabase** (Postgres)
 - Stores: cached AI questions per chapter, journal entries, reading progress/streaks
 
-### C. Journal Entry Structure â€” RESOLVED
+### C. Journal Entry Structure — RESOLVED
 - Per-question response fields (one text area per OIA question)
 - Plus an open "additional notes" field per chapter
 
-### D. Progress Tracking â€” RESOLVED
+### D. Progress Tracking — RESOLVED
 - Chapter checkmark (studied)
 - **Streak tracking** included from the start
 
-### E. Mobile UX â€” REVISED
+### E. Mobile UX — REVISED
 - **Strategy: No App Store.** Pure web SaaS on Vercel. PWA for home screen installation on iOS and Android.
 - Keeps 100% revenue (no 30% Apple/Google cut)
 - No App Store review process or content restrictions
 - PWA gives installable, near-native feel on both platforms
-- Background audio is the one real PWA limitation â€” acceptable tradeoff
+- Background audio is the one real PWA limitation — acceptable tradeoff
 
-### Phase Model â€” CLARIFIED
-- **Phases are small and fast** â€” not "Phase 1: personal use" vs "Phase 2: commercial." Phases are 1-hour coding increments with Claude Opus 4.
+### Phase Model — CLARIFIED
+- **Phases are small and fast** — not "Phase 1: personal use" vs "Phase 2: commercial." Phases are 1-hour coding increments with Claude Opus 4.
 - Expect a dozen or more phases to get to a working personal-use app.
 - Commercial features (Stripe, etc.) are additional phases on top, not a separate project.
 - Each phase should produce something that runs and is usable.
@@ -312,50 +312,50 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 - **Frontend / Framework:** Next.js (App Router)
 - **Hosting:** Vercel
 - **Auth:** Supabase Auth
-- **Bible Text:** ESV API (api.esv.org) â€” free tier during dev; passage text cached in DB
-- **AI (questions/commentary/onboarding):** Anthropic Claude Sonnet 4.6 (`claude-sonnet-4-6`) via `@anthropic-ai/sdk`
+- **Bible Text:** ESV API (api.esv.org) — free tier during dev; passage text cached in DB
+- **AI (questions/commentary/onboarding):** Anthropic Claude Sonnet 4.5 (`claude-sonnet-4-5`) via `@anthropic-ai/sdk`
 - **Database:** Supabase (Postgres)
 - **PWA:** next-pwa or built-in Next.js PWA support
 - **Email delivery:** Resend (Next.js-native, simple API, free tier sufficient for personal use)
 
 ### Phase 2 (Commercial Release)
-- **Distribution:** Same Vercel web app â€” no App Store, no Google Play
+- **Distribution:** Same Vercel web app — no App Store, no Google Play
 - **Bible Text:** Commercial ESV license from Crossway (or public domain fallback)
-- **Payments:** Stripe â€” tiered subscriptions + a la carte feature unlocks
-- **Backend:** Same Next.js API routes / Supabase â€” no change
+- **Payments:** Stripe — tiered subscriptions + a la carte feature unlocks
+- **Backend:** Same Next.js API routes / Supabase — no change
 - **AI:** Switch to lower-cost Claude model (Haiku or equivalent) for question generation at scale
-- **PWA:** Remains the mobile delivery method â€” users install from browser
+- **PWA:** Remains the mobile delivery method — users install from browser
 
 ---
 
 ## Major Feature Threads (Deep Brainstorm Needed)
 
-### THREAD 1 â€” Personalization Engine
+### THREAD 1 — Personalization Engine
 - Every user gets a profile with interests, occupation, life stage, theological background
 - Tim's profile: aspiring chef, [father's son], personal history with the text
 - AI uses this profile as context when generating: questions, commentary, connections, application prompts
-- "Personalized study Bible" â€” same passage, different experience per user
+- "Personalized study Bible" — same passage, different experience per user
 - Could offer a onboarding flow: "Tell us about yourself" to seed the profile
-- Profile evolves over time â€” AI can learn from journal entries what resonates
+- Profile evolves over time — AI can learn from journal entries what resonates
 - **Big question:** How deep does personalization go? Per-chapter? Per-question? Per-commentary paragraph?
 - **Potential commercial angle:** Each user gets their own "edition" of the Bible with their name on it
 
-### THREAD 2 â€” Progress Map & Visual Bible Journey
-- Not a simple checklist â€” a rich visual experience
+### THREAD 2 — Progress Map & Visual Bible Journey
+- Not a simple checklist — a rich visual experience
 - Ideas to brainstorm:
-  - Interactive map of the ancient Near East â€” chapters/events pinned geographically
-  - Timeline view â€” place chapters in historical chronology with world history context
-  - "Books of the Bible" grid â€” color-coded by completion, genre, testament
-  - Archaeological layer â€” photos, artifacts, sites connected to passages
+  - Interactive map of the ancient Near East — chapters/events pinned geographically
+  - Timeline view — place chapters in historical chronology with world history context
+  - "Books of the Bible" grid — color-coded by completion, genre, testament
+  - Archaeological layer — photos, artifacts, sites connected to passages
   - A "you are here" in the grand narrative of Scripture
   - Personal stats: chapters read, words read, streak, highlights made, notes written
-- This could become a major differentiator â€” no other app does this well
+- This could become a major differentiator — no other app does this well
 
-### THREAD 3 â€” Cross-References + TSK (Treasury of Scripture Knowledge)
-- TSK is public domain â€” ~500,000 cross-references, the most comprehensive ever compiled
+### THREAD 3 — Cross-References + TSK (Treasury of Scripture Knowledge)
+- TSK is public domain — ~500,000 cross-references, the most comprehensive ever compiled
 - Standard ESV cross-references built in (from API)
 - TSK layered on top as a deeper research mode
-- **Cross-Reference Bingo** â€” built-in feature:
+- **Cross-Reference Bingo** — built-in feature:
   - Start at a random (or chosen) verse
   - Follow cross-references across the Bible like a trail
   - Track the path, see where you end up
@@ -363,11 +363,11 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
   - Could be a daily feature ("Today's trail starts at...")
 - TSK data needs to be imported, parsed, stored in Supabase (one-time import)
 
-### THREAD 4 â€” Commentary Layer
+### THREAD 4 — Commentary Layer
 - Claude generates a contextual intro paragraph per chapter (historical, literary, theological)
-- **Personalized connections** â€” using user profile, Claude finds relevant links:
+- **Personalized connections** — using user profile, Claude finds relevant links:
   - **Tim (chef):** food in the Bible, ancient cooking methods, ingredients, hospitality customs, food laws (Leviticus suddenly gets interesting), the Last Supper as a meal, feeding of the 5,000 as a catering event
-  - Future users: athlete, teacher, parent, lawyer, etc. â€” all get different connections
+  - Future users: athlete, teacher, parent, lawyer, etc. — all get different connections
 - **Spurgeon integration:**
   - "Morning and Evening" and "Treasury of David" and sermons are all public domain
   - Index Spurgeon's writings by passage reference
@@ -377,23 +377,23 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
   - Connect passages to known archaeological discoveries
   - Photos, site descriptions, artifact references
   - Could pull from public domain sources or curated dataset
-- Commentary layers are toggleable â€” user can turn on/off: Spurgeon, food connections, archaeology, etc.
+- Commentary layers are toggleable — user can turn on/off: Spurgeon, food connections, archaeology, etc.
 
-### THREAD 5 â€” Sharing & Messaging
+### THREAD 5 — Sharing & Messaging
 - Share a highlight + note via:
   - SMS (using device native share sheet on mobile)
   - Email
   - Copy to clipboard
-  - Internal messaging between users (for father/son dynamic â€” could be a "send to Dad" button)
-- Internal messaging is a big feature â€” essentially a Bible study discussion thread between two people tied to specific verses
+  - Internal messaging between users (for father/son dynamic — could be a "send to Dad" button)
+- Internal messaging is a big feature — essentially a Bible study discussion thread between two people tied to specific verses
 - "Send this verse to Tim" with your note attached
 - Could expand to small group use commercially
 
-### THREAD 6 â€” Audio
+### THREAD 6 — Audio
 - ESV has an audio Bible API
 - Must-have for commute/workout listening
-- Synced highlighting â€” highlight while audio plays (like karaoke)
-- Background playback (PWA limitation â€” another reason for Expo Phase 2)
+- Synced highlighting — highlight while audio plays (like karaoke)
+- Background playback (PWA limitation — another reason for Expo Phase 2)
 - Playback speed control
 
 ---
@@ -401,56 +401,56 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 ## Reading Experience Features
 
 ### Highlighting
-- Multiple colors (yellow, green, blue, pink â€” standard 4)
+- Multiple colors (yellow, green, blue, pink — standard 4)
 - Stored as position references against cached passage text (character offsets)
-- DB table: `highlights` â€” user_id, book, chapter, start_offset, end_offset, color, note
+- DB table: `highlights` — user_id, book, chapter, start_offset, end_offset, color, note
 - Tap highlight to view/edit inline note
 
 ### Annotations
-- **Unified with highlights** â€” a note is an optional field on a highlight
+- **Unified with highlights** — a note is an optional field on a highlight
 - Two levels: macro (chapter journal / OIA questions) and micro (inline highlight notes)
 - Inline indicator icon when a highlight has a note attached
 
 ### Typography & Display
-- **Font size control** â€” quick +/- or slider, persisted per user profile
-- **Dark mode from day one** â€” quick toggle, persisted per user profile
+- **Font size control** — quick +/- or slider, persisted per user profile
+- **Dark mode from day one** — quick toggle, persisted per user profile
 - Consider sepia mode as a third option (easy on eyes for long reading)
 
 ---
 
 ## Open Commercial Decisions
 
-### F. Monetization Model â€” IN ARCHITECTURE, DEFERRED
-- **Stripe** for payments/subscriptions â€” will be built into the architecture now, activated at commercial launch
-- Model TBD (one-time, freemium, or subscription) â€” decide before launch
+### F. Monetization Model — IN ARCHITECTURE, DEFERRED
+- **Stripe** for payments/subscriptions — will be built into the architecture now, activated at commercial launch
+- Model TBD (one-time, freemium, or subscription) — decide before launch
 - No Stripe integration needed during Phase 1 personal use
 
-### G. ESV Commercial License â€” OPEN
+### G. ESV Commercial License — OPEN
 - Contact Crossway at crossway.org before any public launch
 - Have public-domain fallback (KJV/WEB) ready
 
-### H. AI Cost Model at Scale â€” PARTIALLY RESOLVED
-- **Phase 1 (family only):** Claude Sonnet 4.6 â€” quality over cost, negligible usage
+### H. AI Cost Model at Scale — PARTIALLY RESOLVED
+- **Phase 1 (family only):** Claude Sonnet 4.5 — quality over cost, negligible usage
 - **Phase 2 (commercial):** Switch to a cheaper/faster model (Haiku or equivalent) for question generation at scale
-- Generate once per chapter, cache forever â€” cost scales with unique chapters not users
+- Generate once per chapter, cache forever — cost scales with unique chapters not users
 - Migration is a one-line model string change
 
 ---
 
 ## AI Model
-- **All generation (questions, commentary, onboarding, chat):** `claude-sonnet-4-6` (Claude Sonnet 4.6)
-- **Commercial phase:** Switch to Haiku-tier model for cost â€” one-line model string change
+- **All generation (questions, commentary, onboarding, chat):** `claude-sonnet-4-5` (Claude Sonnet 4.5)
+- **Commercial phase:** Switch to Haiku-tier model for cost — one-line model string change
 - **Coding sessions:** Claude Opus 4
-- **See:** [charles-persona.md](charles-persona.md) â€” the theological persona that shapes all AI generation
+- **See:** [charles-persona.md](charles-persona.md) — the theological persona that shapes all AI generation
 
 ---
 
 ## AI Model Strategy
-- **All generation (questions, commentary, onboarding, chat):** `claude-sonnet-4-6` (Claude Sonnet 4.6) â€” family phase
-- **Brainstorming/planning sessions:** Claude Sonnet 4.6 (you're talking to it now)
-- **Coding:** Claude Opus 4 (most capable â€” justified for a labor of love)
-- **Commercial phase:** Downgrade generation to Haiku-tier â€” one-line model string change
-- **Long-term:** Costs scale with unique chapter generations, not user count â€” very favorable economics
+- **All generation (questions, commentary, onboarding, chat):** `claude-sonnet-4-5` (Claude Sonnet 4.5) — family phase
+- **Brainstorming/planning sessions:** Claude Sonnet 4.5 (you're talking to it now)
+- **Coding:** Claude Opus 4 (most capable — justified for a labor of love)
+- **Commercial phase:** Downgrade generation to Haiku-tier — one-line model string change
+- **Long-term:** Costs scale with unique chapter generations, not user count — very favorable economics
 
 ---
 
@@ -460,41 +460,41 @@ On Tim's birthday, the day's study includes a note woven in by Claude â€” not a 
 - Initial brainstorm session
 - Identified ESV licensing as first critical constraint
 - Outlined three priority decisions: licensing path, questions model, accounts vs. local
-- All major decisions resolved â€” personal use, hybrid AI questions, journaling, in-app reading, solo study
-- AI provider: Anthropic (Claude Sonnet 4.6), with OpenAI as fallback
+- All major decisions resolved — personal use, hybrid AI questions, journaling, in-app reading, solo study
+- AI provider: Anthropic (Claude Sonnet 4.5), with OpenAI as fallback
 - Database: Supabase with Auth (multi-user from day one)
 - Journal: per-question response fields + open notes field per chapter
 - Progress: chapter checkmark + streaks
-- **Pivoted to SaaS web platform** â€” no App Store ever, PWA only, Vercel hosted, 100% revenue retained
-- Personalization engine is the core product â€” same Bible, radically different experience per user
+- **Pivoted to SaaS web platform** — no App Store ever, PWA only, Vercel hosted, 100% revenue retained
+- Personalization engine is the core product — same Bible, radically different experience per user
 - Feature tiers + a la carte purchasing to be designed
-- Tim is first user; his profile seeds the personalization model â€” chef AND 3-sport athlete (XC, basketball, track)
+- Tim is first user; his profile seeds the personalization model — chef AND 3-sport athlete (XC, basketball, track)
 - ESV licensing must be resolved before public launch
 - Six major feature threads identified; expanded to 31 brainstorm sessions
-- **Charles persona created** â€” modern voice, no archaic language, dynamic, sarcastic when warranted. Spurgeon's fire + MacArthur's spine + Ladd's Kingdom framework. See [charles-persona.md](charles-persona.md)
+- **Charles persona created** — modern voice, no archaic language, dynamic, sarcastic when warranted. Spurgeon's fire + MacArthur's spine + Ladd's Kingdom framework. See [charles-persona.md](charles-persona.md)
 - New sessions added: Psalms as their own category, Lament mode, Canonical shape/typology, Sermon notes, Community of the Book, Catechism integration, Tim's arc over time
 
-> **API keys stored in `.env.local` only â€” never commit that file.**
+> **API keys stored in `.env.local` only — never commit that file.**
 
 ---
 
-## Brainstorm Plan â€” Iterative Sessions
+## Brainstorm Plan — Iterative Sessions
 
 > Sessions can be added, removed, or reordered as the project evolves. Mark each DONE when resolved.
 
-### The Conversational Onboarding Concept â€” LOCKED IN
+### The Conversational Onboarding Concept — LOCKED IN
 
 **No forms. No questionnaires. A conversation.**
 
 When a new user signs up, they don't see a form. They see a single prompt from Claude:
 
-> *"Before we get started â€” tell me a little about yourself. I want to make sure this Bible feels like yours."*
+> *"Before we get started — tell me a little about yourself. I want to make sure this Bible feels like yours."*
 
 Claude then listens, asks maybe two or three natural follow-up questions, and silently builds the profile from what they share. The user never sees fields being filled. They just feel heard.
 
 **Why this is architecturally important:**
 - The same conversation engine is reused throughout the app (freeform chat per passage, word study explanation, etc.)
-- The profile isn't a static snapshot â€” it's the first chapter of an ongoing conversation
+- The profile isn't a static snapshot — it's the first chapter of an ongoing conversation
 - The tone Claude uses in onboarding sets the tone for the entire app experience
 
 **How it plays out per archetype:**
@@ -502,14 +502,14 @@ Claude then listens, asks maybe two or three natural follow-up questions, and si
 *Tim (15, chef):*
 > Claude: "Tell me a little about yourself."
 > Tim: "I'm 15, I want to be a chef someday."
-> Claude: "That's cool â€” like fine dining or more like your own place? And is this your first time really reading the Bible or have you done it before?"
+> Claude: "That's cool — like fine dining or more like your own place? And is this your first time really reading the Bible or have you done it before?"
 > Tim: "Both maybe. I've read some but not really studied it."
 > Claude builds: age=15, occupation_goal=chef, faith_stage=familiar_not_deep, interests=[food, cooking, creativity]
 
 *Prayer Warrior (87):*
 > Claude: "Tell me a little about yourself."
 > Her: "I've been reading this Book for 60 years. I just want to go deeper."
-> Claude: "Sixty years â€” you know this text. Are you looking to pray through it, study it more academically, or something else?"
+> Claude: "Sixty years — you know this text. Are you looking to pray through it, study it more academically, or something else?"
 > Her: "Pray it. I want to pray every word."
 > Claude builds: age_range=elderly, faith_stage=mature, primary_mode=prayer, tone=reverent, gamification=off, accessibility=large_font
 
@@ -522,34 +522,34 @@ Claude then listens, asks maybe two or three natural follow-up questions, and si
 *New Believer:*
 > Claude: "Tell me a little about yourself."
 > Her: "I just became a Christian like two months ago. I don't really know where to start."
-> Claude: "Two months in â€” that's exciting. Do you want me to help you find your footing, or do you already have a sense of where you want to begin?"
+> Claude: "Two months in — that's exciting. Do you want me to help you find your footing, or do you already have a sense of where you want to begin?"
 > Claude builds: faith_stage=new_believer, reading_plan=chronological, scaffolding=high, tone=friendly_guide, celebrate_milestones=true
 
 **Technical implementation:**
 - Onboarding is a short Claude API call with a structured extraction prompt
 - Claude's job: have a warm natural exchange, then output a JSON profile object silently
-- The conversation is 3-5 exchanges max â€” enough to feel real, not so much it's a commitment
+- The conversation is 3-5 exchanges max — enough to feel real, not so much it's a commitment
 - User can update their profile any time via a "Tell Claude more about yourself" chat in settings
 - Profile evolves automatically as journal entries accumulate (separate background process)
 
-**The opening line varies slightly by context â€” and the gifted flow is different:**
-- **Gifted account (dad sets up for Tim):** Setup flow asks dad: *"Tell me about the person you're giving this to. Tell me as much as you want."* No word limit. No fields. Dad writes it. Claude reads it and builds the profile seed. The more dad shares, the richer Tim's first experience. The birthday letter is written here too â€” waiting for its day.
+**The opening line varies slightly by context — and the gifted flow is different:**
+- **Gifted account (dad sets up for Tim):** Setup flow asks dad: *"Tell me about the person you're giving this to. Tell me as much as you want."* No word limit. No fields. Dad writes it. Claude reads it and builds the profile seed. The more dad shares, the richer Tim's first experience. The birthday letter is written here too — waiting for its day.
 - Dad's seeded greeting when Tim first opens it: *"Your dad set this up for you. He told me about you. Let's see what this Book has to say."*
-- Self-signup: "Before we get started â€” tell me a little about yourself."
-- Returning user who wants to update: "It's been a while â€” anything changed since we last talked?"
+- Self-signup: "Before we get started — tell me a little about yourself."
+- Returning user who wants to update: "It's been a while — anything changed since we last talked?"
 
 ---
 
-### SESSION 1 â€” User Profile Schema \& Personalization Architecture â€” IN PROGRESS
+### SESSION 1 — User Profile Schema \& Personalization Architecture — IN PROGRESS
 
-**Extraction method: Option B** â€” Guided conversation with hidden structure. Claude knows what fields it needs but asks naturally, doesn't repeat what's already been given, and follows the conversational thread rather than a script.
+**Extraction method: Option B** — Guided conversation with hidden structure. Claude knows what fields it needs but asks naturally, doesn't repeat what's already been given, and follows the conversational thread rather than a script.
 
-**Profile visibility:** Transparent but buried a few steps. User can see "here's what I know about you" and edit it â€” but it's not the first thing they see. A settings area: "Your Profile" or "What Charles knows about you."
+**Profile visibility:** Transparent but buried a few steps. User can see "here's what I know about you" and edit it — but it's not the first thing they see. A settings area: "Your Profile" or "What Charles knows about you."
 
-**Gifted account letter:** User's choice. Setup flow asks the giver: *"Would you like Tim to be able to read what you wrote about him someday?"* If yes, it's stored as a letter that can be revealed â€” on his birthday, or when he turns a certain age, or whenever dad decides. If no, it stays as background profile data only.
+**Gifted account letter:** User's choice. Setup flow asks the giver: *"Would you like Tim to be able to read what you wrote about him someday?"* If yes, it's stored as a letter that can be revealed — on his birthday, or when he turns a certain age, or whenever dad decides. If no, it stays as background profile data only.
 
-#### Category 1 â€” Identity Anchors (DETAILED)
-- **Name + Nickname:** Both available. Charles uses the preferred name. "Tim" vs "Timothy" vs "T" â€” matters to a 15-year-old.
+#### Category 1 — Identity Anchors (DETAILED)
+- **Name + Nickname:** Both available. Charles uses the preferred name. "Tim" vs "Timothy" vs "T" — matters to a 15-year-old.
 - **Age / Life Stage:** Not a form field. Inferred conversationally, but Claude is prompted to gently draw this out because younger users will under-share. Life stage options to surface as gentle prompts if needed:
   - Kid/Student (middle school)
   - High schooler
@@ -561,56 +561,56 @@ Claude then listens, asks maybe two or three natural follow-up questions, and si
   - Retired
   - Senior adult
   - "I'd rather not say" always available
-- **Vocation / Calling:** Multiple â€” people contain multitudes. Tim is a chef *and* an athlete *and* a student. Options include freeform + suggested tags. Also: "I'm still figuring that out" is a completely valid answer and Charles treats it as such â€” actually *that* answer opens up rich territory.
+- **Vocation / Calling:** Multiple — people contain multitudes. Tim is a chef *and* an athlete *and* a student. Options include freeform + suggested tags. Also: "I'm still figuring that out" is a completely valid answer and Charles treats it as such — actually *that* answer opens up rich territory.
 - **Key Relationships:** Who are they reading with or for? Parent, spouse, child, friend, small group, alone. Family sharing mode: a family unit can link accounts, share reading plans, see each other's progress (opt-in, per-member). Accountability partnerships. This is the seed of the small group commercial feature.
 
-#### Category 2 â€” Faith Posture (DETAILED)
-- **Faith stage:** Conversationally extracted â€” never asked bluntly. Charles listens for signals.
+#### Category 2 — Faith Posture (DETAILED)
+- **Faith stage:** Conversationally extracted — never asked bluntly. Charles listens for signals.
   - New believer / just started
   - Growing, been at this a while
   - Mature, deep roots
   - Skeptical / curious / not sure
   - Returning after time away
-  - "It's complicated" â€” Charles just says "fair enough" and calibrates from what comes next
+  - "It's complicated" — Charles just says "fair enough" and calibrates from what comes next
 - **Church background:** Shapes vocabulary and assumptions. Not a judgment.
 - **Theological depth:** Spectrum from "just help me understand what I'm reading" to "I want the Greek." Charles infers and adjusts.
 
-#### Family Sharing & Privacy Model â€” RESOLVED
-- **Everything is private by default.** Journal entries, highlights, annotations, reading progress â€” all personal.
+#### Family Sharing & Privacy Model — RESOLVED
+- **Everything is private by default.** Journal entries, highlights, annotations, reading progress — all personal.
 - **Sharing is always opt-in, always granular.** User chooses: share this highlight, share my progress, share this journal entry. Not a blanket setting.
-- Family unit: linked accounts can share a reading plan and see each other's completion progress â€” but only if both members opt in individually.
+- Family unit: linked accounts can share a reading plan and see each other's completion progress — but only if both members opt in individually.
 - Internal messaging (verse/highlight sends) is initiated by the sender, not exposed automatically.
 - No family member ever sees another's journal unless the writer explicitly shares that specific entry.
 - This model scales to small groups and commercial use identically.
 
-#### "Just Read" Mode â€” RESOLVED
+#### "Just Read" Mode — RESOLVED
 - Tim (or anyone) taps "Just Read" on the home screen or chapter screen.
 - Charles adjusts his approach: no pre-reading study questions front and center, lighter touch.
-- But questions don't disappear â€” they're available, just collapsed or minimal. Reading without any engagement option is too passive; the questions are still there if he wants them.
+- But questions don't disappear — they're available, just collapsed or minimal. Reading without any engagement option is too passive; the questions are still there if he wants them.
 - Journal is still accessible.
-- Charles's commentary is still present but shorter â€” a single orienting sentence rather than a paragraph.
+- Charles's commentary is still present but shorter — a single orienting sentence rather than a paragraph.
 - Essentially: reduced friction, not zero engagement. The text is still doing its work.
-- **Goals are changeable day by day.** Not locked at onboarding. The home screen can have a "what are you here for today?" soft prompt â€” devotional warmth, deep study, just read, I need something specific.
+- **Goals are changeable day by day.** Not locked at onboarding. The home screen can have a "what are you here for today?" soft prompt — devotional warmth, deep study, just read, I need something specific.
 - **Primary goal types:** Devotional / Deep study / Read through the whole Bible / Follow a plan / One book / Hard season
-- **Time budget:** 10 / 20 / 30+ min â€” shapes question depth and commentary length
+- **Time budget:** 10 / 20 / 30+ min — shapes question depth and commentary length
 - **Cadence:** Daily / Few times a week / Whenever
 - **Reminders / Delivery options:**
   - Push notification at a chosen time (PWA, limited on iOS)
   - SMS reminder (via Twilio or similar)
   - Email reminder
-  - **Email the day's reading** â€” actual passage + questions delivered to inbox. Day 1 feature. Email service: Resend (simple, Next.js-native). Format: passage text, 2-3 pre-reading questions, Charles's context note, "Open in app" button.
+  - **Email the day's reading** — actual passage + questions delivered to inbox. Day 1 feature. Email service: Resend (simple, Next.js-native). Format: passage text, 2-3 pre-reading questions, Charles's context note, "Open in app" button.
   - All reminders optional, user-configured, off by default
 
-#### Category 4 â€” Personalization Seeds (DETAILED)
+#### Category 4 — Personalization Seeds (DETAILED)
 - **Interests:** Multi-select + freeform. Starter tags: cooking, athletics, medicine, law, parenting, music, visual art, history, science, outdoors, business, teaching, military, farming, engineering. Room to add freely. This list grows with the product.
-- **Current life context:** Opt-in only. User chooses to "give an update" â€” not prompted automatically. A button: "Tell Charles what's going on in your life right now." This feeds into the living portrait.
-- **Critical guardrail:** This app is NOT a counselor. If a user's update contains language suggesting crisis, self-harm, grief, or serious mental health need â€” Charles acknowledges it warmly, does not engage as a therapist, and gently points to appropriate resources. The app stays in its lane. Charles says: "I'm a Bible study tool, not a counselor â€” but God's Word has met people in exactly this place before. Let's find that together." Then gets out of the clinical territory.
+- **Current life context:** Opt-in only. User chooses to "give an update" — not prompted automatically. A button: "Tell Charles what's going on in your life right now." This feeds into the living portrait.
+- **Critical guardrail:** This app is NOT a counselor. If a user's update contains language suggesting crisis, self-harm, grief, or serious mental health need — Charles acknowledges it warmly, does not engage as a therapist, and gently points to appropriate resources. The app stays in its lane. Charles says: "I'm a Bible study tool, not a counselor — but God's Word has met people in exactly this place before. Let's find that together." Then gets out of the clinical territory.
 - **Tone:** Dynamic. Charles infers it from the conversation and from journal entry patterns over time. User can also set a preference but it's not mandatory.
 
-#### Category 5 â€” Feature Defaults (DETAILED)
+#### Category 5 — Feature Defaults (DETAILED)
 Set by inferred archetype at onboarding, fully adjustable any time:
 - Spurgeon layer: on/off
-- Gamification (streaks, XP, achievements): on/off â€” off by default for older archetypes
+- Gamification (streaks, XP, achievements): on/off — off by default for older archetypes
 - Lament mode availability: always available, never pushed
 - Commentary depth: brief / standard / deep
 - Font size: standard / large / extra large
@@ -618,78 +618,78 @@ Set by inferred archetype at onboarding, fully adjustable any time:
 - Highlight colors: all on by default
 - Notification preferences: all off by default
 
-#### Token Strategy â€” RESOLVED
-- **Tim / personal phase:** Wide open. Generous context. No token optimization. The profile, the passage, the living portrait, prior journal entries on this chapter â€” all of it goes in. This is a labor of love, not a cost center.
+#### Token Strategy — RESOLVED
+- **Tim / personal phase:** Wide open. Generous context. No token optimization. The profile, the passage, the living portrait, prior journal entries on this chapter — all of it goes in. This is a labor of love, not a cost center.
 - **Commercial / scale phase:** Switch to Haiku-tier model + compressed prompts. One-line model change. But that's future-Charles's problem.
 - **System prompt structure (three layers):**
-  - Layer 1 â€” Static persona (~400 tokens): Charles's voice, theology, banned phrases, counselor guardrail
-  - Layer 2 â€” Full living portrait (~500-800 tokens for Tim): not a compressed paragraph â€” a rich, specific description. Gets regenerated every 5-8 journal entries. As detailed as it needs to be.
-  - Layer 3 â€” Session context: passage text, book/chapter, reading mode, any prior journal on this chapter, any recent "life update" the user gave
+  - Layer 1 — Static persona (~400 tokens): Charles's voice, theology, banned phrases, counselor guardrail
+  - Layer 2 — Full living portrait (~500-800 tokens for Tim): not a compressed paragraph — a rich, specific description. Gets regenerated every 5-8 journal entries. As detailed as it needs to be.
+  - Layer 3 — Session context: passage text, book/chapter, reading mode, any prior journal on this chapter, any recent "life update" the user gave
 - **Total per call for Tim:** ~2,000-3,000 tokens of context. Fine. Worth it.
 
-#### Auth â€” RESOLVED
+#### Auth — RESOLVED
 - **Both magic links AND username/password.** User chooses at signup.
-- Magic links: lower friction, great for mobile, no password to forget â€” default recommendation
+- Magic links: lower friction, great for mobile, no password to forget — default recommendation
 - Username/password: for users who want it, commercial standard
 - Supabase Auth handles both natively
 
-#### Tone & Energy â€” RESOLVED
+#### Tone & Energy — RESOLVED
 - **This app is NOT a quiet contemplation app by default.** Theology is fun, engaging, and edifying. Charles has energy. The UI has life.
 - Quiet/contemplative mode exists (lament mode, Just Read mode) but it's a gear the user shifts into, not the default setting.
 - The home screen should feel like opening something you're excited about, not entering a library.
 - Charles's default register: engaged, curious, occasionally surprising. The text is the most interesting book ever written and Charles acts like it.
 
-#### Onboarding Conversation â€” FINAL SPEC
+#### Onboarding Conversation — FINAL SPEC
 - Natural, back-and-forth, no pressure to be brief
-- User can ramble, circle back, change their mind â€” Claude follows the thread
-- Not 3-5 exchanges â€” **as long as it needs to be.** If Tim wants to talk for 10 exchanges, great. More profile data, better experience.
+- User can ramble, circle back, change their mind — Claude follows the thread
+- Not 3-5 exchanges — **as long as it needs to be.** If Tim wants to talk for 10 exchanges, great. More profile data, better experience.
 - No "completing onboarding" progress bar. No "Step 2 of 4." Just a conversation.
-- When Claude has enough to work with, it finds a natural moment to close: *"Alright â€” I think I've got a good sense of you. Let's get started."*
+- When Claude has enough to work with, it finds a natural moment to close: *"Alright — I think I've got a good sense of you. Let's get started."*
 - Extraction call fires silently after the conversation ends
 - Profile is available immediately for the first chapter
 
-#### SESSION 1 â€” COMPLETE âœ“
+#### SESSION 1 — COMPLETE ?
 
 
 
-### SESSION 2 â€” Supabase Schema Design âœ“ COMPLETE
-Design every table before a line of code is written. **Full schema documented in `sql/` folder (files 01â€“11).**
+### SESSION 2 — Supabase Schema Design ? COMPLETE
+Design every table before a line of code is written. **Full schema documented in `sql/` folder (files 01–11).**
 
 **Tables designed (22+ tables across 11 files):**
-- `sql/01-core-auth-profiles.md` â€” profiles, profile_interests, user_life_updates, family_units, family_members
-- `sql/02-reading-plans.md` â€” reading_plans, plan_chapters, user_reading_plans
-- `sql/03-bible-content.md` â€” chapters (ESV text cache), questions (OIA bank), personalized_content (AI-generated, keyed to user+chapter, profile_hash for stale detection)
-- `sql/04-journal.md` â€” journal_entries, journal_answers
-- `sql/05-highlights-bookmarks.md` â€” highlights (6 colors + inline annotations), bookmarks, messages (AI chat threads per passage)
-- `sql/06-progress-gamification.md` â€” streaks, achievements, user_achievements, memory_verses (SM-2 spaced repetition), prayer_journal
-- `sql/07-source-data.md` â€” tsk_references, spurgeon_index, catechism_entries, typology_connections, bible_dictionary_entries, commentary_entries, hymn_index
-- `sql/08-word-study.md` â€” strongs_lexicon, morphology_data, word_occurrences
-- `sql/09-geography-archaeology.md` â€” geographic_locations, passage_locations, archaeological_sites
-- `sql/10-notifications-settings.md` â€” notification_settings, user_display_settings, feature_toggles
-- `sql/11-extensibility.md` â€” cross_reference_trails, trail_steps, audio_progress, integrations, onboarding_conversations
+- `sql/01-core-auth-profiles.md` — profiles, profile_interests, user_life_updates, family_units, family_members
+- `sql/02-reading-plans.md` — reading_plans, plan_chapters, user_reading_plans
+- `sql/03-bible-content.md` — chapters (ESV text cache), questions (OIA bank), personalized_content (AI-generated, keyed to user+chapter, profile_hash for stale detection)
+- `sql/04-journal.md` — journal_entries, journal_answers
+- `sql/05-highlights-bookmarks.md` — highlights (6 colors + inline annotations), bookmarks, messages (AI chat threads per passage)
+- `sql/06-progress-gamification.md` — streaks, achievements, user_achievements, memory_verses (SM-2 spaced repetition), prayer_journal
+- `sql/07-source-data.md` — tsk_references, spurgeon_index, catechism_entries, typology_connections, bible_dictionary_entries, commentary_entries, hymn_index
+- `sql/08-word-study.md` — strongs_lexicon, morphology_data, word_occurrences
+- `sql/09-geography-archaeology.md` — geographic_locations, passage_locations, archaeological_sites
+- `sql/10-notifications-settings.md` — notification_settings, user_display_settings, feature_toggles
+- `sql/11-extensibility.md` — cross_reference_trails, trail_steps, audio_progress, integrations, onboarding_conversations
 
 **Design principles applied:** UUIDs everywhere, `meta jsonb` extensibility on all tables, profile_hash for AI content cache invalidation, RLS on all user tables, soft deletes on precious data, subscription_tier hooks for commercial gating.
 
-### SESSION 3 â€” AI Prompt Architecture âœ“ COMPLETE
+### SESSION 3 — AI Prompt Architecture ? COMPLETE
 
 #### 4 Distinct Prompt Call Types
 
-1. **Content Generation** â€” fires once per `(user Ã— chapter)`, result cached in `personalized_content`. Generates intro hook, life-connections, all 5 OIA questions, closing. Single call, one context window. Stale when `profile_hash` changes.
-2. **Answer Response** â€” fires when user submits an OIA answer. Charles reads the user's response and replies. NOT cached. Length and depth mirror the user's answer â€” a one-liner gets a short reply; a genuinely thoughtful answer earns a full engagement.
-3. **Chat** â€” Session 18's freeform "ask me anything about this passage." Stateful. Pulls message thread from `messages` table. Always `claude-sonnet-4-6`.
-4. **Living Portrait Regeneration** â€” background job, fires every **5-8 journal entries**. Reads recent entries + existing portrait + full profile â†’ produces richer updated portrait. Writes both `living_portrait` (text, for prompt injection) and `living_portrait_json` (structured, for app display).
+1. **Content Generation** — fires once per `(user × chapter)`, result cached in `personalized_content`. Generates intro hook, life-connections, all 5 OIA questions, closing. Single call, one context window. Stale when `profile_hash` changes.
+2. **Answer Response** — fires when user submits an OIA answer. Charles reads the user's response and replies. NOT cached. Length and depth mirror the user's answer — a one-liner gets a short reply; a genuinely thoughtful answer earns a full engagement.
+3. **Chat** — Session 18's freeform "ask me anything about this passage." Stateful. Pulls message thread from `messages` table. Always `claude-sonnet-4-5`.
+4. **Living Portrait Regeneration** — background job, fires every **5-8 journal entries**. Reads recent entries + existing portrait + full profile ? produces richer updated portrait. Writes both `living_portrait` (text, for prompt injection) and `living_portrait_json` (structured, for app display).
 
-#### Profile Briefing â€” How Charles Knows Who He's Talking To
-- **Primary:** Option C â€” `living_portrait` text injected directly into the system prompt as the user description block. Already written in natural language, already in Charles's register.
-- **Fallback:** Option B â€” server-side rendered template from profile fields, used when portrait hasn't been generated yet (new users).
-- **Portrait must be very robust** â€” not a summary paragraph. A multi-section document covering: who this person is, their identity lenses (chef, athlete), faith journey, observed study patterns, current life season, inferred tone preferences, family context, notable things they've said or noticed. The `living_portrait_json` stores these sections structurally; `living_portrait` is the rendered prompt string.
+#### Profile Briefing — How Charles Knows Who He's Talking To
+- **Primary:** Option C — `living_portrait` text injected directly into the system prompt as the user description block. Already written in natural language, already in Charles's register.
+- **Fallback:** Option B — server-side rendered template from profile fields, used when portrait hasn't been generated yet (new users).
+- **Portrait must be very robust** — not a summary paragraph. A multi-section document covering: who this person is, their identity lenses (chef, athlete), faith journey, observed study patterns, current life season, inferred tone preferences, family context, notable things they've said or noticed. The `living_portrait_json` stores these sections structurally; `living_portrait` is the rendered prompt string.
 - Target length: 500-800 tokens for Tim. Enough that Claude genuinely knows this person.
 
-#### OIA Question Model â€” Model B: Fully AI-Generated, All 5 Questions
-- All 5 questions generated by Claude per `(user Ã— chapter)`. No bank. No curation. Fully personalized.
+#### OIA Question Model — Model B: Fully AI-Generated, All 5 Questions
+- All 5 questions generated by Claude per `(user × chapter)`. No bank. No curation. Fully personalized.
 - **Observation is the cornerstone.** Good interpretation is impossible without exhaustive observation. The OIA method demands you know what the text *says* before you ask what it *means*. Rushing to interpretation is the most common Bible study failure.
 - Observe questions must surface: vocabulary analysis, word order and grammatical choices, sentence/paragraph structure and patterns, historical and cultural context, identification of literary devices, who/what/when/where/why of every claim in the passage.
-- **Question distribution: 3 Observe, 1 Interpret, 1 Apply** â€” deliberately front-weighted toward observation.
+- **Question distribution: 3 Observe, 1 Interpret, 1 Apply** — deliberately front-weighted toward observation.
 - All 5 generated in a single call for thematic coherence. The questions should feel like a unified progression, not 5 independent thoughts.
 
 #### JSON Response Contract
@@ -699,7 +699,7 @@ Design every table before a line of code is written. **Full schema documented in
   "connections": [
     {
       "type": "life | athletic | season | historical",
-      "label": "short display label â€” 'In the Kitchen' / 'On the Course'",
+      "label": "short display label — 'In the Kitchen' / 'On the Course'",
       "text": "2-3 sentences connecting this passage to user's life"
     }
   ],
@@ -713,34 +713,34 @@ Design every table before a line of code is written. **Full schema documented in
   "closing": "Charles's sign-off (1-2 sentences)"
 }
 ```
-Questions array is ordered: 3 Observe â†’ 1 Interpret â†’ 1 Apply. `answer_prompt` is the gentle nudge visible beneath each question â€” not the answer, just a thinking frame.
+Questions array is ordered: 3 Observe ? 1 Interpret ? 1 Apply. `answer_prompt` is the gentle nudge visible beneath each question — not the answer, just a thinking frame.
 
-#### Counselor Guardrail â€” Final Language
-> *"If the user expresses suicidal ideation, self-harm, abuse, or any crisis language, respond with genuine warmth, provide the 988 Suicide & Crisis Lifeline (call or text 988, US), and if the user may be outside the US note that local crisis resources are available. Do not attempt to counsel. Do not engage the theological angle. Express care, give the resources, stop. For grief, anxiety, depression, or hard seasons â€” engage pastorally and Scripturally with warmth. Do not diagnose, prescribe, or provide clinical guidance. You are a theological companion, not a therapist."*
-- Safety resources always given â€” no softening, no exceptions.
+#### Counselor Guardrail — Final Language
+> *"If the user expresses suicidal ideation, self-harm, abuse, or any crisis language, respond with genuine warmth, provide the 988 Suicide & Crisis Lifeline (call or text 988, US), and if the user may be outside the US note that local crisis resources are available. Do not attempt to counsel. Do not engage the theological angle. Express care, give the resources, stop. For grief, anxiety, depression, or hard seasons — engage pastorally and Scripturally with warmth. Do not diagnose, prescribe, or provide clinical guidance. You are a theological companion, not a therapist."*
+- Safety resources always given — no softening, no exceptions.
 
 #### Token Strategy
-- **Tim:** `claude-sonnet-4-6`, one call, all 5 questions, full context â€” no compromise.
-- **Commercial users at scale:** `claude-haiku` for content generation (same prompt architecture, cheaper model). Answer response and chat always stay on Sonnet â€” those are real-time interactions that can't afford to feel cheap.
+- **Tim:** `claude-sonnet-4-5`, one call, all 5 questions, full context — no compromise.
+- **Commercial users at scale:** `claude-haiku` for content generation (same prompt architecture, cheaper model). Answer response and chat always stay on Sonnet — those are real-time interactions that can't afford to feel cheap.
 - Content generation is the only call that can be downtiered. Everything else is live.
 
-### SESSION 4 â€” Progress Map & Visual Bible Journey âœ“ COMPLETE
+### SESSION 4 — Progress Map & Visual Bible Journey ? COMPLETE
 
 **No AI image generation anywhere in this feature.** Sacred text + AI inconsistency = wrong tool. All visuals are SVG, CSS, typography, and designed iconography.
 
-#### Six Active Concepts (concept 5 â€” AI chapter illustrations â€” cut)
+#### Six Active Concepts (concept 5 — AI chapter illustrations — cut)
 
-**1. Fog of War Map** (always on â€” the core geographic view)
+**1. Fog of War Map** (always on — the core geographic view)
 - The ancient Near East map starts completely black/fogged
 - Every passage read that mentions a location lights up that region from darkness
 - Cities appear, roads emerge, coastlines glow in as you read the passages that mention them
-- By the time you've read the whole Bible, the entire world is illuminated â€” a world you personally unveiled
-- Tap any revealed location â†’ key events there, dictionary entry, what you've read set there
+- By the time you've read the whole Bible, the entire world is illuminated — a world you personally unveiled
+- Tap any revealed location ? key events there, dictionary entry, what you've read set there
 - Archaeological layer toggle: pins appear at excavated sites with brief description + Scripture connection
 - Tech: Custom SVG map, CSS masking layer, driven by `geographic_locations` + `passage_locations` tables. No API cost.
 
-**2. Cinematic Universe â€” Bible as Phases**
-- The 66 books are organized into Phases (not generic genres â€” narrative phases of the one story):
+**2. Cinematic Universe — Bible as Phases**
+- The 66 books are organized into Phases (not generic genres — narrative phases of the one story):
   - Phase 1: Origins (Pentateuch)
   - Phase 2: The Kingdom Era (History books)
   - Phase 3: Wisdom & Worship (Poetry)
@@ -756,12 +756,12 @@ Questions array is ordered: 3 Observe â†’ 1 Interpret â†’ 1 Apply. `answer_promp
 **3. Character Collection**
 - 3,237+ named people in the Bible. Every first mention = card earned.
 - **No AI portraits. No faces.** Cards are heraldic: character name in large display type, role, era, key verse, and a **calling symbol** (SVG icon): crown for kings, scroll for prophets, fishing net for apostles, flame for Spirit-filled, sword for warriors, harp for musicians, measuring line for builders, etc.
-- Rarity tiers (vocabulary TBD â€” see below): tiered by narrative significance, card border and icon treatment scales up accordingly.
+- Rarity tiers (vocabulary TBD — see below): tiered by narrative significance, card border and icon treatment scales up accordingly.
 - Special "Athlete of Faith" badge: David, Elijah (outran a chariot), Paul (runner metaphors), Samson, Jonathan. Tim's collection surfaces these first.
 - Cards filterable by: testament, era, role, tribe/nation, rarity.
-- Character data sourced from public domain Bible dictionaries (Easton's, Smith's, ISBE) â€” already in `bible_dictionary_entries` table.
+- Character data sourced from public domain Bible dictionaries (Easton's, Smith's, ISBE) — already in `bible_dictionary_entries` table.
 
-**4. Identity-Adaptive Visual Themes** â€” DAY 1 FEATURE
+**4. Identity-Adaptive Visual Themes** — DAY 1 FEATURE
 - Same data layer, radically different visual presentation based on user identity. Selected during onboarding or changed in settings. Non-default themes as premium unlock.
   - **Tim (chef + runner):** Books Grid = race course with mile markers. Completion % = runner silhouette moving down the course. Finishing a book = split time drop.
   - **SAHM:** Home with many rooms. Books = rooms filling with warm light. House grows wings as she reads. Foundation = Creation, Rooftop view = Revelation.
@@ -770,9 +770,9 @@ Questions array is ordered: 3 Observe â†’ 1 Interpret â†’ 1 Apply. `answer_promp
   - **Seeker/Skeptic:** 66-piece puzzle assembling from outside in. Shape of the puzzle = a cross. Each piece snapping = a book complete.
 - Additional themes can be added post-launch without DB changes (pure frontend).
 
-**6. Living Constellation Sky** (alternate ambient view â€” not the default)
+**6. Living Constellation Sky** (alternate ambient view — not the default)
 - 66 books as stars. Brightness = % of book read. Color = section (blue = Law, gold = Poetry, red = Prophecy, white = Gospels).
-- Finishing a book: star pulses, constellation forms â€” visible shape from biblical imagery.
+- Finishing a book: star pulses, constellation forms — visible shape from biblical imagery.
 - Full sky when all 66 books read = stunning. The 87-year-old Prayer Warrior lives here.
 - Tech: Canvas or lightweight Three.js. Star positions are fixed (designed). Constellation paths are SVG overlay. No API cost.
 
@@ -781,35 +781,35 @@ Questions array is ordered: 3 Observe â†’ 1 Interpret â†’ 1 Apply. `answer_promp
 - Lateral unlocks: reading the Tabernacle chapters (Ex 25-40) unlocks a "Architecture of Holiness" theology node. Reading Isaiah 53 unlocks "Suffering Servant" typology node. Reading Romans 3-5 unlocks "Doctrine of Justification" mastery node.
 - Node color codes: Blue = narrative unlock, Gold = theological concept unlock, Green = cross-reference unlock, Red = hard passage ("you've earned the tools now").
 - Makes the Bible's dependency structure visible and turns prerequisite reading into reward rather than obstacle.
-- Tim gets this immediately â€” it's a tech tree.
+- Tim gets this immediately — it's a tech tree.
 
 #### Open Question: Rarity Tier Vocabulary
-- Standard gaming language (Common/Rare/Epic/Legendary/Mythic) â€” familiar but possibly jarring in a Bible context
-- Alternative: Servant / Faithful / Mighty / Renowned / Eternal â€” maps to biblical honor language
+- Standard gaming language (Common/Rare/Epic/Legendary/Mythic) — familiar but possibly jarring in a Bible context
+- Alternative: Servant / Faithful / Mighty / Renowned / Eternal — maps to biblical honor language
 - Need a decision before UI is built. Leaning toward **Faithful / Renowned / Mighty / Eternal** with Christ as a separate "The Word" tier.
 
 #### Personal Stats Dashboard
-Accessible from the progress screen â€” secondary panel. Chapters read / % of Bible, current + longest streak, study time, most active book, memory verses mastered, journal count, questions answered.
+Accessible from the progress screen — secondary panel. Chapters read / % of Bible, current + longest streak, study time, most active book, memory verses mastered, journal count, questions answered.
 
-### SESSION 5 â€” TSK + Cross-Reference Bingo âœ“ COMPLETE
+### SESSION 5 — TSK + Cross-Reference Bingo ? COMPLETE
 
 #### What the TSK is
 ~500K cross-reference pairs. Every verse linked to every other verse it echoes, quotes, fulfills, or illuminates. It is the Bible's internal dialogue across 1,500 years of writing. Stored in `tsk_references` (07), indexed both directions. Pre-computed density stats in `tsk_verse_stats` for gutter display.
 
 #### The Four Trail Modes
 
-1. **Daily Trail** â€” **Two per day, morning and evening**, mirroring Spurgeon's Morning & Evening rhythm. AI-selected based on what the reading community is currently in (majority reading plan position). Starting verse changes at midnight. Community stat shown: "Today 847 people started at Isaiah 53:5. The longest trail reached 34 verses." Wordle energy â€” daily, shared, creates conversation.
+1. **Daily Trail** — **Two per day, morning and evening**, mirroring Spurgeon's Morning & Evening rhythm. AI-selected based on what the reading community is currently in (majority reading plan position). Starting verse changes at midnight. Community stat shown: "Today 847 people started at Isaiah 53:5. The longest trail reached 34 verses." Wordle energy — daily, shared, creates conversation.
 
-2. **Thread the Needle** â€” **Launch feature.** Given two verses that seem unconnected, find the shortest TSK path between them. Speed + fewest hops = score. Puzzles curated by us. Hard and delightful simultaneously for Scholar and competitive Tim archetypes.
+2. **Thread the Needle** — **Launch feature.** Given two verses that seem unconnected, find the shortest TSK path between them. Speed + fewest hops = score. Puzzles curated by us. Hard and delightful simultaneously for Scholar and competitive Tim archetypes.
 
-3. **Free Exploration Trail** â€” On any reading screen, tap the cross-reference icon on any verse. Slide-up panel shows TSK references grouped by type (quotation, echo, fulfillment, parallel). Tap any to jump. Tap "Add to Trail" to keep building. Persistent trail pill at bottom of screen shows step count. Seminary students disappear into this for two hours.
+3. **Free Exploration Trail** — On any reading screen, tap the cross-reference icon on any verse. Slide-up panel shows TSK references grouped by type (quotation, echo, fulfillment, parallel). Tap any to jump. Tap "Add to Trail" to keep building. Persistent trail pill at bottom of screen shows step count. Seminary students disappear into this for two hours.
 
-4. **Canonical Constellation Visualization** â€” At trail completion, verses are rendered as a D3.js force-directed graph: nodes = verses, edges = TSK connections. SVG cached to `cross_reference_trails.svg_cache`. Completed trails become named constellations in the user's Session 4 night sky. "The Isaiah-Romans Trail."
+4. **Canonical Constellation Visualization** — At trail completion, verses are rendered as a D3.js force-directed graph: nodes = verses, edges = TSK connections. SVG cached to `cross_reference_trails.svg_cache`. Completed trails become named constellations in the user's Session 4 night sky. "The Isaiah-Romans Trail."
 
 #### The Thread System (replaces "Bingo" framing)
-- Each book has **12 canonical threads** â€” recurring themes the TSK reveals (atonement, covenant, the name of God, rest, exile, etc.) stored in `thread_definitions`.
-- When a trail touches all instances of a thread across both testaments â€” user has **"Pulled a Thread."**
-- Pull all 12 threads in a book = Thread Complete. Book tile on Cinematic Universe screen gains a woven pattern overlay â€” literally showing threads traced.
+- Each book has **12 canonical threads** — recurring themes the TSK reveals (atonement, covenant, the name of God, rest, exile, etc.) stored in `thread_definitions`.
+- When a trail touches all instances of a thread across both testaments — user has **"Pulled a Thread."**
+- Pull all 12 threads in a book = Thread Complete. Book tile on Cinematic Universe screen gains a woven pattern overlay — literally showing threads traced.
 - Long-term structure for what would otherwise be random exploration. Always something specific to hunt: "I'm two verses short of pulling the 'Rest' thread through Hebrews."
 
 #### Reading Screen UI
@@ -818,73 +818,73 @@ Accessible from the progress screen â€” secondary panel. Chapters read / % of Bi
 - **Active trail pill**: persistent at reading screen bottom when trail in progress.
 
 #### Sharing
-- Completed trail generates a **shareable SVG constellation** (D3 render â†’ SVG export â†’ PNG). No AI generation â€” purely data-driven geometry.
+- Completed trail generates a **shareable SVG constellation** (D3 render ? SVG export ? PNG). No AI generation — purely data-driven geometry.
 - Share via: copy link (opens app to read-only trail view via `share_token`), or download/share PNG constellation image.
 - Trail constellation shared to Instagram/SMS = free marketing. The art is yours, generated from your reading.
 
 #### Tech Decisions
 - **Graph visualization:** D3.js force-directed graph
 - **TSK density:** Pre-computed at import time into `tsk_verse_stats` (not runtime aggregation)
-- **Daily trail selection:** AI call at midnight using Sonnet â€” one call per day for the whole platform, trivially cheap
+- **Daily trail selection:** AI call at midnight using Sonnet — one call per day for the whole platform, trivially cheap
 - **Trail storage:** `cross_reference_trails` + `trail_steps` (file 11), expanded with `trail_type`, `share_token`, `svg_cache`, `step_count`, `daily_trail_id`
 
-### SESSION 6 â€” Commentary Layers Deep Dive âœ“ COMPLETE
+### SESSION 6 — Commentary Layers Deep Dive ? COMPLETE
 
 #### The Sources
 | Source | Coverage | Vibe | Default for |
 |---|---|---|---|
-| **Charles (AI)** | Every chapter, personalized | Always on â€” the primary voice | Everyone |
-| **Spurgeon â€” Morning & Evening** | Verse-anchored daily devotional | Warm, pastoral, alive | Most archetypes |
-| **Spurgeon â€” Treasury of David** | Psalms only | Exhaustive, devotional | Psalms chapters |
-| **Spurgeon â€” Sermons** | 3,500+ indexed by text | Rhetorical, convicting | Scholar, mature |
+| **Charles (AI)** | Every chapter, personalized | Always on — the primary voice | Everyone |
+| **Spurgeon — Morning & Evening** | Verse-anchored daily devotional | Warm, pastoral, alive | Most archetypes |
+| **Spurgeon — Treasury of David** | Psalms only | Exhaustive, devotional | Psalms chapters |
+| **Spurgeon — Sermons** | 3,500+ indexed by text | Rhetorical, convicting | Scholar, mature |
 | **Matthew Henry** | Full Bible, verse-by-verse | Thorough, pastoral, verbose | Scholar, Prayer Warrior |
 | **John Calvin** | Most of NT + some OT | Precise, exegetical, Reformed | Scholar only |
 | **Adam Clarke** | Full Bible, philological | Dense, word-level, technical | Scholar only |
 
 #### Three-Tier Layer Architecture
-**Tier 1 â€” Charles (always on, always personalized)**
-Default commentary for every user. Weaves historical background, literary observation, theological weight, and personal lens connections. Can cite historical commentators inline: *"Matthew Henry called this 'the hinge of the whole epistle' â€” and he wasn't wrong."* Charles synthesizes; scholars are his sources.
+**Tier 1 — Charles (always on, always personalized)**
+Default commentary for every user. Weaves historical background, literary observation, theological weight, and personal lens connections. Can cite historical commentators inline: *"Matthew Henry called this 'the hinge of the whole epistle' — and he wasn't wrong."* Charles synthesizes; scholars are his sources.
 
-**Tier 2 â€” Spurgeon Card (semi-surface, one tap to expand)**
-Special treatment â€” not buried in a deep menu. Surfaced as a card because:
-- His prose is the most readable of any 1800s commentator â€” still alive, not academic
+**Tier 2 — Spurgeon Card (semi-surface, one tap to expand)**
+Special treatment — not buried in a deep menu. Surfaced as a card because:
+- His prose is the most readable of any 1800s commentator — still alive, not academic
 - Morning & Evening links directly to the two-trails-per-day rhythm from Session 5
 - Treasury of David makes the Psalms section uniquely rich
-- Charles's own theological DNA is Spurgeon â€” quoting him feels natural
+- Charles's own theological DNA is Spurgeon — quoting him feels natural
 
 **Spurgeon Card placement:**
-- Morning slot â†’ **top of chapter view**, before verse 1, as devotional framing
-- Evening slot â†’ **bottom of chapter view**, after the chapter text, as reflection
+- Morning slot ? **top of chapter view**, before verse 1, as devotional framing
+- Evening slot ? **bottom of chapter view**, after the chapter text, as reflection
 - Mirrors the Morning & Evening structure literally
 
-**Tier 3 â€” Commentary Vault (intentional one-tap to open)**
-Matthew Henry, Calvin, Clarke live behind a "Commentary" button. Opens as a **tabbed panel** â€” one scholar at a time, not a mixed feed. Their voices are distinct enough that mixing them is confusing.
-Access is not hidden â€” just not in the way. The SAHM at 5am doesn't need Calvin on Romans 9.
+**Tier 3 — Commentary Vault (intentional one-tap to open)**
+Matthew Henry, Calvin, Clarke live behind a "Commentary" button. Opens as a **tabbed panel** — one scholar at a time, not a mixed feed. Their voices are distinct enough that mixing them is confusing.
+Access is not hidden — just not in the way. The SAHM at 5am doesn't need Calvin on Romans 9.
 
 #### Archaeological Note (always shown, no toggle)
-When a chapter is set in a location with site data, a brief note (1-2 sentences from `archaeological_sites`) appears inline between Charles's intro and verse 1. Always shown. Always brief. Always grounding. "Modern excavations at Tell es-Sultan confirm Jericho as one of the oldest inhabited cities on earth â€” 10,000 years of continuous habitation. This is the road Jesus walked."
+When a chapter is set in a location with site data, a brief note (1-2 sentences from `archaeological_sites`) appears inline between Charles's intro and verse 1. Always shown. Always brief. Always grounding. "Modern excavations at Tell es-Sultan confirm Jericho as one of the oldest inhabited cities on earth — 10,000 years of continuous habitation. This is the road Jesus walked."
 
 #### Toggle Defaults by Archetype
 | Layer | Tim | SAHM | Prayer Warrior | Skeptic | Scholar | New Believer |
 |---|---|---|---|---|---|---|
-| Charles | âœ… | âœ… | âœ… | âœ… | âœ… | âœ… |
-| Spurgeon Card | âœ… | âœ… | âœ… | âŒ | âœ… | âœ… |
-| Matthew Henry | âŒ | âŒ | âœ… | âŒ | âœ… | âŒ |
-| Calvin | âŒ | âŒ | âŒ | âŒ | âœ… | âŒ |
-| Adam Clarke | âŒ | âŒ | âŒ | âŒ | âœ… | âŒ |
-| Word Note (see below) | âœ… | âŒ | âŒ | âŒ | âœ… | âŒ |
-| Archaeological pins | âœ… | âŒ | âŒ | âœ… | âœ… | âœ… |
+| Charles | ? | ? | ? | ? | ? | ? |
+| Spurgeon Card | ? | ? | ? | ? | ? | ? |
+| Matthew Henry | ? | ? | ? | ? | ? | ? |
+| Calvin | ? | ? | ? | ? | ? | ? |
+| Adam Clarke | ? | ? | ? | ? | ? | ? |
+| Word Note (see below) | ? | ? | ? | ? | ? | ? |
+| Archaeological pins | ? | ? | ? | ? | ? | ? |
 
-#### The Word Note â€” Tim's Version of Adam Clarke
+#### The Word Note — Tim's Version of Adam Clarke
 Tim doesn't get the full Adam Clarke vault (homework). He gets a **Word Note**: one key word per chapter, synthesized to one punchy sentence. **On by default for Tim and Scholar; off for others.**
 
 **Full pipeline:**
 1. Strong's number identified for the key word of the chapter
-2. `strongs_lexicon` â€” original word, transliteration, morphology, full definition
-3. `commentary_entries` (Clarke) â€” Clarke's philological note on that specific word, if it exists
+2. `strongs_lexicon` — original word, transliteration, morphology, full definition
+3. `commentary_entries` (Clarke) — Clarke's philological note on that specific word, if it exists
 4. Charles synthesizes all of it into one sentence the user actually wants to read
 
-Example: *"The word translated 'endurance' is* hupomone *â€” it literally means to remain under a heavy load and not collapse."*
+Example: *"The word translated 'endurance' is* hupomone *— it literally means to remain under a heavy load and not collapse."*
 
 This is Clarke's insight without Clarke's density. Tapping the Word Note chip expands to show the full `strongs_lexicon` entry and the Clarke source note for users who want to go deeper.
 
@@ -901,59 +901,59 @@ This is Clarke's insight without Clarke's density. Tapping the Word Note chip ex
 #### The Lens Mandate
 Charles is **required** to connect every chapter to the user's active identity lenses (`profile_interests`). For Tim: chef lens + athlete lens, every chapter, no exceptions.
 
-**When a genuine connection exists** â†’ he makes it, fully.
+**When a genuine connection exists** ? he makes it, fully.
 
-**When no obvious connection exists** â†’ he does NOT just name the gap and move on. He reaches into the **Creative Fallback System**, tried in priority order:
+**When no obvious connection exists** ? he does NOT just name the gap and move on. He reaches into the **Creative Fallback System**, tried in priority order:
 
-1. **Archaeological Surprise** â€” something physically excavated that makes the text real. *"Archaeologists found a first-century bema seat in Corinth matching Acts 18:12 exactly. Paul stood on that stone."* Pulls from `archaeological_sites`. First choice when data exists.
-2. **Geography Drop** â€” one physical fact about the location that reframes everything. *"The Negev gets less than 8 inches of rain per year. When this text says they were 'thirsting' â€” that's not a metaphor. That's Tuesday."* Pulls from `geographic_locations`.
-3. **Historical Frame** â€” what was happening in the world when this was written that changes the text. *"Paul wrote this during Nero's reign â€” a man who lit Christians on fire to light his garden parties. When Paul says 'suffering,' he's not being abstract."* Charles generates from training knowledge.
-4. **Cultural Key** â€” a first-century or ANE social/legal/religious custom modern readers miss that unlocks the passage. *"In first-century Jewish culture, 'firstborn' wasn't birth order â€” it was a legal designation carrying double inheritance rights. Everything in this chapter turns on that."*
-5. **Charles's Wildcard** â€” last resort, often the most interesting. Typology, intertextual resonance, structural pattern, or a linguistic observation no one expects. Announced: *"There's no running in this chapter and nobody's cooking anything. But here's what most people miss entirely..."*
+1. **Archaeological Surprise** — something physically excavated that makes the text real. *"Archaeologists found a first-century bema seat in Corinth matching Acts 18:12 exactly. Paul stood on that stone."* Pulls from `archaeological_sites`. First choice when data exists.
+2. **Geography Drop** — one physical fact about the location that reframes everything. *"The Negev gets less than 8 inches of rain per year. When this text says they were 'thirsting' — that's not a metaphor. That's Tuesday."* Pulls from `geographic_locations`.
+3. **Historical Frame** — what was happening in the world when this was written that changes the text. *"Paul wrote this during Nero's reign — a man who lit Christians on fire to light his garden parties. When Paul says 'suffering,' he's not being abstract."* Charles generates from training knowledge.
+4. **Cultural Key** — a first-century or ANE social/legal/religious custom modern readers miss that unlocks the passage. *"In first-century Jewish culture, 'firstborn' wasn't birth order — it was a legal designation carrying double inheritance rights. Everything in this chapter turns on that."*
+5. **Charles's Wildcard** — last resort, often the most interesting. Typology, intertextual resonance, structural pattern, or a linguistic observation no one expects. Announced: *"There's no running in this chapter and nobody's cooking anything. But here's what most people miss entirely..."*
 
-**The rule:** categories tried in order, first with real data for this chapter wins. Charles never announces which category he's using â€” it just reads as him being genuinely interesting.
+**The rule:** categories tried in order, first with real data for this chapter wins. Charles never announces which category he's using — it just reads as him being genuinely interesting.
 
-For other users, lenses come from `profile_interests` â€” extensible. Nurse gets healing lens. Lawyer gets justice/covenant lens. Engineer gets structure/design lens.
+For other users, lenses come from `profile_interests` — extensible. Nurse gets healing lens. Lawyer gets justice/covenant lens. Engineer gets structure/design lens.
 
-#### Charles Quoting Commentators â€” Option B (direct quotes)
-All sources are public domain â€” zero copyright risk. Charles receives the 3-5 most relevant Spurgeon/Henry passages for the chapter in his context window and decides whether to quote verbatim or paraphrase. Direct Spurgeon quotes inside a Charles response are *exactly* the experience: the historical voice and the modern voice in conversation.
+#### Charles Quoting Commentators — Option B (direct quotes)
+All sources are public domain — zero copyright risk. Charles receives the 3-5 most relevant Spurgeon/Henry passages for the chapter in his context window and decides whether to quote verbatim or paraphrase. Direct Spurgeon quotes inside a Charles response are *exactly* the experience: the historical voice and the modern voice in conversation.
 
 #### Caching
 - Charles/personalized_content: generated once, cached until `profile_hash` changes (Session 3)
-- Historical commentary text: static DB reads â€” zero generation cost
-- Spurgeon card: single query on `spurgeon_index` by `(book, chapter)` â€” free at read time
-- Word Note: generated as part of content generation call â€” stored in `personalized_content.word_note`
+- Historical commentary text: static DB reads — zero generation cost
+- Spurgeon card: single query on `spurgeon_index` by `(book, chapter)` — free at read time
+- Word Note: generated as part of content generation call — stored in `personalized_content.word_note`
 
-### SESSION 7 â€” Sharing & Internal Messaging âœ“ COMPLETE
+### SESSION 7 — Sharing & Internal Messaging ? COMPLETE
 
-#### External Sharing â€” Five Content Types
+#### External Sharing — Five Content Types
 
 | Content | SMS | Clipboard | Download PNG | Internal |
 |---|---|---|---|---|
-| Verse / passage | âœ“ | âœ“ | âœ“ | âœ“ |
-| Highlight + annotation | âœ“ | âœ“ | âœ“ | âœ“ |
-| Journal answer | â€” | âœ“ | â€” | âœ“ |
-| Trail constellation | â€” | âœ“ (link) | âœ“ | âœ“ |
-| Streak card | âœ“ | â€” | âœ“ | â€” |
+| Verse / passage | ? | ? | ? | ? |
+| Highlight + annotation | ? | ? | ? | ? |
+| Journal answer | — | ? | — | ? |
+| Trail constellation | — | ? (link) | ? | ? |
+| Streak card | ? | — | ? | — |
 
-Journal answers: no one-tap SMS â€” too personal, too easy to blast accidentally. Copy-to-clipboard only for external; full internal sharing. Trail constellation: share token generates a read-only deep-link (`/trail/[share_token]`) + downloadable SVG/PNG. Streak card: styled SVG card, "Day 47 in the Word," option to include a verse from that day. No native social API integrations â€” download PNG + open app is the standard flow.
+Journal answers: no one-tap SMS — too personal, too easy to blast accidentally. Copy-to-clipboard only for external; full internal sharing. Trail constellation: share token generates a read-only deep-link (`/trail/[share_token]`) + downloadable SVG/PNG. Streak card: styled SVG card, "Day 47 in the Word," option to include a verse from that day. No native social API integrations — download PNG + open app is the standard flow.
 
 All external shares logged in `shared_content` table with `share_token`, `view_count`, `expires_at`. Public token reads handled at API layer via service role.
 
-#### Internal Messaging â€” The Verse Thread
+#### Internal Messaging — The Verse Thread
 
-Every message is **anchored to a specific verse**. Not a general chat â€” a conversation that lives permanently inside Scripture.
+Every message is **anchored to a specific verse**. Not a general chat — a conversation that lives permanently inside Scripture.
 
 **The mechanic:**
-- From any verse on the reading screen, tap the verse menu â†’ "Send to [family member]"
+- From any verse on the reading screen, tap the verse menu ? "Send to [family member]"
 - Composer opens: verse quoted at top (locked), message body below (1,000 character limit)
-- Both directions: Tim can initiate a thread just as easily as Dad can â€” and should be. "Dad, look at verse 4. This is what you always say."
+- Both directions: Tim can initiate a thread just as easily as Dad can — and should be. "Dad, look at verse 4. This is what you always say."
 - Reply threading: `parent_id` on messages supports nested replies
 
 **The reading screen indicator:**
-A **colored flame** appears in the verse gutter when a family thread message exists on that verse. Color = family unit accent color. Private â€” only visible to unit members. Tapping the flame opens the thread inline.
+A **colored flame** appears in the verse gutter when a family thread message exists on that verse. Color = family unit accent color. Private — only visible to unit members. Tapping the flame opens the thread inline.
 
-**Over time:** The family thread becomes a living record â€” Dad's note on Romans 8:28 when Tim was going through something hard, Tim's reply three days later. That exchange lives permanently anchored to that verse, surfaced every time either of them reads Romans 8. This is the birthday letter mechanic's ongoing sibling. The letter is a one-time gift. The verse thread builds over years.
+**Over time:** The family thread becomes a living record — Dad's note on Romans 8:28 when Tim was going through something hard, Tim's reply three days later. That exchange lives permanently anchored to that verse, surfaced every time either of them reads Romans 8. This is the birthday letter mechanic's ongoing sibling. The letter is a one-time gift. The verse thread builds over years.
 
 #### Read Receipts
 - Simple "seen" indicator. Dad knows when Tim has read his message.
@@ -964,42 +964,42 @@ A **colored flame** appears in the verse gutter when a family thread message exi
 #### Charles Nudge (opt-in, off by default)
 When a verse thread message goes unanswered for 7+ days, Charles can optionally send a gentle notification: *"Tim hasn't replied to your note on Romans 8:28. He might still be thinking about it."*
 - Off by default (`charles_nudge_enabled` on `notification_settings`)
-- **User is shown this option explicitly** during settings discovery â€” not buried. It feels faintly manipulative until you need it, and then you're grateful.
+- **User is shown this option explicitly** during settings discovery — not buried. It feels faintly manipulative until you need it, and then you're grateful.
 
-#### Small Groups â€” Day-1 Architecture, Post-Launch Activation
+#### Small Groups — Day-1 Architecture, Post-Launch Activation
 `family_units` and `family_members` already support any user grouping. Groups need: group size limit, `leader` role with broadcast ability, group discovery/join flow. Data model is essentially already built. Ship family thread day 1. Open groups in the first major post-launch update.
 
 #### Notification Delivery (Verse Thread)
-1. **Push** â€” fires immediately on new message if enabled
-2. **Email via Resend** â€” fallback ensuring nothing is missed. Template: *"Your dad left you a note on Romans 8:28."* â†’ deep-link tap opens app directly to that verse with thread visible
-3. Deep-link routing required from day 1: `/read/[book]/[chapter]?verse=[v]&thread=open` â€” must be in routing architecture from the start
+1. **Push** — fires immediately on new message if enabled
+2. **Email via Resend** — fallback ensuring nothing is missed. Template: *"Your dad left you a note on Romans 8:28."* ? deep-link tap opens app directly to that verse with thread visible
+3. Deep-link routing required from day 1: `/read/[book]/[chapter]?verse=[v]&thread=open` — must be in routing architecture from the start
 
-### SESSION 8 â€” Audio Layer âœ“ COMPLETE
+### SESSION 8 — Audio Layer ? COMPLETE
 
 #### Source: ESV Audio API
-`api.esv.org/v3/passage/audio/` â€” MP3 per chapter, professional narration (Max McLean). Same licensing situation as text API â€” negotiate before commercial launch. Cached to **Supabase Storage** keyed by `(book, chapter, translation)` on first fetch. One API call per chapter ever, then zero cost.
+`api.esv.org/v3/passage/audio/` — MP3 per chapter, professional narration (Max McLean). Same licensing situation as text API — negotiate before commercial launch. Cached to **Supabase Storage** keyed by `(book, chapter, translation)` on first fetch. One API call per chapter ever, then zero cost.
 
 #### The Three Player States
-**State 1 â€” Expanded player:** Book/chapter title, current verse reference (live-updating), play/pause, 15s skip back/forward, scrubber, speed selector (0.75x / 1x / 1.25x / 1.5x / 2x), read-along toggle.
+**State 1 — Expanded player:** Book/chapter title, current verse reference (live-updating), play/pause, 15s skip back/forward, scrubber, speed selector (0.75x / 1x / 1.25x / 1.5x / 2x), read-along toggle.
 
-**State 2 â€” Mini player (persistent):** Pill bar above bottom navigation when user leaves reading screen during playback. Label, play/pause, thin progress bar. Tap to expand. Standard mobile audio pattern â€” users already know it.
+**State 2 — Mini player (persistent):** Pill bar above bottom navigation when user leaves reading screen during playback. Label, play/pause, thin progress bar. Tap to expand. Standard mobile audio pattern — users already know it.
 
-**State 3 â€” Background playback:** Media Session API (`navigator.mediaSession`) â€” sets lock screen controls, keeps audio alive on iOS Safari 15+ and modern Android. Required for Tim to run with the app playing.
+**State 3 — Background playback:** Media Session API (`navigator.mediaSession`) — sets lock screen controls, keeps audio alive on iOS Safari 15+ and modern Android. Required for Tim to run with the app playing.
 
-#### Verse Timestamp Alignment â€” Option B (Automated Forced Alignment)
-ESV audio provides no per-verse timestamps. We generate them at import time using a forced aligner (`aeneas` or `gentle`) â€” audio file + text transcript â†’ verse-level timestamps automatically. Run once per chapter. Output stored in `chapter_audio_timestamps` table as `{verse, start_seconds}` array.
+#### Verse Timestamp Alignment — Option B (Automated Forced Alignment)
+ESV audio provides no per-verse timestamps. We generate them at import time using a forced aligner (`aeneas` or `gentle`) — audio file + text transcript ? verse-level timestamps automatically. Run once per chapter. Output stored in `chapter_audio_timestamps` table as `{verse, start_seconds}` array.
 
-At playback: app watches audio `currentTime`, fires verse-highlight events when timestamp thresholds pass. Current verse gets a **warm amber background highlight** (transient â€” distinct from user's manual highlights, disappears on pause). Text auto-scrolls to keep highlighted verse visible.
+At playback: app watches audio `currentTime`, fires verse-highlight events when timestamp thresholds pass. Current verse gets a **warm amber background highlight** (transient — distinct from user's manual highlights, disappears on pause). Text auto-scrolls to keep highlighted verse visible.
 
 #### Read-Along
 - **On by default when screen is visible, auto-off when screen locks** (no point highlighting verses user can't see)
-- Amber highlight color â€” warm, unambiguous, doesn't clash with any of the 6 user highlight colors
+- Amber highlight color — warm, unambiguous, doesn't clash with any of the 6 user highlight colors
 - Smooth fade transition between verses
 
 #### Playback Position Persistence
-`audio_progress` table (file 11) stores `position_seconds` per `(user, book, chapter)`. On return to a chapter: 'Resume from 3:42' prompt â€” user taps to resume or restart. Not auto-resume (some users want to restart).
+`audio_progress` table (file 11) stores `position_seconds` per `(user, book, chapter)`. On return to a chapter: 'Resume from 3:42' prompt — user taps to resume or restart. Not auto-resume (some users want to restart).
 
-#### Auto-Advance (Running Mode â€” Tim's use case)
+#### Auto-Advance (Running Mode — Tim's use case)
 Tim runs 45-minute cross country miles. He queues a chapter, pockets the phone, runs. When the chapter ends, the next chapter in his reading plan auto-queues with a 3-second 'Up next: Mark 2' card.
 - **Opt-in, but actively prompted** after the first chapter ends: 'Want to auto-advance? Turn it on in settings.' One prompt, never asked again.
 - Speed preference saved per user (`audio_progress.meta` initially).
@@ -1007,12 +1007,12 @@ Tim runs 45-minute cross country miles. He queues a chapter, pockets the phone, 
 #### Progress Credit for Audio
 - Listening to a chapter = **full reading plan credit**. Hearing the Word is reading the Word. No second-class citizenship for audio users.
 - `user_reading_plans.current_day` advances. Streak fires. Achievements eligible.
-- **Character cards unlock on audio** â€” if Tim hears Bartimaeus mentioned in Mark 10 while running, Bartimaeus's card unlocks. Audio triggers the same completion event pipeline as text reading.
+- **Character cards unlock on audio** — if Tim hears Bartimaeus mentioned in Mark 10 while running, Bartimaeus's card unlocks. Audio triggers the same completion event pipeline as text reading.
 
 #### What We Don't Build
-- No TTS generation â€” ESV professional narration is better than any TTS
-- No multi-voice dramatic reading â€” too complex, not worth it at launch
-- No audio for historical commentaries â€” Matthew Henry read aloud is genuinely unpleasant
+- No TTS generation — ESV professional narration is better than any TTS
+- No multi-voice dramatic reading — too complex, not worth it at launch
+- No audio for historical commentaries — Matthew Henry read aloud is genuinely unpleasant
 
 ### SESSION 9  Monetization & Feature Tier Design [COMPLETE ]
 
@@ -1225,7 +1225,7 @@ Tap TSK dot -> opens Cross-Reference Bottom Sheet
 - 4 tier cards: Reader / Disciple / Scholar / Living Bible
 - Current tier indicated; upgrade CTA per card
 - "Give as a Gift" toggle: switches flow to gift purchase (recipient email, letter, reveal date)
-- Ã€ la carte add-ons listed below tier cards
+- À la carte add-ons listed below tier cards
 - Stripe Checkout for all purchase flows
 
 #### Key UX Principles Locked
@@ -1988,8 +1988,8 @@ System prompt layers (in order):
 6. User message
 
 Model selection by tier:
-  Tim (Your Edition) : claude-sonnet-4-6, no token cap per session
-  Premium            : claude-sonnet-4-6, 4,000 output tokens/session max
+  Tim (Your Edition) : claude-sonnet-4-5, no token cap per session
+  Premium            : claude-sonnet-4-5, 4,000 output tokens/session max
   Standard           : claude-haiku-4, 2,000 output tokens/session max
   Free               : no chat access (upgrade prompt)
 
@@ -3610,12 +3610,12 @@ New tables go to sql/12-community.md (new file  community is its own logical gro
 6. New schema file: sql/12-community.md
 7. Leaderboards: never. XP and streaks are private.
 
-### SESSION 29 â€” Community of the Book (No Social Media)
+### SESSION 29 — Community of the Book (No Social Media)
 The app is intentionally solo. But there's a middle ground between isolation and social media that no one has built well.
-- Anonymous aggregation: see what verses others are highlighting most this week â€” not names, not comments, just a quiet sense of "you are not alone in this"
-- "Others have wrestled with this too" â€” surfaces journal themes (never content) from across the user base
-- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights â€” opt-in, private
-- Father/son thread: the internal messaging already planned â€” tied to specific verses, intimate not social
+- Anonymous aggregation: see what verses others are highlighting most this week — not names, not comments, just a quiet sense of "you are not alone in this"
+- "Others have wrestled with this too" — surfaces journal themes (never content) from across the user base
+- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights — opt-in, private
+- Father/son thread: the internal messaging already planned — tied to specific verses, intimate not social
 - Community features are off by default. The app is your quiet place first.
 
 ### SESSION 30  Catechism Integration
@@ -3733,22 +3733,22 @@ No new tables needed  catechism data fits in the existing `catechism_entries` ta
 6. Charles has internalized all three  references them in conversation when they illuminate, not to show off.
 7. Schema: extend `catechism_entries` (sql/07), extend `memory_verses` (sql/06), extend `user_display_settings` (sql/10). No new tables.
 
-### SESSION 29 â€” Community of the Book (No Social Media)
+### SESSION 29 — Community of the Book (No Social Media)
 The app is intentionally solo. But there's a middle ground between isolation and social media that no one has built well.
-- Anonymous aggregation: see what verses others are highlighting most this week â€” not names, not comments, just a quiet sense of "you are not alone in this"
-- "Others have wrestled with this too" â€” surfaces journal themes (never content) from across the user base
-- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights â€” opt-in, private
-- Father/son thread: the internal messaging already planned â€” tied to specific verses, intimate not social
+- Anonymous aggregation: see what verses others are highlighting most this week — not names, not comments, just a quiet sense of "you are not alone in this"
+- "Others have wrestled with this too" — surfaces journal themes (never content) from across the user base
+- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights — opt-in, private
+- Father/son thread: the internal messaging already planned — tied to specific verses, intimate not social
 - Community features are off by default. The app is your quiet place first.
 
-### SESSION 30 â€” Catechism Integration
+### SESSION 30 — Catechism Integration
 The great catechisms are public domain and they do something no Bible app does: they connect systematic theology to biblical theology in real time. You're a theologian. You know this tool.
-- Westminster Shorter Catechism, Westminster Larger Catechism, Heidelberg Catechism â€” all public domain
+- Westminster Shorter Catechism, Westminster Larger Catechism, Heidelberg Catechism — all public domain
 - Index by Scripture reference (already exists in scholarly editions)
 - Per-chapter surface: "This passage grounds Question 1 of the Heidelberg: 'What is your only comfort in life and in death?'"
-- Toggleable layer â€” on for the seminary student and the pastor, off by default for Tim
+- Toggleable layer — on for the seminary student and the pastor, off by default for Tim
 - For the prayer warrior: the catechisms are how she learned to pray. This is her language.
-- Deepens the already/not yet framework â€” the catechisms have excellent eschatological content
+- Deepens the already/not yet framework — the catechisms have excellent eschatological content
 
 ### SESSION 31  Tim's Arc Over Time (The Long Game)
 **STATUS: COMPLETE**
@@ -3887,31 +3887,31 @@ What was built across 31 sessions:
 
 The next phase is code.
 
-### SESSION 29 â€” Community of the Book (No Social Media)
+### SESSION 29 — Community of the Book (No Social Media)
 The app is intentionally solo. But there's a middle ground between isolation and social media that no one has built well.
-- Anonymous aggregation: see what verses others are highlighting most this week â€” not names, not comments, just a quiet sense of "you are not alone in this"
-- "Others have wrestled with this too" â€” surfaces journal themes (never content) from across the user base
-- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights â€” opt-in, private
-- Father/son thread: the internal messaging already planned â€” tied to specific verses, intimate not social
+- Anonymous aggregation: see what verses others are highlighting most this week — not names, not comments, just a quiet sense of "you are not alone in this"
+- "Others have wrestled with this too" — surfaces journal themes (never content) from across the user base
+- Small group mode: a closed group (family, church, friends) can share a reading plan and see each other's highlights — opt-in, private
+- Father/son thread: the internal messaging already planned — tied to specific verses, intimate not social
 - Community features are off by default. The app is your quiet place first.
 
-### SESSION 30 â€” Catechism Integration
+### SESSION 30 — Catechism Integration
 The great catechisms are public domain and they do something no Bible app does: they connect systematic theology to biblical theology in real time. You're a theologian. You know this tool.
-- Westminster Shorter Catechism, Westminster Larger Catechism, Heidelberg Catechism â€” all public domain
+- Westminster Shorter Catechism, Westminster Larger Catechism, Heidelberg Catechism — all public domain
 - Index by Scripture reference (already exists in scholarly editions)
 - Per-chapter surface: "This passage grounds Question 1 of the Heidelberg: 'What is your only comfort in life and in death?'"
-- Toggleable layer â€” on for the seminary student and the pastor, off by default for Tim
+- Toggleable layer — on for the seminary student and the pastor, off by default for Tim
 - For the prayer warrior: the catechisms are how she learned to pray. This is her language.
-- Deepens the already/not yet framework â€” the catechisms have excellent eschatological content
+- Deepens the already/not yet framework — the catechisms have excellent eschatological content
 
-### SESSION 31 â€” Tim's Arc Over Time (The Long Game)
-This is the most important feature and it requires no extra code â€” just the DB preserving everything and Charles knowing how to read it.
+### SESSION 31 — Tim's Arc Over Time (The Long Game)
+This is the most important feature and it requires no extra code — just the DB preserving everything and Charles knowing how to read it.
 - Tim's journal entries from age 15 are still readable at age 25. That IS the feature.
-- "On this day" â€” three years ago you were reading Genesis 1. Here's what you wrote.
+- "On this day" — three years ago you were reading Genesis 1. Here's what you wrote.
 - Pattern recognition: Charles notices Tim keeps returning to themes of vocation and worth. That becomes part of his living profile.
 - The app grows with him through seasons: high school athlete, culinary school student, working chef, husband, father
 - The birthday letter tradition: dad writes one for 16, Tim can write his own for future years
-- "Letter to my younger self" â€” at some point Tim might want to respond to his 15-year-old journal entries
+- "Letter to my younger self" — at some point Tim might want to respond to his 15-year-old journal entries
 - This is what no other app has. Most apps are designed for acquisition. This one is designed for a lifetime.
 
 ---

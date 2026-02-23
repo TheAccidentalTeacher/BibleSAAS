@@ -8,9 +8,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Flame, BookOpen, CheckCircle2, ChevronRight, Plus, Brain } from "lucide-react";
+import { Flame, BookOpen, CheckCircle2, ChevronRight, Plus, Brain, Clock } from "lucide-react";
 import PlanPicker from "./plan-picker";
 import type { ReadingPlanRow, UserReadingPlanRow, PlanChapterRow, ReadingProgressRow, UserStreakRow } from "@/types/database";
+import type { OnThisDayEntry } from "@/app/api/on-this-day/route";
 
 interface TodayChapter {
   planChapter: PlanChapterRow;
@@ -31,6 +32,13 @@ interface PulseVerse {
   weight: number;
 }
 
+interface DailyTrail {
+  slot: "morning" | "evening";
+  bookCode: string;
+  bookName: string;
+  chapter: number;
+}
+
 interface DashboardClientProps {
   displayName: string;
   tier: string;
@@ -44,6 +52,8 @@ interface DashboardClientProps {
   recentJournal: RecentEntry[];
   memoryVerseDueCount: number;
   pulseVerses: PulseVerse[];
+  onThisDay: OnThisDayEntry[];
+  dailyTrails: DailyTrail[];
 }
 
 export default function DashboardClient({
@@ -58,6 +68,8 @@ export default function DashboardClient({
   recentJournal,
   memoryVerseDueCount,
   pulseVerses,
+  onThisDay,
+  dailyTrails,
 }: DashboardClientProps) {
   const router = useRouter();
   const [pickerOpen, setPickerOpen] = useState(false);
@@ -321,6 +333,54 @@ export default function DashboardClient({
           </section>
         )}
 
+        {/* ── On This Day ── */}
+        {onThisDay.length > 0 && (
+          <section>
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-xs font-semibold uppercase tracking-widest flex items-center gap-1.5" style={{ color: "var(--color-text-3)" }}>
+                <Clock size={12} />
+                On This Day
+              </h2>
+            </div>
+            <div className="flex flex-col gap-2">
+              {onThisDay.map((entry) => (
+                <button
+                  key={entry.id}
+                  onClick={() => router.push(`/read/${entry.book}/${entry.chapter}`)}
+                  className="w-full text-left rounded-2xl p-4 border flex items-start gap-3 transition-opacity hover:opacity-80"
+                  style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
+                >
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5"
+                    style={{ background: "rgba(196,160,64,0.12)" }}
+                  >
+                    <Clock size={16} style={{ color: "#C4A040" }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span className="text-xs font-semibold" style={{ color: "var(--color-accent)" }}>
+                        {entry.bookName} {entry.chapter}
+                      </span>
+                      <span className="text-[10px]" style={{ color: "var(--color-text-3)" }}>
+                        · {entry.years_ago} year{entry.years_ago !== 1 ? "s" : ""} ago
+                      </span>
+                    </div>
+                    {entry.note && (
+                      <p
+                        className="text-xs leading-relaxed line-clamp-2"
+                        style={{ color: "var(--color-text-3)", fontFamily: "var(--font-garamond)" }}
+                      >
+                        {entry.note}
+                      </p>
+                    )}
+                  </div>
+                  <ChevronRight size={14} style={{ color: "var(--color-text-3)", flexShrink: 0, marginTop: 2 }} />
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* ── Memory verse due ── */}
         {memoryVerseDueCount > 0 && (
           <section>
@@ -407,26 +467,52 @@ export default function DashboardClient({
           </section>
         )}
 
-        {/* ── Trail cards placeholder ── */}
+        {/* ── Trail cards ── */}
         <section>
           <h2 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--color-text-3)" }}>
             Daily Trails
           </h2>
           <div className="flex flex-col gap-3">
-            {["Morning Trail", "Evening Trail"].map((t) => (
-              <div
-                key={t}
-                className="rounded-2xl p-4 border"
-                style={{
-                  background: "var(--color-surface)",
-                  borderColor: "var(--color-border)",
-                  opacity: 0.5,
-                }}
-              >
-                <p className="text-sm font-semibold" style={{ color: "var(--color-text-2)" }}>{t}</p>
-                <p className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>Coming in Phase 13</p>
-              </div>
-            ))}
+            {(["morning", "evening"] as const).map((slot) => {
+              const trail = dailyTrails.find((t) => t.slot === slot);
+              const label = slot === "morning" ? "Morning Trail" : "Evening Trail";
+              if (!trail) {
+                return (
+                  <div
+                    key={slot}
+                    className="rounded-2xl p-4 border"
+                    style={{
+                      background: "var(--color-surface)",
+                      borderColor: "var(--color-border)",
+                      opacity: 0.5,
+                    }}
+                  >
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-text-2)" }}>{label}</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>Not available yet — check back later</p>
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={slot}
+                  href={`/read/${trail.bookCode.toLowerCase()}/${trail.chapter}`}
+                  className="rounded-2xl p-4 border flex items-center justify-between"
+                  style={{
+                    background: "var(--color-surface)",
+                    borderColor: "var(--color-border)",
+                    textDecoration: "none",
+                  }}
+                >
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: "var(--color-text-2)" }}>{label}</p>
+                    <p className="text-xs mt-0.5" style={{ color: "var(--color-text-3)" }}>
+                      {trail.bookName} {trail.chapter}
+                    </p>
+                  </div>
+                  <ChevronRight size={16} style={{ color: "var(--color-text-3)" }} />
+                </Link>
+              );
+            })}
           </div>
         </section>
 
