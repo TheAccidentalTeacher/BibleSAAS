@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { TRANSLATIONS } from "@/lib/bible/index";
+import { TRANSLATIONS } from "@/lib/bible/types";
 import { saveDisplaySettings } from "./actions";
 
 const VISUAL_THEMES = [
