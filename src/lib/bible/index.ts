@@ -66,7 +66,10 @@ export function getUnavailableReason(translation: string): string {
   }
 
   if (code === "ESV") {
-    return "The English Standard Version requires an API key that hasn't been configured. Please contact support or choose a free translation.";
+    if (!process.env.ESV_API_KEY) {
+      return "The English Standard Version requires an API key that hasn't been configured. Please contact support or choose a free translation.";
+    }
+    return "The English Standard Version is temporarily unavailable. Please try again in a moment or choose a different translation.";
   }
 
   if (isApiTranslation(code)) {

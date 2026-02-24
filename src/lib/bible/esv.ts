@@ -143,7 +143,8 @@ export async function getEsvChapter(
       next: { revalidate: 0 }, // skip Next.js cache; we manage our own
     });
     if (!res.ok) {
-      console.error(`[ESV] API error ${res.status} for ${query}`);
+      const body = await res.text().catch(() => "");
+      console.error(`[ESV] API error ${res.status} for ${query}: ${body.slice(0, 200)}`);
       return null;
     }
     const json = (await res.json()) as { passages?: string[] };
