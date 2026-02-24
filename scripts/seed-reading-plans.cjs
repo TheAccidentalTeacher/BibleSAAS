@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * Seed reading plans into Supabase.
  * Run: node scripts/seed-reading-plans.cjs
@@ -39,18 +40,6 @@ function flatChapters(books) {
     for (let ch = 1; ch <= count; ch++) out.push({ book, chapter: ch });
   }
   return out;
-}
-
-/** Distribute chapters into N days, as evenly as possible */
-function distributeIntoDays(chapters, numDays) {
-  const days = [];
-  const perDay = chapters.length / numDays;
-  for (let day = 1; day <= numDays; day++) {
-    const start = Math.round((day - 1) * perDay);
-    const end = Math.round(day * perDay);
-    days.push({ day, chapters: chapters.slice(start, end) });
-  }
-  return days;
 }
 
 // ── Plan definitions (1 chapter per day — unique constraint on plan_id+day_number) ──
