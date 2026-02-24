@@ -3988,4 +3988,76 @@ The ESV was showing "temporarily unavailable" on Vercel despite the API key bein
 
 ---
 
+### SESSION 33 — Reading Screen Feature Audit & Fixes [COMPLETE]
+
+#### Problem
+User reported that many "little features" on the reading screen were not working:
+- Word long-press / word study popover never appeared
+- No clear way to start reading (audio)
+- General feature audit requested
+
+#### Root Cause Analysis
+
+**Word study (long-press):**
+- `morphology_data` table has **0 rows** — the API `/api/word-note` always returned `{ found: false }`
+- Root cause: seeding morphology data requires alignment of Greek (MorphGNT) or Hebrew (OSHB) original-language word positions to English word positions — this is a complex NLP alignment task not yet implemented
+- 14,197 Strong's lexicon entries ARE present in `strongs_lexicon`
+
+**Word study library search:**
+- `/api/library/word-study` route only supported `?strongs=H1234` lookup; the library page was calling `?q=grace` (text search) which returned 400 errors — the search box was completely non-functional
+
+**Listen button:**
+- Code was correct; ESV audio now works (fixed Session 32)  
+- Google TTS confirmed working (`GOOGLE_TTS_API_KEY` in Vercel)
+- Issue: no visual feedback while ESV audio URL was being fetched (1-2 second silent wait after tap)
+
+#### Features Status After Audit
+
+| Feature | Status | Notes |
+|---------|--------|-------|
+| Listen (Headphones) | ✅ Working | ESV = Max McLean pro audio; others = Google TTS Neural2 |
+| Word long-press → Word Study | ✅ Fixed (fallback) | Redirects to word-study library search |
+| Word study library search | ✅ Fixed | API now supports `?q=` text search on lexicon |
+| TSK cross-reference dots | ✅ Working | 344,799 rows seeded |
+| Catechism C badges | ✅ Working | 396 entries seeded |
+| Highlights / Bookmarks | ✅ Working | Tables exist; empty until user adds |
+| WEB / KJV / ASV translations | ✅ Working | 1,189 chapters each (full Bible) |
+| Verse thread panel | ✅ Working | `verse_thread_messages` table exists |
+| Charles card (AI) | ✅ Working | AI generation via `/api/content/generate` |
+| Hymn ♪ chips | ⚠️ No data | `hymn_index` has 0 rows — not seeded yet |
+| Bible characters library | ⚠️ No data | `bible_characters` has 0 rows |
+| YLT translation | ⚠️ No data | 0 chapters seeded; WEB is the default alternative |
+| Morphology data | 🔴 Missing | 0 rows; requires Greek/Hebrew alignment to English positions |
+
+#### Code Changes (commit `f1b0238`)
+
+**`src/app/read/[book]/[chapter]/reading-view.tsx`:**
+- `handleWordLongPress` now accepts `wordText: string` (4th param)
+- When API returns `{ found: false }`, redirects to `/library/word-study?q={word}` instead of silent nothing
+- Word `<span>` event handlers pass `token` (the actual word text) to handler
+- Added `audioLoading` state + `Loader2` spinner on headphones button (shows while ESV URL is fetched)
+
+**`src/app/api/library/word-study/route.ts`:**
+- Added `?q=` text search mode: searches `strongs_number`, `transliteration`, `short_def`, `kjv_usage` across all 14,197 entries; returns up to 20 matches
+- Existing `?strongs=` single-entry lookup unchanged
+
+**`src/app/library/word-study/page.tsx`:**
+- Added `useEffect` that reads `?q=` from `window.location.search` on mount and auto-runs the search
+- Uses `useRef` to prevent double-firing
+
+#### Key data state after Session 33
+- `morphology_data`: 0 rows — word study works via fallback search (not position-mapped)
+- `strongs_lexicon`: 14,197 rows (complete Hebrew + Greek lexicon)
+- `chapters`: 3,568 rows — WEB (1,189), KJV (1,189), ASV (1,189), YLT (0)
+- `hymn_index`: 0 rows
+- `bible_characters`: 0 rows
+
+#### NEXT UP
+1. **Seed hymn_index** — parse public-domain hymnals (e.g., Trinity Hymnal, Psalter Hymnal) and align to Bible references
+2. **Seed bible_characters** — parse character data with verse citations
+3. **Seed morphology_data** — load MorphGNT (NT) + OSHB (OT) and align to WEB/KJV word positions (complex; may need AI-assisted alignment)
+4. **Phase 27** — Commercial launch infrastructure
+
+---
+
 *Add sessions below as new threads emerge.*

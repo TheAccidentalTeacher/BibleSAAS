@@ -57,6 +57,10 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 
 > **⚠️ ESV key is working on Vercel.** The env var must contain ONLY the 40-character hex key — never `ESV_API_KEY=<value>`. Paste just the key value into the Vercel field.
 
+> **📌 Word study (long-press):** `morphology_data` has 0 rows — exact position-mapped lookup not possible yet. The UI now gracefully falls back to the Strong's lexicon search (`?q=word`) rather than silently failing. Full morphology requires loading MorphGNT (NT) + OSHB (OT) alignment — a data project. Lexicon search is functional with 14,197 entries.
+
+> **📌 Still missing data:** `hymn_index` (0 rows), `bible_characters` (0 rows), YLT translation (0 chapters). Hymn chips and character library features are built but show no content until seeded.
+
 ### ⚠️ PHASE 23 HOUSEKEEPING
 1. **Sermon outline `.docx` export** — only Markdown clipboard export built; `.docx` server-side export (via `docx` npm pkg) deferred to Phase 25.
 2. **Catechism Q&A Memory (Step 23.3)** — flashcard mode for catechism answers deferred (SM-2 mechanics planned for Phase 25).
@@ -65,8 +69,8 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 
 ---
 
-### Infrastructure state (2026-02-23, updated after Phase 26 + deployment fixes)
-- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS — latest commit `628bee1`
+### Infrastructure state (2026-02-24, updated after Session 33 reading feature fixes)
+- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS — latest commit `f1b0238`
 - **Build:** `npm run build` → ✅ 0 errors, 0 typescript errors
 - **CI:** GitHub Actions — Type Check ✅ · SQL Validate ✅ · Secret Scan ✅
 - **Dev server:** Running locally at `http://localhost:3001`
@@ -78,11 +82,13 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 - **Google TTS:** ✅ Key `AIzaSyCWRKBURjpgU9pvdT_F523oyLfcTTqaCbQ` in Vercel env vars.
 - **ESV audio:** ✅ `/api/audio/esv` proxy route deployed, Max McLean MP3 via `/v3/passage/audio/`.
 
-### Seeded data (2026-02-21)
+### Seeded data (2026-02-24, verified in Session 33)
 | Table | Rows | Target | Status |
 |---|---|---|---|
 | `chapters` (WEB) | 1,189 | 1,189 | ✅ |
 | `chapters` (KJV) | 1,189 | 1,189 | ✅ |
+| `chapters` (ASV) | 1,189 | 1,189 | ✅ |
+| `chapters` (YLT) | 0 | 1,189 | ❌ Not seeded |
 | `strongs_lexicon` (hebrew) | 8,674 | ~8,674 | ✅ |
 | `strongs_lexicon` (greek) | 5,523 | ~5,624 | ✅ |
 | `spurgeon_index` | 732 | 730+ | ✅ |
@@ -91,6 +97,9 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 | `tsk_references` | 344,799 | ~500K* | ✅ (source has ~374K unique) |
 | `tsk_verse_stats` | 29,364 | populated | ✅ |
 | `commentary_entries` (MHCC) | 2,777 | — | ✅ |
+| `morphology_data` | 0 | ~700K | ❌ Requires Greek/Hebrew→English alignment |
+| `hymn_index` | 0 | TBD | ❌ Not seeded |
+| `bible_characters` | 0 | TBD | ❌ Not seeded |
 
 *The plan's ~500K estimate was high; actual OpenBible source has ~374K cross-reference pairs.
 
