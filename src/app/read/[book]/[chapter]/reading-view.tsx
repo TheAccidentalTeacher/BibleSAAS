@@ -209,6 +209,28 @@ export default function ReadingView({
       }
     } catch { /* ignore */ }
 
+    // Use ESV professional audio (Max McLean) when reading ESV
+    if (translation === "ESV") {
+      try {
+        const esvRes = await fetch(`/api/audio/esv?book=${bookCode}&chapter=${chapter}`);
+        if (esvRes.ok) {
+          const { audioUrl } = await esvRes.json() as { audioUrl: string };
+          audioActions.loadChapter({
+            book: bookCode,
+            bookName,
+            chapter,
+            verses: chapterData.verses.map((v) => ({ verse: v.verse, text: v.text })),
+            mode: "url",
+            audioUrl,
+            resumeSeconds,
+          });
+          setTimeout(() => audioActions.play(), 50);
+          return;
+        }
+      } catch { /* fall through to TTS */ }
+    }
+
+    // Fallback: Google TTS (all other translations, or if ESV audio unavailable)
     audioActions.loadChapter({
       book: bookCode,
       bookName,
