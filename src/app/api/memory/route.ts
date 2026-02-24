@@ -31,8 +31,7 @@ export async function GET(req: NextRequest) {
       .select("id, verse, mastered, next_review")
       .eq("user_id", user.id)
       .eq("book", book.toUpperCase())
-      .eq("chapter", parseInt(chapter, 10))
-      .is("deleted_at", null);
+      .eq("chapter", parseInt(chapter, 10));
 
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     const markers = (data as unknown as Pick<MemoryVerseRow, "id" | "verse" | "mastered" | "next_review">[]) ?? [];
