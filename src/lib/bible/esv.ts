@@ -89,13 +89,19 @@ export async function getEsvChapter(
   if (!book) return null;
 
   // ----- Check cache -----
-  const { data: cached } = await supabase
-    .from("chapters")
-    .select("*")
-    .eq("book", book.name)
-    .eq("chapter", chapter)
-    .eq("translation", "ESV")
-    .maybeSingle();
+  let cached = null;
+  try {
+    const { data } = await supabase
+      .from("chapters")
+      .select("*")
+      .eq("book", book.name)
+      .eq("chapter", chapter)
+      .eq("translation", "ESV")
+      .maybeSingle();
+    cached = data;
+  } catch (err) {
+    console.warn("[ESV] Cache read failed, proceeding to API fetch:", err);
+  }
 
   if (cached) {
     const row = cached as unknown as ChapterRow;
@@ -139,8 +145,11 @@ export async function getEsvChapter(
   let rawText: string;
   try {
     const res = await fetch(url.toString(), {
-      headers: { Authorization: `Token ${apiKey}` },
-      next: { revalidate: 0 }, // skip Next.js cache; we manage our own
+      headers: {
+        Authorization: `Token ${apiKey}`,
+        "Accept": "application/json",
+      },
+      cache: "no-store",
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "");
@@ -149,6 +158,10 @@ export async function getEsvChapter(
     }
     const json = (await res.json()) as { passages?: string[] };
     rawText = json.passages?.[0] ?? "";
+    if (!rawText) {
+      console.error(`[ESV] Empty passages array for ${query}`);
+      return null;
+    }
   } catch (err) {
     console.error("[ESV] Fetch failed:", err);
     return null;
