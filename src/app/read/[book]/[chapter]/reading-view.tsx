@@ -32,6 +32,7 @@ import {
   Hand,
   ScrollText,
   SlidersHorizontal,
+  Loader2,
 } from "lucide-react";
 import { useAudioState, useAudioActions } from "@/context/audio-context";
 import TranslationPicker from "./translation-picker";
@@ -191,6 +192,7 @@ export default function ReadingView({
   const audioState = useAudioState();
   const audioActions = useAudioActions();
   const isThisChapterAudio = audioState.book === bookCode && audioState.chapter === chapter;
+  const [audioLoading, setAudioLoading] = useState(false);
 
   async function handleListen() {
     if (isThisChapterAudio) {
@@ -199,6 +201,7 @@ export default function ReadingView({
       return;
     }
     if (!chapterData) return;
+    setAudioLoading(true);
     // Check for saved progress
     let resumeSeconds = 0;
     try {
@@ -224,6 +227,7 @@ export default function ReadingView({
             audioUrl,
             resumeSeconds,
           });
+          setAudioLoading(false);
           setTimeout(() => audioActions.play(), 50);
           return;
         }
@@ -241,6 +245,7 @@ export default function ReadingView({
       voiceId: ttsVoiceId,
       resumeSeconds,
     });
+    setAudioLoading(false);
     // Small delay for state to settle, then play
     setTimeout(() => audioActions.play(), 50);
   }
@@ -304,15 +309,21 @@ export default function ReadingView({
   const [wordNote, setWordNote] = useState<{ note: WordNote; anchorY: number } | null>(null);
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const handleWordLongPress = useCallback(async (verse: number, wordPos: number, anchorY: number) => {
+  const handleWordLongPress = useCallback(async (verse: number, wordPos: number, anchorY: number, wordText: string) => {
     const res = await fetch(`/api/word-note?book=${bookCode}&chapter=${chapter}&verse=${verse}&word_pos=${wordPos}`);
     if (res.ok) {
       const data = await res.json() as { found: boolean; word?: WordNote };
       if (data.found && data.word) {
         setWordNote({ note: data.word, anchorY });
+      } else {
+        // No morphology data — fall back to the word-study library search
+        const cleanWord = wordText.replace(/[^a-zA-Z]/g, "").toLowerCase();
+        if (cleanWord.length > 1) {
+          router.push(`/library/word-study?q=${encodeURIComponent(cleanWord)}`);
+        }
       }
     }
-  }, [bookCode, chapter]);
+  }, [bookCode, chapter, router]);
 
   // Load highlights + bookmarks when chapter changes
   useEffect(() => {
@@ -649,7 +660,11 @@ export default function ReadingView({
             className="flex items-center justify-center w-8 h-8 rounded"
             style={{ color: isThisChapterAudio ? "var(--color-accent)" : "var(--color-text-2)" }}
           >
-            <Headphones size={18} />
+            {audioLoading ? (
+              <Loader2 size={18} className="animate-spin" />
+            ) : (
+              <Headphones size={18} />
+            )}
           </button>
         )}
 
@@ -1009,7 +1024,7 @@ export default function ReadingView({
                             const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
                             const ay = rect.bottom + window.scrollY;
                             longPressTimer.current = setTimeout(() => {
-                              void handleWordLongPress(v.verse, wordPos, ay);
+                              void handleWordLongPress(v.verse, wordPos, ay, token);
                             }, 500);
                           }}
                           onTouchEnd={() => {
@@ -1021,7 +1036,7 @@ export default function ReadingView({
                           onContextMenu={(e) => {
                             e.preventDefault();
                             const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-                            void handleWordLongPress(v.verse, wordPos, rect.bottom + window.scrollY);
+                            void handleWordLongPress(v.verse, wordPos, rect.bottom + window.scrollY, token);
                           }}
                           style={{ cursor: "default", userSelect: "none" }}
                         >

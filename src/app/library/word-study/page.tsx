@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import BottomNav from "@/components/layout/bottom-nav";
@@ -12,6 +12,7 @@ export default function WordStudyIndexPage() {
     { strongs_number: string; original_word: string; transliteration: string; definition: string }[]
   >([]);
   const [loading, setLoading] = useState(false);
+  const didAutoSearch = useRef(false);
 
   async function handleSearch(q: string) {
     setQuery(q);
@@ -26,6 +27,18 @@ export default function WordStudyIndexPage() {
     } catch { /* ignore */ }
     setLoading(false);
   }
+
+  // Auto-search when navigated here from word long-press in reading view
+  useEffect(() => {
+    if (didAutoSearch.current) return;
+    didAutoSearch.current = true;
+    const params = new URLSearchParams(window.location.search);
+    const q = params.get("q");
+    if (q && q.length >= 2) {
+      void handleSearch(q);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>

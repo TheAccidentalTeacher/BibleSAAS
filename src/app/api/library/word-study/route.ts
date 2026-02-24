@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import type { StrongsLexiconRow } from "@/types/database";
 
-// GET /api/library/word-study?strongs=H0001
+// GET /api/library/word-study?strongs=H0001   — full detail for one entry
+// GET /api/library/word-study?q=grace         — text search, returns list of matches
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -10,7 +11,31 @@ export async function GET(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
   const strongs = (searchParams.get("strongs") ?? "").trim().toUpperCase();
-  if (!strongs) return NextResponse.json({ error: "Missing strongs" }, { status: 400 });
+  const q = (searchParams.get("q") ?? "").trim();
+
+  // ── Text search mode ───────────────────────────────────────────────────────
+  if (!strongs && q.length >= 2) {
+    const term = `%${q}%`;
+    const { data: rows } = await supabase
+      .from("strongs_lexicon")
+      .select("strongs_number, original_word, transliteration, short_def, kjv_usage")
+      .or(
+        `strongs_number.ilike.${term},transliteration.ilike.${term},short_def.ilike.${term},kjv_usage.ilike.${term}`
+      )
+      .order("strongs_number")
+      .limit(20);
+
+    const results = (rows ?? []).map((r) => ({
+      strongs_number: r.strongs_number,
+      original_word: r.original_word ?? "",
+      transliteration: r.transliteration ?? "",
+      definition: r.short_def ?? r.kjv_usage ?? "",
+    }));
+    return NextResponse.json({ results });
+  }
+
+  // ── Single-entry mode ──────────────────────────────────────────────────────
+  if (!strongs) return NextResponse.json({ error: "Missing strongs or q" }, { status: 400 });
 
   const { data: rawEntry, error } = await supabase
     .from("strongs_lexicon")
