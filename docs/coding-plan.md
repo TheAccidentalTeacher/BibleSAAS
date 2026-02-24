@@ -7,7 +7,7 @@
 
 ---
 
-## 🗓 PHASE PROGRESS — Last updated: 2026-02-21
+## 🗓 PHASE PROGRESS — Last updated: 2026-02-23
 
 | Phase | Title | Status | Commit |
 |-------|-------|--------|--------|
@@ -37,8 +37,8 @@
 | 22 | Advanced AI Features | ✅ Complete | `a77964e` |
 | 23 | Sermon Notes, Catechism & The Long Game | 🔴 Not started | — |
 | 24 | Geographic & Archaeological Layer | 🔴 Not started | — |
-| 25 | Pre-Launch Hardening | 🔴 Not started | — |
-| 26 | Data Integrity & Seeding Verification | 🔴 Not started | — |
+| 25 | Pre-Launch Hardening | ✅ Complete | `ab137fc` |
+| 26 | Data Integrity & Seeding Verification | ✅ Complete | `628bee1` |
 | 27 | Commercial Launch Preparation | 🔴 Not started | — |
 
 ### Phase 8 status (as of 2026-02-21)
@@ -52,8 +52,10 @@ Phase 8 is fully complete (commit `475423d`):
 - ✅ Lament mode built
 
 ### ⚡ NEXT UP — Phase 27 (Commercial Launch Preparation)
-Phases 10–26 are fully complete (all committed). Start Phase 27 next.
-Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production config, Vercel production setup.
+Phases 10–26 are fully complete (all committed). Vercel is live at `https://bible-saas.vercel.app`. Start Phase 27 next.
+Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production config, Vercel production custom domain.
+
+> **⚠️ ESV key is working on Vercel.** The env var must contain ONLY the 40-character hex key — never `ESV_API_KEY=<value>`. Paste just the key value into the Vercel field.
 
 ### ⚠️ PHASE 23 HOUSEKEEPING
 1. **Sermon outline `.docx` export** — only Markdown clipboard export built; `.docx` server-side export (via `docx` npm pkg) deferred to Phase 25.
@@ -63,21 +65,24 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 
 ---
 
-### Infrastructure state (2026-02-21, updated after Phase 22)
-- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS — latest commit `18d483f`
-- **Build:** `npm run build` → ✅ 0 errors, 77 routes (dynamic + static), ~20 non-blocking viewport metadata warnings
+### Infrastructure state (2026-02-23, updated after Phase 26 + deployment fixes)
+- **Repo:** https://github.com/TheAccidentalTeacher/BibleSAAS — latest commit `628bee1`
+- **Build:** `npm run build` → ✅ 0 errors, 0 typescript errors
 - **CI:** GitHub Actions — Type Check ✅ · SQL Validate ✅ · Secret Scan ✅
-- **Dev server:** Running locally at `http://localhost:3000` (terminal PID active)
-- **Test account:** `test@biblesaas.com` / `BibleTest2026!` — pre-confirmed, ready to use
-- **Vercel:** Not yet connected — ready to deploy (see Vercel setup instructions below)
+- **Dev server:** Running locally at `http://localhost:3001`
+- **Test account:** `test@biblesaas.com` / `BibleTest2026!` — pre-confirmed, `subscription_tier: standard`, `onboarding_complete: true`
+- **Vercel:** ✅ LIVE at `https://bible-saas.vercel.app` (deployment `dpl_9jgwhBe5o13wzLMrYZTQz2dSk5Np`)
 - **Supabase project:** `yjeegeqnjkvevrnrsybu` — ALL 13 migrations applied ✅
 - **Node:** v24.13.1 · npm v11.8.0 · Next.js 16.1.6
+- **ESV API:** ✅ Working on Vercel. Key `bafd99b0a44cc8311acfd22675b0d6e7bc7127c9` confirmed 200 response.
+- **Google TTS:** ✅ Key `AIzaSyCWRKBURjpgU9pvdT_F523oyLfcTTqaCbQ` in Vercel env vars.
+- **ESV audio:** ✅ `/api/audio/esv` proxy route deployed, Max McLean MP3 via `/v3/passage/audio/`.
 
 ### Seeded data (2026-02-21)
 | Table | Rows | Target | Status |
 |---|---|---|---|
 | `chapters` (WEB) | 1,189 | 1,189 | ✅ |
-| `chapters` (KJV) | ~10 | 1,189 | ❌ Incomplete |
+| `chapters` (KJV) | 1,189 | 1,189 | ✅ |
 | `strongs_lexicon` (hebrew) | 8,674 | ~8,674 | ✅ |
 | `strongs_lexicon` (greek) | 5,523 | ~5,624 | ✅ |
 | `spurgeon_index` | 732 | 730+ | ✅ |
@@ -92,8 +97,10 @@ Phase 27 spec: Form LLC, apply for ESV commercial license, Stripe production con
 ### Files built (src/ inventory as of 2026-02-21)
 ```
 src/app/
+  api/audio/esv/route.ts          — ESV audio proxy (follows 302 to Max McLean MP3)
   api/bookmarks/route.ts          — bookmark CRUD
   api/content/generate/route.ts   — Charles OIA + personalized content
+  api/debug/esv/route.ts          — temporary ESV diagnostic (remove after confirmed working)
   api/highlights/route.ts         — highlight CRUD
   api/journal/submit/route.ts     — journal entry + answers
   api/onboarding/chat/route.ts    — Charles onboarding conversation
@@ -163,10 +170,14 @@ src/types/app.ts + database.ts    — TypeScript types
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase → Settings → API → anon/public key |
    | `SUPABASE_SERVICE_ROLE_KEY` | Supabase → Settings → API → service_role key |
    | `ANTHROPIC_API_KEY` | console.anthropic.com → API Keys |
-   | `STRIPE_SECRET_KEY` | dashboard.stripe.com (test mode for now) — can be `sk_test_dummy` until Phase 15 |
+   | `ESV_API_KEY` | api.esv.org → Account → API token — **paste ONLY the 40-char hex value, never `ESV_API_KEY=value`** |
+   | `GOOGLE_TTS_API_KEY` | console.cloud.google.com → Credentials |
+   | `API_BIBLE_KEY` | scripture.api.bible → My Apps |
+   | `STRIPE_SECRET_KEY` | dashboard.stripe.com (test mode for now) — can be `sk_test_dummy` until Phase 18 |
    | `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | dashboard.stripe.com (test mode) |
-   | `STRIPE_WEBHOOK_SECRET` | Set `whsec_dummy` until Phase 15 |
+   | `STRIPE_WEBHOOK_SECRET` | Set `whsec_dummy` until Phase 18 |
    | `RESEND_API_KEY` | resend.com — can be `re_dummy` until Phase 16 |
+   | `CRON_SECRET` | Any secure random string — used to authenticate Vercel cron job calls |
 
 6. **Supabase migrations:** Already applied to project `yjeegeqnjkvevrnrsybu` ✅ — use the combined file `sql/all-migrations.sql` if setting up a new project (one paste in SQL editor).
 7. **Bible text seed:** Already seeded (1189 WEB chapters) ✅ — re-run `npm run seed:translations` only if using a new Supabase project. Checkpointing resumes safely.
@@ -1428,8 +1439,9 @@ Each is a separate script, run once at deploy time:
 ## ✅ PHASE 26 — Data Integrity & Seeding Verification *(COMPLETE)*
 *Produces: Verified seed data, all background jobs tested, production readiness.*
 
-**Verified (2026-02-22):**
+**Verified (2026-02-23):**
 - ✅ `chapters` WEB: 1,189 | KJV: 1,189
+- ✅ ESV API: confirmed 200 on Vercel — key `bafd99b0a44cc8311acfd22675b0d6e7bc7127c9` (40 chars, value-only in env var)
 - ✅ `strongs_lexicon` Hebrew: 8,674 | Greek: 5,523 (full OpenScriptures dictionary)
 - ✅ `tsk_references`: 344,799 unique cross-references (fully seeded; 500K was estimate from raw line count)
 - ✅ `spurgeon_index`: 732 entries
