@@ -125,7 +125,6 @@ export async function POST(request: NextRequest) {
     let contentType: string;
 
     if (jobType === "data_csv") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       fileContent = buildJournalCsv((journal ?? []) as Record<string, unknown>[]);
       fileName = `bible-study-journal-${isoDateSlug()}.csv`;
       contentType = "text/csv";

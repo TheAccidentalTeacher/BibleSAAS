@@ -63,7 +63,6 @@ export async function POST(request: NextRequest) {
         user_id: user.id,
         anchor_book: anchorBook ?? null,
         anchor_chapter: anchorChapter ?? null,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         companion_id: (minimal?.active_companion_id as string | null) ?? null,
       })
       .select("id")

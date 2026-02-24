@@ -18,6 +18,7 @@ import {
   useContext,
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -111,7 +112,9 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const speakVerseCallbackRef = useRef<(idx: number) => void>(() => {});
   const speedRef = useRef<number>(1.0);
   const stateRef = useRef<AudioState>(state);
-  stateRef.current = state;
+  useLayoutEffect(() => {
+    stateRef.current = state;
+  });
 
   const saveProgress = useCallback(async (s: AudioState, posSeconds: number, completed: boolean) => {
     if (!s.book || !s.chapter) return;

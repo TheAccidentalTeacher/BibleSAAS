@@ -10,13 +10,12 @@
 import { useEffect, useState } from "react";
 
 export function useOnlineStatus(): boolean {
-  // SSR-safe: default to true; correct value set on mount
-  const [isOnline, setIsOnline] = useState(true);
+  // SSR-safe lazy initializer: reads navigator.onLine only on client, defaults to true on server
+  const [isOnline, setIsOnline] = useState(() =>
+    typeof navigator !== "undefined" ? navigator.onLine : true
+  );
 
   useEffect(() => {
-    // Sync immediately with real value
-    setIsOnline(navigator.onLine);
-
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
 

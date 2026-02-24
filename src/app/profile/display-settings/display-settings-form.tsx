@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useState, useEffect, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { TRANSLATIONS } from "@/lib/bible/types";
 import { saveDisplaySettings } from "./actions";
@@ -88,18 +88,17 @@ export default function DisplaySettingsForm({ initial }: Props) {
     else document.documentElement.setAttribute("data-mode", m);
     setTheme(m);
   };
-  const applyFont = (f: string) => {
-    const matched = BIBLE_FONTS.find((b) => b.value === f);
-    if (matched) {
-      (document.documentElement.style as unknown as Record<string, string>)["--font-reading"] = matched.css;
-    }
-    setFont(f);
-  };
-  const applyFontSize = (s: string) => {
-    const px = FONT_SIZE_MAP[s] ?? "18px";
-    (document.documentElement.style as unknown as Record<string, string>)["--text-body-size"] = px;
-    setFontSize(s);
-  };
+  // Apply font/size changes to CSS vars via effects (avoids mutating external DOM in handler)
+  useEffect(() => {
+    const matched = BIBLE_FONTS.find((b) => b.value === font);
+    if (matched) document.documentElement.style.setProperty("--font-reading", matched.css);
+  }, [font]);
+  useEffect(() => {
+    document.documentElement.style.setProperty("--text-body-size", FONT_SIZE_MAP[fontSize] ?? "18px");
+  }, [fontSize]);
+
+  const applyFont = (f: string) => { setFont(f); };
+  const applyFontSize = (s: string) => { setFontSize(s); };
 
   const SectionLabel = ({ children }: { children: React.ReactNode }) => (
     <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--color-accent)" }}>

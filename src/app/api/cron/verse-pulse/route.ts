@@ -37,7 +37,6 @@ export async function GET(request: NextRequest) {
     .from("verse_interactions")
     .select("book, chapter, verse, interaction_type")
     .gte("created_at", sevenDaysAgo);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const interactions: { book: string; chapter: number; verse: number | null }[] = rawInteractions ?? [];
 
   if (error) {

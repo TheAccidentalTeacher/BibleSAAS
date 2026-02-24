@@ -37,7 +37,6 @@ export default function WordStudyIndexPage() {
     if (q && q.length >= 2) {
       void handleSearch(q);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
