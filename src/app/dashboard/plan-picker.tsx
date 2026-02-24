@@ -99,7 +99,9 @@ export default function PlanPicker({ plans, onSelect, onClose }: PlanPickerProps
                   )}
                   <p className="text-xs mt-1" style={{ color: "var(--color-text-3)" }}>
                     {TYPE_LABELS[plan.type] ?? plan.type}
-                    {plan.total_days ? ` · ${plan.total_days} days` : ""}
+                    {(plan.total_days ?? (plan.meta?.total_days as number | undefined))
+                      ? ` · ${plan.total_days ?? (plan.meta?.total_days as number)} days`
+                      : ""}
                   </p>
                 </div>
                 {loading === plan.id && (
