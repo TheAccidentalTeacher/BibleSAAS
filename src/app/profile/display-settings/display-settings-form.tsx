@@ -63,6 +63,14 @@ const TTS_VOICES = [
   { value: "en-GB-Neural2-F", label: "British Female",      desc: "Elegant and clear" },
 ];
 
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--color-accent)" }}>
+      {children}
+    </p>
+  );
+}
+
 export default function DisplaySettingsForm({ initial }: Props) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -99,12 +107,6 @@ export default function DisplaySettingsForm({ initial }: Props) {
 
   const applyFont = (f: string) => { setFont(f); };
   const applyFontSize = (s: string) => { setFontSize(s); };
-
-  const SectionLabel = ({ children }: { children: React.ReactNode }) => (
-    <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--color-accent)" }}>
-      {children}
-    </p>
-  );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
