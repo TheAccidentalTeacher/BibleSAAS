@@ -82,7 +82,7 @@ export async function getEsvChapter(
   bookCode: string,
   chapter: number
 ): Promise<ReadingChapter | null> {
-  const apiKey = process.env.ESV_API_KEY;
+  const apiKey = process.env.ESV_API_KEY?.trim();
 
   const supabase = await createClient();
   const book = getBook(bookCode.toUpperCase() as Parameters<typeof getBook>[0]);

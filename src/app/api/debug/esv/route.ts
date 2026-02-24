@@ -9,10 +9,17 @@ export async function GET() {
   const results: Record<string, unknown> = {};
 
   // 1. Key presence
-  const apiKey = process.env.ESV_API_KEY;
+  const apiKeyRaw = process.env.ESV_API_KEY ?? "";
+  const apiKey = apiKeyRaw.trim();
   results.key_present = !!apiKey;
-  results.key_length = apiKey?.length ?? 0;
-  results.key_preview = apiKey ? apiKey.slice(0, 6) + "..." : null;
+  results.key_raw_length = apiKeyRaw.length;
+  results.key_trimmed_length = apiKey.length;
+  results.key_has_whitespace = apiKeyRaw !== apiKey;
+  results.key_starts_with_quote = apiKeyRaw.startsWith('"') || apiKeyRaw.startsWith("'");
+  results.key_ends_with_quote = apiKeyRaw.endsWith('"') || apiKeyRaw.endsWith("'");
+  results.key_first_char_code = apiKeyRaw.length > 0 ? apiKeyRaw.charCodeAt(0) : null;
+  results.key_last_char_code = apiKeyRaw.length > 0 ? apiKeyRaw.charCodeAt(apiKeyRaw.length - 1) : null;
+  results.key_preview = apiKey ? apiKey.slice(0, 8) + "..." : null;
 
   // 2. Direct ESV API call
   if (apiKey) {
@@ -30,6 +37,7 @@ export async function GET() {
         headers: { Authorization: `Token ${apiKey}`, Accept: "application/json" },
         cache: "no-store",
       });
+      results.auth_header_sent = `Token ${apiKey.slice(0, 8)}...`;
 
       results.esv_status = res.status;
       results.esv_ok = res.ok;

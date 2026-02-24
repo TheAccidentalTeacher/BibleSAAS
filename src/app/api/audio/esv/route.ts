@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: `Unknown book code: ${book}` }, { status: 400 });
   }
 
-  const apiKey = process.env.ESV_API_KEY;
+  const apiKey = process.env.ESV_API_KEY?.trim();
   if (!apiKey) {
     return NextResponse.json({ error: "ESV audio not configured" }, { status: 503 });
   }
