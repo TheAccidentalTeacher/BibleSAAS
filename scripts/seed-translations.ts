@@ -98,6 +98,7 @@ const DELAY_MS = 700; // be polite to the free API
 const TRANSLATIONS = [
   { name: 'WEB', apiKey: 'web', seedName: 'web_chapters' },
   { name: 'KJV', apiKey: 'kjv', seedName: 'kjv_chapters' },
+  { name: 'ASV', apiKey: 'asv', seedName: 'asv_chapters' },
 ];
 
 function sleep(ms: number) {
