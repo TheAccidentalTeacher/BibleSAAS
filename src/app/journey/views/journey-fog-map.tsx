@@ -64,7 +64,7 @@ interface Props {
   data: JourneyData;
 }
 
-export default function JourneyFogMap({ data: _journeyData }: Props) {
+export default function JourneyFogMap(_: Props) {
   const [mapData, setMapData] = useState<MapData | null>(null);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<MapLocation | null>(null);

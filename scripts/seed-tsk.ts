@@ -217,7 +217,7 @@ async function main() {
         text = await fetchHttps(TSK_URL);
         if (text.length < 10000) throw new Error(`Response too short (${text.length} bytes)`);
         console.log(`Fetched ${(text.length / 1024 / 1024).toFixed(1)} MB from openbible.info`);
-      } catch (err) {
+      } catch {
         console.error(`\n❌  All remote sources failed.`);
         console.error('\nDownload the file manually and save to: scripts/cross-references.txt');
         console.error('  Browser URL: https://a.openbible.info/data/cross-references.txt');

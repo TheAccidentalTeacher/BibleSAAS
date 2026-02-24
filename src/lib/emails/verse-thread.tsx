@@ -60,7 +60,7 @@ export default function VerseThreadEmail({
           Someone you love is thinking about the same passage you are.
         </Text>
         <div style={s.quoteBox}>
-          <Text style={s.quote}>"{snippet}{snippet.length >= 120 ? "…" : ""}"</Text>
+          <Text style={s.quote}>&ldquo;{snippet}{snippet.length >= 120 ? "…" : ""}&rdquo;</Text>
           <Text style={s.ref}>— on {verseRef}</Text>
         </div>
         <Button href={threadUrl} style={s.btn}>
