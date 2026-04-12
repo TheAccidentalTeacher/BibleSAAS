@@ -46,6 +46,10 @@ jobs:
         if: steps.app-exists.outputs.exists == 'true'
         run: npm run lint
 
+      - name: Run unit tests
+        if: steps.app-exists.outputs.exists == 'true'
+        run: npm test
+
   # ─────────────────────────────────────────────
   # SQL validation (runs now — no app code needed)
   # ─────────────────────────────────────────────

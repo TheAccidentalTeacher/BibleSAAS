@@ -81,7 +81,8 @@ export async function checkAndAwardAchievements(
 }
 
 // ── Evaluate if a trigger satisfies an achievement's unlock condition ─────────
-function evaluateTrigger(key: string, trigger: AchievementTrigger): boolean {
+// Exported so it can be unit-tested independently of the DB layer.
+export function evaluateTrigger(key: string, trigger: AchievementTrigger): boolean {
   switch (key) {
     case "first_chapter":
       return trigger.type === "chapter_read";
